@@ -1,134 +1,160 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  trafficChannelData,
-  trafficChannelDataSet2,
-  trafficChannelDataSet3,
-  trafficChannelDataSet4,
-} from "@/components/partials/charts/analytics/AnalyticsData";
-import { DropdownToggle, DropdownMenu, UncontrolledDropdown, DropdownItem } from "reactstrap";
-import { Icon, DataTableHead, DataTableRow, DataTableItem } from "@/components/Component";
-import { WPCharts } from "@/components/partials/charts/analytics/AnalyticsCharts";
+  DropdownToggle,
+  DropdownMenu,
+  UncontrolledDropdown,
+  DropdownItem,
+} from "reactstrap";
+import {
+  Icon,
+  DataTableHead,
+  DataTableRow,
+  DataTableItem,
+} from "@/components/Component";
+import WPChartsComponent from "./chart/WPChartsComponent";
+
+import { DataTableBody } from "@/components/table/DataTable";
+
+const trafficChannelData = [
+  {
+    id: 1,
+    channel: "Từ đối tác",
+    sessions: "143",
+    prev: "129",
+    change: "10.9",
+    changeDifference: "up",
+  },
+  {
+    id: 2,
+    channel: "Tự tìm kiếm",
+    sessions: "88",
+    prev: "94",
+    change: "6.4",
+    changeDifference: "down",
+  },
+  {
+    id: 3,
+    channel: "Hội thảo/Webinar",
+    sessions: "51",
+    prev: "33",
+    change: "54.5",
+    changeDifference: "up",
+  },
+  {
+    id: 4,
+    channel: "Quảng cáo",
+    sessions: "31",
+    prev: "44",
+    change: "29.5",
+    changeDifference: "down",
+  },
+];
 
 const TrafficChannel = () => {
   const [dd, setdd] = useState("30");
-  const [trafficData, setTrafficData] = useState(trafficChannelData);
-
-  useEffect(() => {
-    if (dd === "30") {
-      setTrafficData(trafficChannelDataSet3);
-    } else if (dd === "15") {
-      setTrafficData(trafficChannelDataSet4);
-    } else {
-      setTrafficData(trafficChannelDataSet2);
-    }
-  }, [dd]);
 
   return (
     <React.Fragment>
       <div className="card-inner mb-n2">
         <div className="card-title-group">
           <div className="card-title card-title-sm">
-            <h6 className="title">Traffic Channel</h6>
-            <p>Top traffic channels metrics.</p>
+            <h6 className="title">Doanh nghiệp đến từ nguồn nào</h6>
+            <p className="text-soft">Nguồn doanh nghiệp tích hợp hệ thống.</p>
           </div>
           <div className="card-tools">
             <UncontrolledDropdown>
               <DropdownToggle className="dropdown-toggle dropdown-indicator btn btn-sm btn-outline-light btn-white">
-                {dd} Days
+                {dd} Ngày
               </DropdownToggle>
               <DropdownMenu end className="dropdown-menu-xs">
                 <ul className="link-list-opt no-bdr">
-                  <li className={dd === "7" ? "active" : ""}>
-                    <DropdownItem
-                      href="#dropdownitem"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setdd("7");
-                      }}
-                    >
-                      <span>7 Days</span>
-                    </DropdownItem>
-                  </li>
-                  <li className={dd === "15" ? "active" : ""}>
-                    <DropdownItem
-                      href="#dropdownitem"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setdd("15");
-                      }}
-                    >
-                      <span>15 Days</span>
-                    </DropdownItem>
-                  </li>
-                  <li className={dd === "30" ? "active" : ""}>
-                    <DropdownItem
-                      href="#dropdownitem"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setdd("30");
-                      }}
-                    >
-                      <span>30 Days</span>
-                    </DropdownItem>
-                  </li>
+                  {["7", "15", "30"].map((value) => (
+                    <li className={dd === value ? "active" : ""} key={value}>
+                      <DropdownItem
+                        href="#dropdownitem"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setdd(value);
+                        }}
+                      >
+                        <span>{value} Ngày</span>
+                      </DropdownItem>
+                    </li>
+                  ))}
                 </ul>
               </DropdownMenu>
             </UncontrolledDropdown>
           </div>
         </div>
       </div>
-      <div className="nk-tb-list is-loose traffic-channel-table">
-        <DataTableHead>
-          <DataTableRow className="nk-tb-channel">
-            <span>Channel</span>
-          </DataTableRow>
-          <DataTableRow className="nk-tb-sessions">
-            <span>Sessions</span>
-          </DataTableRow>
-          <DataTableRow className="nk-tb-prev-sessions">
-            <span>Prev Sessions</span>
-          </DataTableRow>
-          <DataTableRow className="nk-tb-change">
-            <span>Change</span>
-          </DataTableRow>
-          <DataTableRow className="nk-tb-trend tb-col-sm text-end">
-            <span>Trend</span>
-          </DataTableRow>
-        </DataTableHead>
-        {trafficData.map((item) => {
-          return (
-            <DataTableItem className="nk-tb-item" key={item.id}>
-              <DataTableRow className="nk-tb-channel">
-                <span className="tb-lead">{item.channel}</span>
+
+      <div style={{ overflowX: "auto", width: "100%" }}>
+        <div className="min-w-[900px]">
+          <DataTableBody bodyclass="nk-tb-orders">
+            <DataTableHead>
+              <DataTableRow>
+                <span>Nguồn</span>
               </DataTableRow>
-              <DataTableRow className="nk-tb-sessions">
-                <span className="tb-sub tb-amount">
-                  <span>{item.sessions}</span>
-                </span>
+              <DataTableRow className="text-center ">
+                <span>Hiện tại</span>
               </DataTableRow>
-              <DataTableRow className="nk-tb-prev-sessions">
-                <span className="tb-sub tb-amount">
-                  <span>{item.prev}</span>
-                </span>
+              <DataTableRow className="text-center">
+                <span>Tháng trước</span>
               </DataTableRow>
-              <DataTableRow className="nk-tb-change">
-                <span className="tb-sub">
-                  <span>{item.change}%</span>{" "}
-                  <span className={`change ${item.changeDifference}`}>
-                    <Icon name={`arrow-long-${item.changeDifference}`}></Icon>
+              <DataTableRow className="text-center">
+                <span>% Thay đổi</span>
+              </DataTableRow>
+              <DataTableRow className="text-center">
+                <span>Trend</span>
+              </DataTableRow>
+            </DataTableHead>
+            {trafficChannelData.map((item) => (
+              <DataTableItem className="nk-tb-item" key={item.id}>
+                <DataTableRow className="text-start">
+                  <span className="tb-lead text-nowrap">{item.channel}</span>
+                </DataTableRow>
+
+                <DataTableRow className="text-center">
+                  <span className="tb-sub fw-bold text-nowrap">
+                    {item.sessions}
                   </span>
-                </span>
-              </DataTableRow>
-              <DataTableRow className="nk-tb-trend text-end">
-                <div className="traffic-channel-ck ms-auto">
-                  <WPCharts data={item.chart}></WPCharts>
-                </div>
-              </DataTableRow>
-            </DataTableItem>
-          );
-        })}
+                </DataTableRow>
+
+                <DataTableRow className="text-center">
+                  <span className="tb-sub text-muted text-nowrap">
+                    {item.prev}
+                  </span>
+                </DataTableRow>
+
+                <DataTableRow className="text-center">
+                  <span
+                    className={`tb-sub fw-medium text-nowrap ${
+                      item.changeDifference === "up"
+                        ? "text-success"
+                        : "text-danger"
+                    }`}
+                  >
+                    {item.changeDifference === "up" ? "+" : "-"}
+                    {item.change}%{" "}
+                    <Icon name={`arrow-long-${item.changeDifference}`} />
+                  </span>
+                </DataTableRow>
+
+                <DataTableRow>
+                  <div
+                    className="mx-auto"
+                    style={{ width: "80px", height: "40px" }}
+                  >
+                    <WPChartsComponent direction={item.changeDifference} />
+                  </div>
+                </DataTableRow>
+              </DataTableItem>
+            ))}
+          </DataTableBody>
+        </div>
       </div>
     </React.Fragment>
   );
 };
+
 export default TrafficChannel;

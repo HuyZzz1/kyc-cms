@@ -1,5 +1,10 @@
 import React from "react";
-import { TimeOnSiteData, NewUsersData, PageviewsData, BounceRateData } from "@/components/partials/charts/analytics/AnalyticsData";
+import {
+  TimeOnSiteData,
+  NewUsersData,
+  PageviewsData,
+  BounceRateData,
+} from "@/components/partials/charts/analytics/AnalyticsData";
 import { WPCharts } from "@/components/partials/charts/analytics/AnalyticsCharts";
 import { Icon, TooltipComponent } from "@/components/Component";
 
@@ -8,8 +13,8 @@ const WebsitePerformance = () => {
     <React.Fragment>
       <div className="card-title-group align-start pb-3 g-2">
         <div className="card-title card-title-sm">
-          <h6 className="title">Website Performance</h6>
-          <p>How has performend this month.</p>
+          <h6 className="title">Hiệu quả hệ thống & hành vi người dùng</h6>
+          <p>Dữ liệu hiệu suất và hành vi người dùng trong tháng.</p>
         </div>
         <div className="card-tools">
           <TooltipComponent
@@ -25,62 +30,66 @@ const WebsitePerformance = () => {
         <div className="analytic-wp-group g-3">
           <div className="analytic-data analytic-wp-data">
             <div className="analytic-wp-graph">
-              <div className="title">
-                Bounce Rate <span>(avg)</span>
-              </div>
+              <div className="title text-nowrap">Tỉ lệ xác minh thất bại</div>
               <div className="analytic-wp-ck">
-                <WPCharts className="analytics-line-small" data={BounceRateData}></WPCharts>
+                <WPCharts
+                  className="analytics-line-small"
+                  data={BounceRateData}
+                ></WPCharts>
               </div>
             </div>
             <div className="analytic-wp-text">
-              <div className="amount amount-sm">23.59%</div>
+              <div className="amount amount-sm">8.4%</div>
               <div className="change up">
-                <Icon name="arrow-long-up"></Icon>4.5%
+                <Icon name="arrow-long-up"></Icon>1.2%
               </div>
-              <div className="subtitle">vs. last month</div>
+              <div className="subtitle">so với tháng trước</div>
             </div>
           </div>
           <div className="analytic-data analytic-wp-data">
             <div className="analytic-wp-graph">
-              <div className="title">
-                Pageviews <span>(avg)</span>
-              </div>
+              <div className="title text-nowrap">Số lần thử KYC/người</div>
               <div className="analytic-wp-ck">
-                <WPCharts className="analytics-line-small" data={PageviewsData}></WPCharts>
+                <WPCharts
+                  className="analytics-line-small"
+                  data={PageviewsData}
+                ></WPCharts>
               </div>
             </div>
             <div className="analytic-wp-text">
-              <div className="amount amount-sm">5.48</div>
+              <div className="amount amount-sm">1.14</div>
               <div className="change down">
-                <Icon name="arrow-long-down"></Icon>1.48%
+                <Icon name="arrow-long-down"></Icon>3.1%
               </div>
-              <div className="subtitle">vs. last month</div>
+              <div className="subtitle">so với tháng trước</div>
             </div>
           </div>
           <div className="analytic-data analytic-wp-data">
             <div className="analytic-wp-graph">
-              <div className="title">
-                New Users <span>(avg)</span>
-              </div>
+              <div className="title text-nowrap">Người dùng mới (TB/ngày)</div>
               <div className="analytic-wp-ck">
-                <WPCharts className="analytics-line-small" data={NewUsersData}></WPCharts>
+                <WPCharts
+                  className="analytics-line-small"
+                  data={NewUsersData}
+                ></WPCharts>
               </div>
             </div>
             <div className="analytic-wp-text">
-              <div className="amount amount-sm">549</div>
+              <div className="amount amount-sm">294</div>
               <div className="change up">
-                <Icon name="arrow-long-up"></Icon>6.8%
+                <Icon name="arrow-long-up"></Icon>6.7%
               </div>
-              <div className="subtitle">vs. last month</div>
+              <div className="subtitle">so với tháng trước</div>
             </div>
           </div>
           <div className="analytic-data analytic-wp-data">
             <div className="analytic-wp-graph">
-              <div className="title">
-                Time on Site <span>(avg)</span>
-              </div>
+              <div className="title text-nowrap">Thời gian trên hệ thống</div>
               <div className="analytic-wp-ck">
-                <WPCharts className="analytics-line-small" data={TimeOnSiteData}></WPCharts>
+                <WPCharts
+                  className="analytics-line-small"
+                  data={TimeOnSiteData}
+                ></WPCharts>
               </div>
             </div>
             <div className="analytic-wp-text">
@@ -88,7 +97,7 @@ const WebsitePerformance = () => {
               <div className="change up">
                 <Icon name="arrow-long-up"></Icon>1.4%
               </div>
-              <div className="subtitle">vs. last month</div>
+              <div className="subtitle">so với tháng trước</div>
             </div>
           </div>
         </div>

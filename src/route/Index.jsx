@@ -202,7 +202,7 @@ const Router = () => {
               <Route path="kyc-form" element={<KycForms />}></Route>
             </Route>
             <Route element={<Layout />}>
-              <Route index element={<Crypto />}></Route>
+              <Route index element={<Analytics />}></Route>
               <Route path="crypto" element={<Crypto />}></Route>
               <Route path="analytics" element={<Analytics />}></Route>
               <Route path="sales" element={<Sales />}></Route>

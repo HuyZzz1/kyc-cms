@@ -7,10 +7,14 @@ import WebsitePerformance from "@/components/partials/analytics/website-perfoman
 import TrafficChannel from "@/components/partials/analytics/traffic-channel/Traffic";
 import TrafficDougnut from "@/components/partials/analytics/traffic-dougnut/TrafficDoughnut";
 import UserMap from "@/components/partials/analytics/user-map/UserMap";
-import BrowserUser from "@/components/partials/analytics/browser-users/BrowserUser";
-import PageViewer from "@/components/partials/analytics/page-view/PageView";
 import SessionDevice from "@/components/partials/analytics/session-devices/SessionDevice";
-import { DropdownToggle, DropdownMenu, Card, UncontrolledDropdown, DropdownItem } from "reactstrap";
+import {
+  DropdownToggle,
+  DropdownMenu,
+  Card,
+  UncontrolledDropdown,
+  DropdownItem,
+} from "reactstrap";
 import {
   Block,
   BlockDes,
@@ -43,19 +47,31 @@ const AnalyticsHomePage = () => {
             <BlockHeadContent>
               <div className="toggle-wrap nk-block-tools-toggle">
                 <Button
-                  className={`btn-icon btn-trigger toggle-expand me-n1 ${sm ? "active" : ""}`}
+                  className={`btn-icon btn-trigger toggle-expand me-n1 ${
+                    sm ? "active" : ""
+                  }`}
                   onClick={() => updateSm(!sm)}
                 >
                   <Icon name="more-v"></Icon>
                 </Button>
-                <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
+                <div
+                  className="toggle-expand-content"
+                  style={{ display: sm ? "block" : "none" }}
+                >
                   <ul className="nk-block-tools g-3">
                     <li>
                       <UncontrolledDropdown>
-                        <DropdownToggle tag="a" className="dropdown-toggle btn btn-white btn-dim btn-outline-light">
-                          <Icon className="d-none d-sm-inline" name="calender-date"></Icon>
+                        <DropdownToggle
+                          tag="a"
+                          className="dropdown-toggle btn btn-white btn-dim btn-outline-light"
+                        >
+                          <Icon
+                            className="d-none d-sm-inline"
+                            name="calender-date"
+                          ></Icon>
                           <span>
-                            <span className="d-none d-md-inline">Last</span> 30 Days
+                            <span className="d-none d-md-inline">Last</span> 30
+                            Days
                           </span>
                           <Icon className="dd-indc" name="chevron-right"></Icon>
                         </DropdownToggle>
@@ -131,7 +147,10 @@ const AnalyticsHomePage = () => {
               </Card>
             </Col>
             <Col sm="6" lg="4">
-              <PreviewAltCard className="h-100" bodyClass="h-100 stretch flex-column">
+              <PreviewAltCard
+                className="h-100"
+                bodyClass="h-100 stretch flex-column"
+              >
                 <SessionDevice />
               </PreviewAltCard>
             </Col>
@@ -144,16 +163,6 @@ const AnalyticsHomePage = () => {
               <PreviewAltCard className="h-100">
                 <TrafficDougnut />
               </PreviewAltCard>
-            </Col>
-            <Col sm="6" lg="5">
-              <Card className="card-bordered h-100">
-                <PageViewer />
-              </Card>
-            </Col>
-            <Col lg="7">
-              <Card className="card-bordered h-100">
-                <BrowserUser />
-              </Card>
             </Col>
           </Row>
         </Block>
