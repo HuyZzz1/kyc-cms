@@ -1,6 +1,5 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
-import {menu} from "./header/MenuData";
+import { menu } from "./header/MenuData";
 import Head from "./head/Head";
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
@@ -9,16 +8,16 @@ import AppWrap from "./global/AppWrap";
 
 import FileManagerProvider from "@/pages/app/file-manager/components/Context";
 
-const Layout = ({title, ...props}) => {
+const Layout = ({ title }) => {
   return (
     <FileManagerProvider>
-      <Head title={!title && 'Loading'} />
+      <Head title={!title && "Loading"} />
       <AppRoot>
-          <AppWrap>
-            <Header menuData={menu} fixed />
-            <Outlet />
-            <Footer />
-          </AppWrap>
+        <AppWrap>
+          <Header menuData={menu} fixed />
+          <Outlet />
+          <Footer />
+        </AppWrap>
       </AppRoot>
     </FileManagerProvider>
   );

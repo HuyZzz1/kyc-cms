@@ -32,16 +32,16 @@ const AnalyticsHomePage = () => {
   const [sm, updateSm] = useState(false);
   return (
     <React.Fragment>
-      <Head title="Analytics Dashboard" />
+      <Head title="Phân tích User" />
       <Content>
         <BlockHead size="sm">
           <div className="nk-block-between">
             <BlockHeadContent>
               <BlockTitle page tag="h3">
-                Website Analytics
+                Phân tích
               </BlockTitle>
               <BlockDes className="text-soft">
-                <p>Welcome to Analytics Dashboard.</p>
+                <p>Chào mừng bạn đến bảng điều khiển phân tích.</p>
               </BlockDes>
             </BlockHeadContent>
             <BlockHeadContent>
@@ -114,7 +114,7 @@ const AnalyticsHomePage = () => {
                     <li className="nk-block-tools-opt">
                       <Button color="primary">
                         <Icon name="reports"></Icon>
-                        <span>Reports</span>
+                        <span>Báo cáo</span>
                       </Button>
                     </li>
                   </ul>

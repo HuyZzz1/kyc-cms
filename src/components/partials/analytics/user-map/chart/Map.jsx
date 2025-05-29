@@ -1,5 +1,5 @@
 import { VectorMap } from "@react-jvectormap/core";
-import { worldMill } from "@react-jvectormap/world";
+import { asiaMill } from "@react-jvectormap/asia";
 
 const mapDataList = {
   30: [
@@ -33,21 +33,21 @@ const Map = ({ set = "30" }) => {
       className="vector-map"
       style={{
         width: "100%",
-        height: "250px",
+        height: "220px",
         overflow: "hidden",
         position: "relative",
       }}
     >
       <div
         style={{
-          transform: "scale(1.6) translate(-30%, -12%)", // 👈 Zoom + focus vào SEA
+          transform: "scale(1.3) translate(-20%, -30%)",
           transformOrigin: "top left",
           width: "100%",
           height: "100%",
         }}
       >
         <VectorMap
-          map={worldMill}
+          map={asiaMill}
           backgroundColor="transparent"
           containerStyle={{ width: "100%", height: "100%" }}
           containerClassName="vector-map"
@@ -81,7 +81,7 @@ const Map = ({ set = "30" }) => {
             if (tooltipData[code]) {
               el.html(`${tooltipData[code]}: ${selectedData[code]}`);
             } else {
-              el.html(""); // Ẩn tooltip nếu không có dữ liệu
+              el.html("");
             }
           }}
         />

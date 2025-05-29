@@ -19,25 +19,36 @@ Chart.register(
   Filler,
   Legend
 );
-
-const deviceStatusData = {
-  labels: ["Desktop", "Mobile", "Tablet"],
-  dataUnit: "People",
+const data = {
+  labels: [
+    "Tài chính/Ngân hàng",
+    "Bảo hiểm",
+    "Thương mại điện tử",
+    "Viễn thông",
+    "Khác",
+  ],
+  dataUnit: "%",
   legend: false,
   datasets: [
     {
       borderColor: "#fff",
-      backgroundColor: ["#9cabff", "#b8acff", "#7de1f8"],
-      data: [30.2, 64.1, 5.7],
+      backgroundColor: [
+        "#A19DE0", // Tài chính/Ngân hàng
+        "#B5B4E9", // Bảo hiểm
+        "#D2D1F4", // Thương mại điện tử
+        "#E8E7F8", // Viễn thông
+        "#FADE8C", // Khác
+      ],
+      data: [38.5, 21.4, 17.3, 12.8, 10],
     },
   ],
 };
 
-export const SessionDoughnut = ({ className }) => {
+const TCDoughnut = ({ className }) => {
   return (
     <Doughnut
       className={className}
-      data={deviceStatusData}
+      data={data}
       options={{
         plugins: {
           legend: {
@@ -74,3 +85,5 @@ export const SessionDoughnut = ({ className }) => {
     ></Doughnut>
   );
 };
+
+export default TCDoughnut;

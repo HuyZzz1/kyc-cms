@@ -644,6 +644,11 @@
   resolved "https://registry.yarnpkg.com/@react-google-maps/marker-clusterer/-/marker-clusterer-2.20.0.tgz#6b64177843a60c66e0ebaf85037a47ecd07007df"
   integrity sha512-tieX9Va5w1yP88vMgfH1pHTacDQ9TgDTjox3tLlisKDXRQWdjw+QeVVghhf5XqqIxXHgPdcGwBvKY6UP+SIvLw==
 
+"@react-jvectormap/asia@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@react-jvectormap/asia/-/asia-1.0.1.tgz#449b2be0b8af2c1b455a246451d645a146f3aa3e"
+  integrity sha512-Y94DDc40PToMGQfxyOcrdAc+LpOZGUrl+lm2la5gVA4Gehqj+LuCychQiwdmQLvrR3MbG6iV4soR1+T5ade/aQ==
+
 "@react-jvectormap/core@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@react-jvectormap/core/-/core-1.0.4.tgz#459e396c305dbd3ccf9032bb509d6373ffde8071"

@@ -1,10 +1,9 @@
-import React from "react";
 import { Helmet } from "react-helmet";
 
 const Head = ({ ...props }) => {
   return (
     <Helmet>
-      <title>{props.title ? props.title + " | " : null} DashLite React Admin Template</title>
+      <title>{props.title ? props.title + " | " : null} KYC Chain</title>
     </Helmet>
   );
 };

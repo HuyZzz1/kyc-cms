@@ -18,6 +18,7 @@
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "@react-google-maps/api": "^2.20.3",
+    "@react-jvectormap/asia": "^1.0.1",
     "@react-jvectormap/core": "^1.0.4",
     "@react-jvectormap/world": "^1.1.2",
     "@tinymce/tinymce-react": "^5.1.1",

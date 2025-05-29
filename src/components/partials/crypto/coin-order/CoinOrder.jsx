@@ -85,28 +85,32 @@ const CoinOrder = () => {
               className="dot dot-lg sq"
               style={{ background: "#4c84ff", width: 15 }}
             ></span>
-            <span>Stripe</span>
+            <span className="w-100">Stripe</span>
           </li>
           <li>
             <span
               className="dot dot-lg sq"
               style={{ background: "#ff4d4f", width: 15 }}
             ></span>
-            <span>Google OAuth</span>
+            <span className="w-100">Google OAuth</span>
           </li>
           <li>
             <span
               className="dot dot-lg sq"
-              style={{ background: "#3b5998", width: 15 }}
+              style={{
+                background: "#3b5998",
+                width: 15,
+                height: 12,
+              }}
             ></span>
-            <span>Facebook OAuth</span>
+            <span className="w-100">Facebook OAuth</span>
           </li>
           <li>
             <span
               className="dot dot-lg sq"
-              style={{ background: "#38c976", width: 15 }}
+              style={{ background: "#38c976", width: 15, height: 12 }}
             ></span>
-            <span>Gửi qua API</span>
+            <span className="w-100">Gửi qua API</span>
           </li>
           <li>
             <span
