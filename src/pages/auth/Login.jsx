@@ -64,7 +64,7 @@ const Login = () => {
             <BlockContent>
               <BlockTitle tag="h4">Đăng nhập</BlockTitle>
               <BlockDes>
-                <p>Truy cập KYC Chain bằng email và mật khẩu của bạn.</p>
+                <p>Truy cập KYC CHAIN bằng email và mật khẩu của bạn.</p>
               </BlockDes>
             </BlockContent>
           </BlockHead>

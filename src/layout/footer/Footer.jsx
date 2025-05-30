@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -8,7 +7,7 @@ const Footer = () => {
         <div className="nk-footer-wrap">
           <div className="nk-footer-copyright">
             {" "}
-            &copy; 2025 Dashlite React Template by <a href="https://softnio.com">Softnio</a>
+            &copy; 2025 KYC CHAIN. Bản quyền thuộc về KYC CHAIN
           </div>
           <div className="nk-footer-links">
             <ul className="nav nav-sm">

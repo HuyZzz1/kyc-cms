@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import Toggle from "./Toggle";
-import Logo from "../logo/Logo";
 import Menu from "../menu/Menu";
 import MenuMobile from "../menu/MenuMobile";
 import User from "./dropdown/user/User";
@@ -56,7 +55,13 @@ const Header = ({ fixed, className, menuData }) => {
           >
             <div className="nk-header-mobile ">
               <div className="nk-header-brand">
-                <Logo />
+                <img
+                  style={{
+                    width: 140,
+                  }}
+                  src="logo.png"
+                  alt="logo"
+                />
               </div>
               <div className="nk-menu-trigger me-n2">
                 <Toggle
