@@ -206,7 +206,7 @@ const Router = () => {
             </Route>
             <Route element={<Layout />}>
               {/* <Route index element={<Crypto />}></Route> */}
-              <Route path="crypto" element={<Crypto />}></Route>
+              <Route path="overview" element={<Crypto />}></Route>
               <Route path="analytics" element={<Analytics />}></Route>
               <Route path="sales" element={<Sales />}></Route>
               <Route path="_blank" element={<Blank />}></Route>

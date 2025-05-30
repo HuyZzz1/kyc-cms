@@ -4,7 +4,7 @@ const menu = [
     subMenu: [
       {
         text: "Tổng Quan",
-        link: "/crypto",
+        link: "/overview",
       },
       {
         text: "Phân Tích User",

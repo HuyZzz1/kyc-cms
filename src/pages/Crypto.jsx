@@ -30,7 +30,7 @@ const CryptoHomePage = () => {
   const [sm, updateSm] = useState(false);
   return (
     <React.Fragment>
-      <Head title="Crypto Dashboard" />
+      <Head title="Tổng quan" />
       <Content>
         <BlockHead size="sm">
           <BlockBetween>

@@ -29,7 +29,7 @@ const Login = () => {
     if (formData.name === loginName && formData.passcode === pass) {
       localStorage.setItem("accessToken", "token");
       setTimeout(() => {
-        navigate("/crypto");
+        navigate("/overview");
       }, 1000);
     } else {
       setTimeout(() => {
