@@ -12,7 +12,7 @@ const menu = [
       },
       {
         text: "Quản lý File",
-        link: "/analytics/0",
+        link: "/app-file-manager",
       },
     ],
   },
@@ -21,15 +21,15 @@ const menu = [
     subMenu: [
       {
         text: "Danh sách KYC",
-        link: "/analytics/1",
+        link: "/kyc-list-regular",
       },
       {
         text: "Danh sách Thanh Toán",
-        link: "/analytics/2",
+        link: "/transaction",
       },
       {
         text: "Danh sách Hóa Đơn",
-        link: "/analytics/3",
+        link: "/invoice-list",
       },
     ],
   },
@@ -38,15 +38,15 @@ const menu = [
     subMenu: [
       {
         text: "Hỏi Đáp",
-        link: "/analytics/4",
+        link: "/pages/faq",
       },
       {
         text: "Chính Sách",
-        link: "/analytics/5",
+        link: "/pages/terms-policy",
       },
       {
         text: "Hướng Dẫn",
-        link: "/analytics/6",
+        link: "/pages/guide",
       },
     ],
   },

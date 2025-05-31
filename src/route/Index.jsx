@@ -140,6 +140,7 @@ import Layout from "@/layout/Index";
 import LayoutInvest from "@/layout/Index-invest";
 import LayoutNoSidebar from "@/layout/Index-nosidebar";
 import ThemeProvider from "@/layout/provider/Theme";
+import KycGuide from "../pages/others/KycGuide";
 
 const ScrollToTop = (props) => {
   const location = useLocation();
@@ -264,10 +265,7 @@ const Router = () => {
                 path="transaction-basic"
                 element={<TransListBasic />}
               ></Route>
-              <Route
-                path="transaction-crypto"
-                element={<TransListCrypto />}
-              ></Route>
+              <Route path="transaction" element={<TransListCrypto />}></Route>
               <Route element={<ProductContextProvider />}>
                 <Route path="product-list" element={<ProductList />}></Route>
                 <Route path="product-card" element={<ProductCard />}></Route>
@@ -288,6 +286,7 @@ const Router = () => {
               <Route path="pages">
                 <Route path="terms-policy" element={<Terms />}></Route>
                 <Route path="faq" element={<Faq />}></Route>
+                <Route path="guide" element={<KycGuide />}></Route>
                 <Route path="regular-v1" element={<Regularv1 />}></Route>
                 <Route path="regular-v2" element={<Regularv2 />}></Route>
               </Route>

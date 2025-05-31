@@ -43,7 +43,7 @@ const Header = ({ fixed, className, menuData }) => {
                 style={{
                   width: 140,
                 }}
-                src="logo.png"
+                src="/logo.png"
                 alt="logo"
               />
             </Link>

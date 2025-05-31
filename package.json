@@ -58,7 +58,8 @@
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.13",
     "sweetalert2": "11.4.8",
-    "tinymce": "^7.4.1"
+    "tinymce": "^7.4.1",
+    "bootstrap-icons": "^1.13.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

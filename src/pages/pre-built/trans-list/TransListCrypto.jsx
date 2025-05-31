@@ -5,7 +5,6 @@ import {
   UncontrolledDropdown,
   DropdownMenu,
   DropdownToggle,
-  
   ModalBody,
   Modal,
   DropdownItem,
@@ -33,7 +32,13 @@ import {
   PaginationComponent,
   RSelect,
 } from "@/components/Component";
-import { cryptoActivityOptions, filterCoin, filterPaymentmethod, filterStatusOptions, orderData } from "./TransData";
+import {
+  cryptoActivityOptions,
+  filterCoin,
+  filterPaymentmethod,
+  filterStatusOptions,
+  orderData,
+} from "./TransData";
 import { useForm } from "react-hook-form";
 
 const TransListCrypto = () => {
@@ -111,7 +116,10 @@ const TransListCrypto = () => {
       id: data.length + 1,
       ref: "YWLX52JG73",
       date: "18/10/2019 12:04 PM",
-      desc: formData.orderType === "Profit" ? "Credited " + formData.orderType : formData.orderType + " Funds",
+      desc:
+        formData.orderType === "Profit"
+          ? "Credited " + formData.orderType
+          : formData.orderType + " Funds",
       orderType: formData.orderType,
       amountBTC: amountBTC,
       amountUSD: amountUSD,
@@ -125,7 +133,7 @@ const TransListCrypto = () => {
   };
 
   useEffect(() => {
-    reset(formData)
+    reset(formData);
   }, [formData]);
 
   // function to change to approve property for an item
@@ -164,18 +172,23 @@ const TransListCrypto = () => {
   // function to toggle details modal
   const toggleModalDetail = () => setModalDetail(!modalDetail);
 
-  const { reset, register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   return (
     <React.Fragment>
-      <Head title="Trasaction List - Crypto"></Head>
+      <Head title="Quản lý thanh toán dịch vụ KYC"></Head>
       <Content>
         <BlockHead size="sm">
           <BlockBetween>
             <BlockHeadContent>
-              <BlockTitle page>Crypto Transaction</BlockTitle>
+              <BlockTitle page>Quản lý thanh toán dịch vụ KYC</BlockTitle>
               <BlockDes className="text-soft">
-                <p>You have total 12,835 orders.</p>
+                <p>Tổng số giao dịch đã ghi nhận: 12,835.</p>
               </BlockDes>
             </BlockHeadContent>
             <BlockHeadContent>
@@ -183,11 +196,15 @@ const TransListCrypto = () => {
                 <li>
                   <Button color="light" outline className="btn-white">
                     <Icon name="download-cloud"></Icon>
-                    <span>Export</span>
+                    <span>Xuất dữ liệu</span>
                   </Button>
                 </li>
                 <li>
-                  <Button color="primary" className="btn-icon" onClick={() => setModal({ add: true })}>
+                  <Button
+                    color="primary"
+                    className="btn-icon"
+                    onClick={() => setModal({ add: true })}
+                  >
                     <Icon name="plus"></Icon>
                   </Button>
                 </li>
@@ -201,7 +218,7 @@ const TransListCrypto = () => {
             <div className="card-inner">
               <div className="card-title-group">
                 <div className="card-title">
-                  <h5 className="title">All Orders</h5>
+                  <h5 className="title">Tất cả giao dịch</h5>
                 </div>
                 <div className="card-tools me-n1">
                   <ul className="btn-toolbar gx-1">
@@ -220,13 +237,21 @@ const TransListCrypto = () => {
                     <li className="btn-toolbar-sep"></li>
                     <li>
                       <UncontrolledDropdown>
-                        <DropdownToggle tag="a" className="btn btn-trigger btn-icon dropdown-toggle">
+                        <DropdownToggle
+                          tag="a"
+                          className="btn btn-trigger btn-icon dropdown-toggle"
+                        >
                           <div className="dot dot-primary"></div>
                           <Icon name="filter-alt"></Icon>
                         </DropdownToggle>
-                        <DropdownMenu end className="filter-wg dropdown-menu-xl">
+                        <DropdownMenu
+                          end
+                          className="filter-wg dropdown-menu-xl"
+                        >
                           <div className="dropdown-head">
-                            <span className="sub-title dropdown-title">Advanced Filter</span>
+                            <span className="sub-title dropdown-title">
+                              Advanced Filter
+                            </span>
                             <div className="dropdown">
                               <Button size="sm" className="btn-icon">
                                 <Icon name="more-h"></Icon>
@@ -237,34 +262,61 @@ const TransListCrypto = () => {
                             <Row className="gx-6 gy-4">
                               <Col size="6">
                                 <div className="form-group">
-                                  <label className="overline-title overline-title-alt">Type</label>
-                                  <RSelect options={cryptoActivityOptions} placeholder="Any Activity" />
+                                  <label className="overline-title overline-title-alt">
+                                    Type
+                                  </label>
+                                  <RSelect
+                                    options={cryptoActivityOptions}
+                                    placeholder="Any Activity"
+                                  />
                                 </div>
                               </Col>
                               <Col size="6">
                                 <div className="form-group">
-                                  <label className="overline-title overline-title-alt">Status</label>
-                                  <RSelect options={filterStatusOptions} placeholder="Any Status" />
+                                  <label className="overline-title overline-title-alt">
+                                    Status
+                                  </label>
+                                  <RSelect
+                                    options={filterStatusOptions}
+                                    placeholder="Any Status"
+                                  />
                                 </div>
                               </Col>
                               <Col size="6">
                                 <div className="form-group">
-                                  <label className="overline-title overline-title-alt">Pay Currency</label>
-                                  <RSelect options={filterCoin} placeholder="Any coin" />
+                                  <label className="overline-title overline-title-alt">
+                                    Pay Currency
+                                  </label>
+                                  <RSelect
+                                    options={filterCoin}
+                                    placeholder="Any coin"
+                                  />
                                 </div>
                               </Col>
                               <Col size="6">
                                 <div className="form-group">
-                                  <label className="overline-title overline-title-alt">Method</label>
-                                  <RSelect options={filterPaymentmethod} placeholder="Any Method" />
+                                  <label className="overline-title overline-title-alt">
+                                    Method
+                                  </label>
+                                  <RSelect
+                                    options={filterPaymentmethod}
+                                    placeholder="Any Method"
+                                  />
                                 </div>
                               </Col>
 
                               <Col size="6">
                                 <div className="form-group">
                                   <div className="custom-control custom-control-sm custom-checkbox">
-                                    <input type="checkbox" className="custom-control-input" id="includeDel" />
-                                    <label className="custom-control-label" htmlFor="includeDel">
+                                    <input
+                                      type="checkbox"
+                                      className="custom-control-input"
+                                      id="includeDel"
+                                    />
+                                    <label
+                                      className="custom-control-label"
+                                      htmlFor="includeDel"
+                                    >
                                       {" "}
                                       Including Deleted
                                     </label>
@@ -274,7 +326,10 @@ const TransListCrypto = () => {
 
                               <Col size="12">
                                 <div className="form-group">
-                                  <Button type="button" className="btn btn-secondary">
+                                  <Button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                  >
                                     Filter
                                   </Button>
                                 </div>
@@ -305,7 +360,10 @@ const TransListCrypto = () => {
                     </li>
                     <li>
                       <UncontrolledDropdown>
-                        <DropdownToggle tag="a" className="btn btn-trigger btn-icon dropdown-toggle">
+                        <DropdownToggle
+                          tag="a"
+                          className="btn btn-trigger btn-icon dropdown-toggle"
+                        >
                           <Icon name="setting"></Icon>
                         </DropdownToggle>
                         <DropdownMenu end className="dropdown-menu-xs">
@@ -374,7 +432,9 @@ const TransListCrypto = () => {
                     </li>
                   </ul>
                 </div>
-                <div className={`card-search search-wrap ${!onSearch && "active"}`}>
+                <div
+                  className={`card-search search-wrap ${!onSearch && "active"}`}
+                >
                   <div className="search-content">
                     <Button
                       onClick={() => {
@@ -388,7 +448,7 @@ const TransListCrypto = () => {
                     <input
                       type="text"
                       className="border-transparent form-focus-none form-control"
-                      placeholder="Search by Order Id"
+                      placeholder="Tìm kiếm giao dịch..."
                       value={onSearchText}
                       onChange={(e) => onFilterChange(e)}
                     />
@@ -399,241 +459,280 @@ const TransListCrypto = () => {
                 </div>
               </div>
             </div>
-            <DataTableBody bodyclass="nk-tb-tnx">
-              <DataTableHead>
-                <DataTableRow>
-                  <span>Details</span>
-                </DataTableRow>
-                <DataTableRow size="xxl">
-                  <span>Source</span>
-                </DataTableRow>
-                <DataTableRow size="lg">
-                  <span>Order</span>
-                </DataTableRow>
-                <DataTableRow className="text-end">
-                  <span>Amount</span>
-                </DataTableRow>
-                <DataTableRow size="sm" className="text-end">
-                  <span>Balance</span>
-                </DataTableRow>
-                <DataTableRow className="nk-tb-col-status">
-                  <span className="sub-text d-none d-md-block">Status</span>
-                </DataTableRow>
-                <DataTableRow className="nk-tb-col-tools"></DataTableRow>
-              </DataTableHead>
+            <div style={{ overflowX: "auto", width: "100%" }}>
+              <div className="min-w-[900px]">
+                <DataTableBody bodyclass="nk-tb-tnx">
+                  <DataTableHead>
+                    <DataTableRow>
+                      <span className="text-nowrap">Loại giao dịch</span>
+                    </DataTableRow>
+                    <DataTableRow>
+                      <span className="text-nowrap">Tên doanh nghiệp</span>
+                    </DataTableRow>
+                    <DataTableRow>
+                      <span className="text-nowrap">Liên hệ</span>
+                    </DataTableRow>
+                    <DataTableRow>
+                      <span className="text-nowrap">
+                        Phương thức thanh toán
+                      </span>
+                    </DataTableRow>
+                    <DataTableRow>
+                      <span className="text-nowrap">Mã giao dịch</span>
+                    </DataTableRow>
+                    <DataTableRow>
+                      <span className="text-nowrap">Số tiền</span>
+                    </DataTableRow>
+                    <DataTableRow className="text-center">
+                      <span className="text-nowrap">Số lượt KYC</span>
+                    </DataTableRow>
+                    <DataTableRow>
+                      <span className="sub-text text-center ">Trạng thái</span>
+                    </DataTableRow>
+                    <DataTableRow className="nk-tb-col-tools"></DataTableRow>
+                  </DataTableHead>
 
-              {currentItems.length > 0
-                ? currentItems.map((item) => {
-                    return (
-                      <DataTableItem key={item.id}>
-                        <DataTableRow>
-                          <div className="nk-tnx-type">
-                            <div
-                              className={`nk-tnx-type-icon bg-${
-                                item.status === "Completed"
-                                  ? "success-dim text-success"
-                                  : item.status === "Upcoming"
-                                  ? "warning-dim text-warning"
-                                  : item.status === "Pending"
-                                  ? "info-dim text-info"
-                                  : "danger-dim text-danger"
-                              }`}
-                            >
-                              <Icon name="arrow-up-right"></Icon>
-                            </div>
-                            <div className="nk-tnx-type-text">
-                              <span className="tb-lead">{item.desc}</span>
-                              <span className="tb-date">{item.date}</span>
-                            </div>
-                          </div>
-                        </DataTableRow>
-                        <DataTableRow size="xxl">
-                          <span className="tb-lead-sub">Using PayPal Account</span>
-                          <span className="tb-sub">mypay*****com</span>
-                        </DataTableRow>
-                        <DataTableRow size="lg">
-                          <span className="tb-lead-sub">{item.ref}</span>
-                          <Badge
-                            className="badge-dot"
-                            color={
-                              item.status === "Completed"
-                                ? "success"
-                                : item.status === "Upcoming"
-                                ? "warning"
-                                : item.status === "Pending"
-                                ? "info"
-                                : "danger"
-                            }
-                          >
-                            {item.orderType}
-                          </Badge>
-                        </DataTableRow>
-                        <DataTableRow className="text-end">
-                          <span className="tb-amount">
-                            + {item.amountBTC} <span>BTC</span>
-                          </span>
-                          <span className="tb-amount-sm">{item.amountUSD} USD</span>
-                        </DataTableRow>
-                        <DataTableRow className="text-end" size="sm">
-                          <span className="tb-amount">
-                            {item.balanceBTC} <span>BTC</span>
-                          </span>
-                          <span className="tb-amount-sm">{item.balanceUSD} USD</span>
-                        </DataTableRow>
-                        <DataTableRow className="nk-tb-col-status">
-                          <div
-                            className={`dot dot-${
-                              item.status === "Completed"
-                                ? "success"
-                                : item.status === "Upcoming"
-                                ? "warning"
-                                : item.status === "Pending"
-                                ? "info"
-                                : "danger"
-                            } d-md-none`}
-                          ></div>
-                          <Badge
-                            className="badge-sm badge-dim d-none d-md-inline-flex"
-                            color={`outline-${
-                              item.status === "Completed"
-                                ? "success"
-                                : item.status === "Upcoming"
-                                ? "warning"
-                                : item.status === "Pending"
-                                ? "info"
-                                : "danger"
-                            }`}
-                          >
-                            {item.status}
-                          </Badge>
-                        </DataTableRow>
-                        <DataTableRow className="nk-tb-col-tools">
-                          <ul className="nk-tb-actions gx-1">
-                            <li
-                              className="nk-tb-action-hidden"
-                              onClick={() => {
-                                loadDetail(item.id);
-                                toggleModalDetail();
-                              }}
-                            >
-                              <TooltipComponent
-                                tag="a"
-                                containerClassName="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip"
-                                id={item.ref + "details"}
-                                icon="eye"
-                                direction="top"
-                                text="Details"
-                              />
-                            </li>
-                            {item.status !== "Completed" && item.status !== "Rejected" && (
-                              <React.Fragment>
-                                <li className="nk-tb-action-hidden" onClick={() => onApproveClick(item.id)}>
-                                  <TooltipComponent
-                                    tag="a"
-                                    containerClassName="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip"
-                                    id={item.ref + "approve"}
-                                    icon="done"
-                                    direction="top"
-                                    text="approve"
-                                  />
-                                </li>
-                                <li className="nk-tb-action-hidden" onClick={() => onRejectClick(item.id)}>
-                                  <TooltipComponent
-                                    tag="a"
-                                    containerClassName="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip"
-                                    id={item.ref + "reject"}
-                                    icon="cross-round"
-                                    direction="top"
-                                    text="Reject"
-                                  />
-                                </li>
-                              </React.Fragment>
-                            )}
-                            <li>
-                              <UncontrolledDropdown>
-                                <DropdownToggle
-                                  tag="a"
-                                  className="dropdown-toggle bg-white btn btn-sm btn-outline-light btn-icon"
+                  {currentItems.length > 0
+                    ? currentItems.map((item) => {
+                        return (
+                          <DataTableItem key={item.id}>
+                            <DataTableRow>
+                              <div className="nk-tnx-type text-nowrap">
+                                <div
+                                  className={`nk-tnx-type-icon bg-success-dim text-success `}
+                                  style={{
+                                    width: 30,
+                                    height: 30,
+                                  }}
                                 >
-                                  <Icon name="more-h"></Icon>
-                                </DropdownToggle>
-                                <DropdownMenu end>
-                                  <ul className="link-list-opt no-bdr">
-                                    {item.status !== "Completed" && item.status !== "Rejected" && (
-                                      <React.Fragment>
-                                        <li onClick={() => onApproveClick(item.id)}>
-                                          <DropdownItem
-                                            tag="a"
-                                            href="#approve"
-                                            onClick={(ev) => {
-                                              ev.preventDefault();
-                                            }}
-                                          >
-                                            <Icon name="done"></Icon>
-                                            <span>Approve</span>
-                                          </DropdownItem>
-                                        </li>
-                                        <li onClick={() => onRejectClick(item.id)}>
-                                          <DropdownItem
-                                            tag="a"
-                                            href="#reject"
-                                            onClick={(ev) => {
-                                              ev.preventDefault();
-                                            }}
-                                          >
-                                            <Icon name="cross-round"></Icon>
-                                            <span>Reject</span>
-                                          </DropdownItem>
-                                        </li>
-                                      </React.Fragment>
-                                    )}
-                                    <li
-                                      onClick={() => {
-                                        loadDetail(item.id);
-                                        toggleModalDetail();
-                                      }}
-                                    >
-                                      <DropdownItem
-                                        tag="a"
-                                        href="#details"
-                                        onClick={(ev) => {
-                                          ev.preventDefault();
-                                        }}
+                                  <Icon name="arrow-up-right"></Icon>
+                                </div>
+                                <div className="nk-tnx-type-text">
+                                  <span className="tb-lead">{item.title}</span>
+                                </div>
+                              </div>
+                            </DataTableRow>
+                            <DataTableRow>
+                              <span className="tb-lead-sub text-nowrap">
+                                {item?.company}
+                              </span>
+                            </DataTableRow>
+                            <DataTableRow>
+                              <span className="tb-lead-sub text-nowrap">
+                                {item?.contact?.phone}
+                              </span>
+                              <span
+                                className="tb-lead-sub text-nowrap"
+                                style={{
+                                  color: "blue",
+                                }}
+                              >
+                                {item?.contact?.email}
+                              </span>
+                            </DataTableRow>
+                            <DataTableRow>
+                              <span className="tb-lead-sub text-nowrap">
+                                {item?.paymentMethod}
+                              </span>
+                            </DataTableRow>
+                            <DataTableRow>
+                              <span className="tb-lead-sub text-nowrap">
+                                {item?.transactionRef}
+                              </span>
+                            </DataTableRow>
+                            <DataTableRow>
+                              <span className="tb-lead-sub text-nowrap">
+                                {item.status === "Rejected" ? "-" : "+"}
+                                {item.amount}{" "}
+                              </span>
+                              <p
+                                className="tb-lead-sub"
+                                style={{
+                                  textAlign: "start",
+                                }}
+                              >
+                                VNĐ
+                              </p>
+                            </DataTableRow>
+                            <DataTableRow className="text-center">
+                              <span className="tb-lead-sub text-nowrap">
+                                {" "}
+                                {item.status === "Rejected" ? "-" : ""}
+                                {item.kyc}{" "}
+                              </span>
+                            </DataTableRow>
+                            <DataTableRow>
+                              <Badge
+                                className="badge-sm badge-dim  text-nowrap"
+                                color={`outline-${
+                                  item.status === "Completed"
+                                    ? "success"
+                                    : item.status === "Upcoming"
+                                    ? "warning"
+                                    : item.status === "Pending"
+                                    ? "info"
+                                    : "danger"
+                                }`}
+                              >
+                                {item.status === "Completed"
+                                  ? "Hoàn tất"
+                                  : item.status === "Upcoming"
+                                  ? "Chờ xác nhận"
+                                  : item.status === "Pending"
+                                  ? "Đang xử lí"
+                                  : "Từ chối"}
+                              </Badge>
+                            </DataTableRow>
+                            <DataTableRow className="nk-tb-col-tools">
+                              <ul className="nk-tb-actions gx-1">
+                                <li
+                                  className="nk-tb-action-hidden"
+                                  onClick={() => {
+                                    loadDetail(item.id);
+                                    toggleModalDetail();
+                                  }}
+                                >
+                                  <TooltipComponent
+                                    tag="a"
+                                    containerClassName="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip"
+                                    id={item.ref + "details"}
+                                    icon="eye"
+                                    direction="top"
+                                    text="Chi tiết"
+                                  />
+                                </li>
+                                {item.status !== "Completed" &&
+                                  item.status !== "Rejected" && (
+                                    <React.Fragment>
+                                      <li
+                                        className="nk-tb-action-hidden"
+                                        onClick={() => onApproveClick(item.id)}
                                       >
-                                        <Icon name="eye"></Icon>
-                                        <span>Details</span>
-                                      </DropdownItem>
-                                    </li>
-                                  </ul>
-                                </DropdownMenu>
-                              </UncontrolledDropdown>
-                            </li>
-                          </ul>
-                        </DataTableRow>
-                      </DataTableItem>
-                    );
-                  })
-                : null}
-            </DataTableBody>
-            <div className="card-inner">
-              {currentItems.length > 0 ? (
-                <PaginationComponent
-                  noDown
-                  itemPerPage={itemPerPage}
-                  totalItems={data.length}
-                  paginate={paginate}
-                  currentPage={currentPage}
-                />
-              ) : (
-                <div className="text-center">
-                  <span className="text-silent">No data found</span>
+                                        <TooltipComponent
+                                          tag="a"
+                                          containerClassName="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip"
+                                          id={item.ref + "approve"}
+                                          icon="done"
+                                          direction="top"
+                                          text="Phê duyệt"
+                                        />
+                                      </li>
+                                      <li
+                                        className="nk-tb-action-hidden"
+                                        onClick={() => onRejectClick(item.id)}
+                                      >
+                                        <TooltipComponent
+                                          tag="a"
+                                          containerClassName="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip"
+                                          id={item.ref + "reject"}
+                                          icon="cross-round"
+                                          direction="top"
+                                          text="Từ chối"
+                                        />
+                                      </li>
+                                    </React.Fragment>
+                                  )}
+                                <li>
+                                  <UncontrolledDropdown>
+                                    <DropdownToggle
+                                      tag="a"
+                                      className="dropdown-toggle bg-white btn btn-sm btn-outline-light btn-icon"
+                                    >
+                                      <Icon name="more-h"></Icon>
+                                    </DropdownToggle>
+                                    <DropdownMenu end>
+                                      <ul className="link-list-opt no-bdr">
+                                        {item.status !== "Completed" &&
+                                          item.status !== "Rejected" && (
+                                            <React.Fragment>
+                                              <li
+                                                onClick={() =>
+                                                  onApproveClick(item.id)
+                                                }
+                                              >
+                                                <DropdownItem
+                                                  tag="a"
+                                                  href="#approve"
+                                                  onClick={(ev) => {
+                                                    ev.preventDefault();
+                                                  }}
+                                                >
+                                                  <Icon name="done"></Icon>
+                                                  <span>Phê duyệt</span>
+                                                </DropdownItem>
+                                              </li>
+                                              <li
+                                                onClick={() =>
+                                                  onRejectClick(item.id)
+                                                }
+                                              >
+                                                <DropdownItem
+                                                  tag="a"
+                                                  href="#reject"
+                                                  onClick={(ev) => {
+                                                    ev.preventDefault();
+                                                  }}
+                                                >
+                                                  <Icon name="cross-round"></Icon>
+                                                  <span>Từ chối</span>
+                                                </DropdownItem>
+                                              </li>
+                                            </React.Fragment>
+                                          )}
+                                        <li
+                                          onClick={() => {
+                                            loadDetail(item.id);
+                                            toggleModalDetail();
+                                          }}
+                                        >
+                                          <DropdownItem
+                                            tag="a"
+                                            href="#details"
+                                            onClick={(ev) => {
+                                              ev.preventDefault();
+                                            }}
+                                          >
+                                            <Icon name="eye"></Icon>
+                                            <span>Chi tiết</span>
+                                          </DropdownItem>
+                                        </li>
+                                      </ul>
+                                    </DropdownMenu>
+                                  </UncontrolledDropdown>
+                                </li>
+                              </ul>
+                            </DataTableRow>
+                          </DataTableItem>
+                        );
+                      })
+                    : null}
+                </DataTableBody>
+                <div className="card-inner">
+                  {currentItems.length > 0 ? (
+                    <PaginationComponent
+                      noDown
+                      itemPerPage={itemPerPage}
+                      totalItems={data.length}
+                      paginate={paginate}
+                      currentPage={currentPage}
+                    />
+                  ) : (
+                    <div className="text-center">
+                      <span className="text-silent">No data found</span>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </DataTable>
         </Block>
 
-        <Modal isOpen={modal.add} toggle={() => setModal({ add: false })} className="modal-dialog-centered" size="lg">
+        <Modal
+          isOpen={modal.add}
+          toggle={() => setModal({ add: false })}
+          className="modal-dialog-centered"
+          size="lg"
+        >
           <ModalBody>
             <a
               href="#close"
@@ -647,7 +746,11 @@ const TransListCrypto = () => {
             </a>
             <div className="p-2">
               <h5 className="title">Add Transaction</h5>
-              <Form className="mt-4" onSubmit={handleSubmit(onFormSubmit)} noValidate>
+              <Form
+                className="mt-4"
+                onSubmit={handleSubmit(onFormSubmit)}
+                noValidate
+              >
                 <Row className="g-gs">
                   <Col md="6">
                     <div className="form-group">
@@ -659,7 +762,9 @@ const TransListCrypto = () => {
                             value: formData.orderType,
                             label: formData.orderType,
                           }}
-                          onChange={(e) => setFormData({ ...formData, orderType: e.value })}
+                          onChange={(e) =>
+                            setFormData({ ...formData, orderType: e.value })
+                          }
                         />
                       </div>
                     </div>
@@ -674,7 +779,9 @@ const TransListCrypto = () => {
                             value: formData.status,
                             label: formData.status,
                           }}
-                          onChange={(e) => setFormData({ ...formData, status: e.value })}
+                          onChange={(e) =>
+                            setFormData({ ...formData, status: e.value })
+                          }
                         />
                       </div>
                     </div>
@@ -688,11 +795,23 @@ const TransListCrypto = () => {
                       <label className="form-label">BTC</label>
                       <input
                         type="number"
-                        {...register('amountBTC', { required: "This field is required" })}
+                        {...register("amountBTC", {
+                          required: "This field is required",
+                        })}
                         value={formData.amountBTC}
-                        onChange={(e) => setFormData({ ...formData, amountBTC: e.target.value })}
-                        className="form-control" />
-                      {errors.amountBTC && <span className="invalid">{errors.amountBTC.message}</span>}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            amountBTC: e.target.value,
+                          })
+                        }
+                        className="form-control"
+                      />
+                      {errors.amountBTC && (
+                        <span className="invalid">
+                          {errors.amountBTC.message}
+                        </span>
+                      )}
                     </div>
                   </Col>
                   <Col md="6">
@@ -700,11 +819,23 @@ const TransListCrypto = () => {
                       <label className="form-label">USD</label>
                       <input
                         type="number"
-                        {...register('amountUSD', { required: "This field is required" })}
+                        {...register("amountUSD", {
+                          required: "This field is required",
+                        })}
                         value={formData.amountUSD}
-                        onChange={(e) => setFormData({ ...formData, amountUSD: e.target.value })}
-                        className="form-control" />
-                      {errors.amountUSD && <span className="invalid">{errors.amountUSD.message}</span>}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            amountUSD: e.target.value,
+                          })
+                        }
+                        className="form-control"
+                      />
+                      {errors.amountUSD && (
+                        <span className="invalid">
+                          {errors.amountUSD.message}
+                        </span>
+                      )}
                     </div>
                   </Col>
                 </Row>
@@ -716,11 +847,23 @@ const TransListCrypto = () => {
                       <label className="form-label">BTC</label>
                       <input
                         type="number"
-                        {...register('balanceBTC', { required: "This field is required" })}
+                        {...register("balanceBTC", {
+                          required: "This field is required",
+                        })}
                         value={formData.balanceBTC}
-                        onChange={(e) => setFormData({ ...formData, balanceBTC: e.target.value })}
-                        className="form-control" />
-                      {errors.balanceBTC && <span className="invalid">{errors.balanceBTC.message}</span>}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            balanceBTC: e.target.value,
+                          })
+                        }
+                        className="form-control"
+                      />
+                      {errors.balanceBTC && (
+                        <span className="invalid">
+                          {errors.balanceBTC.message}
+                        </span>
+                      )}
                     </div>
                   </Col>
                   <Col md="6">
@@ -728,11 +871,23 @@ const TransListCrypto = () => {
                       <label className="form-label">USD</label>
                       <input
                         type="number"
-                        {...register('balanceUSD', { required: "This field is required" })}
+                        {...register("balanceUSD", {
+                          required: "This field is required",
+                        })}
                         value={formData.balanceUSD}
-                        onChange={(e) => setFormData({ ...formData, balanceUSD: e.target.value })}
-                        className="form-control" />
-                      {errors.balanceUSD && <span className="invalid">{errors.balanceUSD.message}</span>}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            balanceUSD: e.target.value,
+                          })
+                        }
+                        className="form-control"
+                      />
+                      {errors.balanceUSD && (
+                        <span className="invalid">
+                          {errors.balanceUSD.message}
+                        </span>
+                      )}
                     </div>
                   </Col>
                   <Col size="12">
@@ -762,7 +917,12 @@ const TransListCrypto = () => {
           </ModalBody>
         </Modal>
 
-        <Modal isOpen={modalDetail} toggle={() => toggleModalDetail()} className="modal-dialog-centered" size="lg">
+        <Modal
+          isOpen={modalDetail}
+          toggle={() => toggleModalDetail()}
+          className="modal-dialog-centered"
+          size="lg"
+        >
           <ModalBody>
             <a
               href="#cancel"
@@ -776,7 +936,8 @@ const TransListCrypto = () => {
             </a>
             <div className="nk-modal-head mb-3">
               <h4 className="nk-modal-title title">
-                Transaction <small className="text-primary">{detail.transactionId}</small>
+                Transaction{" "}
+                <small className="text-primary">{detail.transactionId}</small>
               </h4>
             </div>
             <div className="nk-tnx-details">
@@ -829,11 +990,15 @@ const TransListCrypto = () => {
                 </Col>
                 <Col lg={6}>
                   <span className="sub-text">Reference ID</span>
-                  <span className="caption-text text-break">{detail.referenceId}</span>
+                  <span className="caption-text text-break">
+                    {detail.referenceId}
+                  </span>
                 </Col>
                 <Col lg={6}>
                   <span className="sub-text">Transaction Fee</span>
-                  <span className="caption-text">{detail.transactionFee} BTC</span>
+                  <span className="caption-text">
+                    {detail.transactionFee} BTC
+                  </span>
                 </Col>
                 <Col lg={6}>
                   <span className="sub-text">Amount</span>
@@ -859,15 +1024,21 @@ const TransListCrypto = () => {
                 </Col>
                 <Col lg={6}>
                   <span className="sub-text">Payment From</span>
-                  <span className="caption-text text-break">{detail.paymentForm}</span>
+                  <span className="caption-text text-break">
+                    {detail.paymentForm}
+                  </span>
                 </Col>
                 <Col lg={6}>
                   <span className="sub-text">Payment To</span>
-                  <span className="caption-text text-break">{detail.paymentTo}</span>
+                  <span className="caption-text text-break">
+                    {detail.paymentTo}
+                  </span>
                 </Col>
                 <Col lg={12}>
                   <span className="sub-text">Transaction Hash</span>
-                  <span className="caption-text text-break">{detail.transactionHash}</span>
+                  <span className="caption-text text-break">
+                    {detail.transactionHash}
+                  </span>
                 </Col>
                 <Col lg={12}>
                   <span className="sub-text">Details</span>

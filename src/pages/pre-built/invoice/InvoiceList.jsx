@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Content from "@/layout/content/Content";
 import Head from "@/layout/head/Head";
-import { UncontrolledDropdown, DropdownMenu, DropdownToggle, Card, Badge, DropdownItem } from "reactstrap";
+import {
+  UncontrolledDropdown,
+  DropdownMenu,
+  DropdownToggle,
+  Card,
+  Badge,
+  DropdownItem,
+} from "reactstrap";
 import {
   Button,
   Block,
@@ -12,6 +19,10 @@ import {
   BlockTitle,
   Icon,
   PaginationComponent,
+  DataTableBody,
+  DataTableHead,
+  DataTableRow,
+  DataTableItem,
 } from "@/components/Component";
 import { Link } from "react-router-dom";
 import { invoiceData } from "./Invoice";
@@ -28,10 +39,14 @@ const InvoiceList = () => {
   const sortFunc = () => {
     let defaultData = data;
     if (sort === "dsc") {
-      let sortedData = defaultData.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
+      let sortedData = defaultData.sort(
+        (a, b) => parseFloat(a.id) - parseFloat(b.id)
+      );
       setData([...sortedData]);
     } else if (sort === "asc") {
-      let sortedData = defaultData.sort((a, b) => parseFloat(b.id) - parseFloat(a.id));
+      let sortedData = defaultData.sort(
+        (a, b) => parseFloat(b.id) - parseFloat(a.id)
+      );
       setData([...sortedData]);
     }
   };
@@ -66,21 +81,22 @@ const InvoiceList = () => {
 
   return (
     <React.Fragment>
-      <Head title="Invoice List"></Head>
+      <Head title="Hóa đơn doanh nghiệp"></Head>
       <Content>
         <BlockHead size="sm">
           <BlockBetween>
             <BlockHeadContent>
-              <BlockTitle page>Invoices</BlockTitle>
+              <BlockTitle page>Hóa đơn doanh nghiệp</BlockTitle>
               <BlockDes className="text-soft">
-                <p>You have total 937 invoices.</p>
+                <p>Bạn đang có tổng cộng 937 hóa đơn đã được tạo và lưu trữ.</p>
               </BlockDes>
             </BlockHeadContent>
             <BlockHeadContent>
               <ul className="nk-block-tools g-3">
                 <li>
-                  <Button color="primary" className="btn-icon">
+                  <Button color="primary" className="btn-icon px-2 ps-0">
                     <Icon name="plus"></Icon>
+                    Tạo mới
                   </Button>
                 </li>
               </ul>
@@ -94,27 +110,35 @@ const InvoiceList = () => {
               <div className="card-inner">
                 <div className="card-title-group">
                   <div className="card-title">
-                    <h5 className="title">All Invoices</h5>
+                    <h5 className="title">Tất cả hóa đơn</h5>
                   </div>
                   <div className="card-tools me-n1">
                     <ul className="btn-toolbar">
                       <li>
-                        <Button onClick={toggle} className="btn-icon search-toggle toggle-search">
+                        <Button
+                          onClick={toggle}
+                          className="btn-icon search-toggle toggle-search"
+                        >
                           <Icon name="search"></Icon>
                         </Button>
                       </li>
                       <li className="btn-toolbar-sep"></li>
                       <li>
                         <UncontrolledDropdown>
-                          <DropdownToggle tag="a" className="dropdown-toggle btn btn-icon btn-trigger">
+                          <DropdownToggle
+                            tag="a"
+                            className="dropdown-toggle btn btn-icon btn-trigger"
+                          >
                             <Icon name="setting"></Icon>
                           </DropdownToggle>
                           <DropdownMenu end>
                             <ul className="link-check">
                               <li>
-                                <span>Show</span>
+                                <span>Hiển thị</span>
                               </li>
-                              <li className={itemPerPage === 10 ? "active" : ""}>
+                              <li
+                                className={itemPerPage === 10 ? "active" : ""}
+                              >
                                 <DropdownItem
                                   tag="a"
                                   href="#dropdownitem"
@@ -126,7 +150,9 @@ const InvoiceList = () => {
                                   10
                                 </DropdownItem>
                               </li>
-                              <li className={itemPerPage === 15 ? "active" : ""}>
+                              <li
+                                className={itemPerPage === 15 ? "active" : ""}
+                              >
                                 <DropdownItem
                                   tag="a"
                                   href="#dropdownitem"
@@ -141,7 +167,7 @@ const InvoiceList = () => {
                             </ul>
                             <ul className="link-check">
                               <li>
-                                <span>Order</span>
+                                <span>Thứ tự</span>
                               </li>
                               <li className={sort === "dsc" ? "active" : ""}>
                                 <DropdownItem
@@ -153,7 +179,7 @@ const InvoiceList = () => {
                                     sortFunc("dsc");
                                   }}
                                 >
-                                  DESC
+                                  Giảm dần
                                 </DropdownItem>
                               </li>
                               <li className={sort === "asc" ? "active" : ""}>
@@ -166,7 +192,7 @@ const InvoiceList = () => {
                                     sortFunc("asc");
                                   }}
                                 >
-                                  ASC
+                                  Tăng dần
                                 </DropdownItem>
                               </li>
                             </ul>
@@ -175,7 +201,11 @@ const InvoiceList = () => {
                       </li>
                     </ul>
                   </div>
-                  <div className={`card-search search-wrap ${!onSearch ? "active" : ""}`}>
+                  <div
+                    className={`card-search search-wrap ${
+                      !onSearch ? "active" : ""
+                    }`}
+                  >
                     <div className="search-content">
                       <Button
                         className="search-back btn-icon toggle-search"
@@ -189,7 +219,7 @@ const InvoiceList = () => {
                       <input
                         type="text"
                         className="form-control border-transparent form-focus-none"
-                        placeholder="Search by Order Id"
+                        placeholder="Tìm kiếm theo mã hóa đơn, doanh nghiệp, trạng thái..."
                         value={onSearchText}
                         onChange={(e) => onFilterChange(e)}
                       />
@@ -200,93 +230,117 @@ const InvoiceList = () => {
                   </div>
                 </div>
               </div>
-              <div className="card-inner p-0">
-                <table className="table table-orders">
-                  <thead className="tb-odr-head">
-                    <tr className="tb-odr-item">
-                      <th className="tb-odr-info">
-                        <span className="tb-odr-id">Order ID</span>
-                        <span className="tb-odr-date d-none d-md-inline-block">Date</span>
-                      </th>
-                      <th className="tb-odr-amount">
-                        <span className="tb-odr-total">Amount</span>
-                        <span className="tb-odr-status d-none d-md-inline-block">Status</span>
-                      </th>
-                      <th className="tb-odr-action">&nbsp;</th>
-                    </tr>
-                  </thead>
-                  <tbody className="tb-odr-body">
+              <div style={{ overflowX: "auto", width: "100%" }}>
+                <div className="min-w-[900px]">
+                  <DataTableBody>
+                    <DataTableHead>
+                      <DataTableRow>
+                        <span className="text-nowrap">Mã hóa đơn</span>
+                      </DataTableRow>
+                      <DataTableRow>
+                        <span className="text-nowrap">Ngày xuất hóa đơn</span>
+                      </DataTableRow>
+                      <DataTableRow>
+                        <span className="text-nowrap">Số tiền thanh toán</span>
+                      </DataTableRow>
+                      <DataTableRow>
+                        <span className="text-nowrap">Trạng thái xử lý</span>
+                      </DataTableRow>
+                      <DataTableRow>&nbsp;</DataTableRow>
+                    </DataTableHead>
+
                     {currentItems.length > 0
                       ? currentItems.map((item) => {
                           return (
-                            <tr className="tb-odr-item" key={item.id}>
-                              <td className="tb-odr-info">
-                                <span className="tb-odr-id">
+                            <DataTableItem key={item.id}>
+                              <DataTableRow>
+                                <span className="tb-odr-id text-nowrap">
                                   <Link to={`/invoice-details/${item.id}`}>
                                     #{item.orderId}
                                   </Link>
                                 </span>
-                                <span className="tb-odr-date">{item.date}</span>
-                              </td>
-                              <td className="tb-odr-amount">
-                                <span className="tb-odr-total">
-                                  <span className="amount">${item.totalAmount}</span>
+                              </DataTableRow>
+                              <DataTableRow>
+                                <span className="tb-odr-date text-nowrap">
+                                  {item.date}
                                 </span>
-                                <span className="tb-odr-status">
-                                  <Badge
-                                    color={
-                                      item.status === "Complete"
-                                        ? "success"
-                                        : item.status === "Pending"
-                                        ? "warning"
-                                        : "danger"
-                                    }
-                                    className="badge-dot"
-                                  >
-                                    {item.status}
-                                  </Badge>
+                              </DataTableRow>
+                              <DataTableRow>
+                                <span className="tb-date text-nowrap">
+                                  {item.totalAmount} VNĐ
                                 </span>
-                              </td>
-                              <td className="tb-odr-action">
-                                <div className="tb-odr-btns d-none d-sm-inline">
-                                  <Link to={`/invoice-print/${item.id}`} target="_blank">
-                                    <Button color="primary" size="sm" className="btn-icon btn-white btn-dim">
-                                      <Icon name="printer-fill"></Icon>
-                                    </Button>
-                                  </Link>
+                              </DataTableRow>
+                              <DataTableRow>
+                                <Badge
+                                  color={
+                                    item.status === "Complete"
+                                      ? "success"
+                                      : item.status === "Pending"
+                                      ? "warning"
+                                      : "danger"
+                                  }
+                                  className="badge-dot"
+                                >
+                                  {item.status === "Complete"
+                                    ? "Đã thanh toán"
+                                    : item.status === "Pending"
+                                    ? "Chờ thanh toán"
+                                    : "Đã hủy"}
+                                </Badge>
+                              </DataTableRow>
+                              <DataTableRow>
+                                <div className="tb-odr-action">
+                                  <div className="tb-odr-btns d-none d-sm-inline">
+                                    <Link
+                                      to={`/invoice-print/${item.id}`}
+                                      target="_blank"
+                                    >
+                                      <Button
+                                        color="primary"
+                                        size="sm"
+                                        className="btn-icon btn-white btn-dim"
+                                      >
+                                        <Icon name="printer-fill"></Icon>
+                                      </Button>
+                                    </Link>
+                                    <Link to={`/invoice-details/${item.id}`}>
+                                      <Button
+                                        color="primary"
+                                        size="sm"
+                                        className="btn btn-dim"
+                                      >
+                                        View
+                                      </Button>
+                                    </Link>
+                                  </div>
                                   <Link to={`/invoice-details/${item.id}`}>
-                                    <Button color="primary" size="sm" className="btn btn-dim">
-                                      View
+                                    <Button className="btn-pd-auto d-sm-none">
+                                      <Icon name="chevron-right"></Icon>
                                     </Button>
                                   </Link>
                                 </div>
-                                <Link to={`/invoice-details/${item.id}`}>
-                                  <Button className="btn-pd-auto d-sm-none">
-                                    <Icon name="chevron-right"></Icon>
-                                  </Button>
-                                </Link>
-                              </td>
-                            </tr>
+                              </DataTableRow>
+                            </DataTableItem>
                           );
                         })
                       : null}
-                  </tbody>
-                </table>
-              </div>
-              <div className="card-inner">
-                {currentItems.length > 0 ? (
-                  <PaginationComponent
-                    noDown
-                    itemPerPage={itemPerPage}
-                    totalItems={data.length}
-                    paginate={paginate}
-                    currentPage={currentPage}
-                  />
-                ) : (
-                  <div className="text-center">
-                    <span className="text-silent">No data found</span>
+                  </DataTableBody>
+                  <div className="card-inner">
+                    {currentItems.length > 0 ? (
+                      <PaginationComponent
+                        noDown
+                        itemPerPage={itemPerPage}
+                        totalItems={data.length}
+                        paginate={paginate}
+                        currentPage={currentPage}
+                      />
+                    ) : (
+                      <div className="text-center">
+                        <span className="text-silent">No data found</span>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </Card>
