@@ -13,7 +13,7 @@ import {
   Button,
 } from "@/components/Component";
 
-const FormLayoutsPage = ({ ...props }) => {
+const FormLayoutsPage = () => {
   return (
     <React.Fragment>
       <Head title="Form Layouts" />

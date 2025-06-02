@@ -13,17 +13,17 @@ const Footer = () => {
             <ul className="nav nav-sm">
               <li className="nav-item">
                 <Link to={`/pages/terms-policy`} className="nav-link">
-                  Terms
+                  Chính sách
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to={`/pages/faq`} className="nav-link">
-                  Privacy
+                  Hỏi đáp
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to={`/pages/terms-policy`} className="nav-link">
-                  Help
+                  Hướng dẫn
                 </Link>
               </li>
             </ul>
