@@ -3,7 +3,7 @@ ccyellow=\033[0;33m
 ccend=\033[0m
 
 SERVER_IP = 103.153.65.49
-DEPLOY_BRANCH = develop
+DEPLOY_BRANCH = main
 
 deploy_production: print_detail exec_deploy_cmd clean
 
