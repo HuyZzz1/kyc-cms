@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Content from "@/layout/content/Content";
 import Head from "@/layout/head/Head";
-import LogoDark from "@/images/logo-dark.png";
 import {
   BlockHead,
   BlockTitle,
@@ -40,7 +39,10 @@ const InvoiceDetails = () => {
             <BlockBetween className="g-3">
               <BlockHeadContent>
                 <BlockTitle>
-                  Invoice <strong className="text-primary small">#{user.orderId}</strong>
+                  Invoice{" "}
+                  <strong className="text-primary small">
+                    #{user.orderId}
+                  </strong>
                 </BlockTitle>
                 <BlockDes className="text-soft">
                   <ul className="list-inline">
@@ -52,13 +54,21 @@ const InvoiceDetails = () => {
               </BlockHeadContent>
               <BlockHeadContent>
                 <Link to={`/invoice-list`}>
-                  <Button color="light" outline className="bg-white d-none d-sm-inline-flex">
+                  <Button
+                    color="light"
+                    outline
+                    className="bg-white d-none d-sm-inline-flex"
+                  >
                     <Icon name="arrow-left"></Icon>
                     <span>Back</span>
                   </Button>
                 </Link>
                 <Link to={`/invoice-list`}>
-                  <Button color="light" outline className="btn-icon bg-white d-inline-flex d-sm-none">
+                  <Button
+                    color="light"
+                    outline
+                    className="btn-icon bg-white d-inline-flex d-sm-none"
+                  >
                     <Icon name="arrow-left"></Icon>
                   </Button>
                 </Link>
@@ -70,14 +80,25 @@ const InvoiceDetails = () => {
             <div className="invoice">
               <div className="invoice-action">
                 <Link to={`/invoice-print/${user.id}`} target="_blank">
-                  <Button size="lg" color="primary" outline className="btn-icon btn-white btn-dim">
+                  <Button
+                    size="lg"
+                    color="primary"
+                    outline
+                    className="btn-icon btn-white btn-dim"
+                  >
                     <Icon name="printer-fill"></Icon>
                   </Button>
                 </Link>
               </div>
               <div className="invoice-wrap">
                 <div className="invoice-brand text-center">
-                  <img src={LogoDark} alt="" />
+                  <img
+                    style={{
+                      width: 200,
+                    }}
+                    src="/logo.png"
+                    alt="logo"
+                  />
                 </div>
 
                 <div className="invoice-head">
@@ -129,7 +150,10 @@ const InvoiceDetails = () => {
                       <tbody>
                         <tr>
                           <td>24108054</td>
-                          <td>Dashlite - Conceptual App Dashboard - Regular License</td>
+                          <td>
+                            Dashlite - Conceptual App Dashboard - Regular
+                            License
+                          </td>
                           <td>${user.invoiceItem1}</td>
                           <td>1</td>
                           <td>${user.invoiceItem1}</td>
@@ -187,7 +211,8 @@ const InvoiceDetails = () => {
                       </tfoot>
                     </table>
                     <div className="nk-notes ff-italic fs-12px text-soft">
-                      Invoice was created on a computer and is valid without the signature and seal.
+                      Invoice was created on a computer and is valid without the
+                      signature and seal.
                     </div>
                   </div>
                 </div>

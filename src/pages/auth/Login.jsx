@@ -54,7 +54,7 @@ const Login = () => {
             style={{
               width: 200,
             }}
-            src="logo.png"
+            src="/logo.png"
             alt="logo"
           />
         </div>
