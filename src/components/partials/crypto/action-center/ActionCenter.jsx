@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "@/components/icon/Icon";
-import Button from "@/components/button/Button";
+import { Button } from "@/components/Component";
+import { getUrgentTasks } from "@/services/dashboard";
 import {
   UncontrolledDropdown,
   CardTitle,
@@ -10,6 +11,24 @@ import {
 } from "reactstrap";
 
 const ActionCenter = () => {
+  const [urgentTasks, setUrgentTasks] = useState({
+    pending_kyc: 0,
+    support_tickets: 0,
+    payment_issues: 0
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getUrgentTasks();
+        setUrgentTasks(data);
+      } catch (error) {
+        console.error("Error fetching urgent tasks:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <React.Fragment>
       {" "}
@@ -62,9 +81,9 @@ const ActionCenter = () => {
         <div className="card-inner">
           <div className="nk-wg-action">
             <div className="nk-wg-action-content">
-              <Icon name="shield"></Icon>
-              <div className="title">Xác minh đang chờ</div>
-              <p>Còn 200 yêu cầu xác minh chưa được duyệt</p>
+              <Icon name="users"></Icon>
+              <div className="title">KYC đang chờ</div>
+              <p>Có {urgentTasks.pending_kyc} yêu cầu cần xử lý</p>
             </div>
             <Button className="btn-icon btn-trigger me-n2">
               <Icon name="forward-ios"></Icon>
@@ -76,7 +95,7 @@ const ActionCenter = () => {
             <div className="nk-wg-action-content">
               <Icon name="msg-circle"></Icon>
               <div className="title">Tin nhắn hỗ trợ</div>
-              <p>Có 18 yêu cầu đang mở</p>
+              <p>Có {urgentTasks.support_tickets} yêu cầu đang mở</p>
             </div>
             <Button className="btn-icon btn-trigger me-n2">
               <Icon name="forward-ios"></Icon>
@@ -88,7 +107,7 @@ const ActionCenter = () => {
             <div className="nk-wg-action-content">
               <Icon name="alert"></Icon>
               <div className="title">Vấn đề thanh toán</div>
-              <p>Có 5 giao dịch chưa xác minh cần kiểm tra</p>
+              <p>Có {urgentTasks.payment_issues} giao dịch chưa xác minh cần kiểm tra</p>
             </div>
             <Button className="btn-icon btn-trigger me-n2">
               <Icon name="forward-ios"></Icon>

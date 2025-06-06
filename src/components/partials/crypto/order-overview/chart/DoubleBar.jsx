@@ -25,7 +25,6 @@ Chart.register(
 const DoubleBarChart = ({ data }) => {
   const allValues = data.datasets.flatMap((ds) => ds.data);
   const maxYValue = Math.max(...allValues);
-  const niceMaxY = Math.ceil(maxYValue / 100) * 100 + 100;
 
   return (
     <Bar
@@ -59,9 +58,9 @@ const DoubleBarChart = ({ data }) => {
           y: {
             beginAtZero: true,
             min: 0,
-            max: niceMaxY,
+            max: maxYValue,
             ticks: {
-              stepSize: Math.ceil(niceMaxY / 5),
+              stepSize: Math.ceil(maxYValue / 5),
               color: "#9eaecf",
               font: {
                 size: 11,
