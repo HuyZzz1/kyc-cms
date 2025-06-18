@@ -1,15 +1,28 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import UserAvatar from "@/components/user/UserAvatar";
 import { DropdownToggle, DropdownMenu, Dropdown } from "reactstrap";
 import { Icon } from "@/components/Component";
 import { LinkList, LinkItem } from "@/components/links/Links";
 import { useTheme, useThemeUpdate } from "@/layout/provider/Theme";
+import { useNavigate } from "react-router-dom";
 
 const User = () => {
   const theme = useTheme();
   const themeUpdate = useThemeUpdate();
   const [open, setOpen] = useState(false);
   const toggle = () => setOpen((prevState) => !prevState);
+  const navigate = useNavigate();
+
+  // Hàm xử lý đăng xuất
+  const handleSignOut = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("accessToken");
+    // Xóa cookie adminProfile nếu có
+    if (typeof document !== 'undefined') {
+      document.cookie = "adminProfile=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+    navigate("/auth-login");
+  };
 
   return (
     <Dropdown isOpen={open} className="user-dropdown" toggle={toggle}>
@@ -96,7 +109,7 @@ const User = () => {
         </div>
         <div className="dropdown-inner">
           <LinkList>
-            <a href={`/auth-login`}>
+            <a href="/auth-login" onClick={handleSignOut}>
               <Icon name="signout"></Icon>
               <span>Sign Out</span>
             </a>

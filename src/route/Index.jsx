@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route, useLocation, BrowserRouter } from "react-router-dom";
+import { Routes, Route, useLocation, BrowserRouter, Navigate } from "react-router-dom";
 import { ProductContextProvider } from "@/pages/pre-built/products/ProductContext";
 import { UserContextProvider } from "@/pages/pre-built/user-manage/UserContext";
 
@@ -151,6 +151,15 @@ const ScrollToTop = (props) => {
   return <>{props.children}</>;
 };
 
+// RequireAuth component
+const RequireAuth = ({ children }) => {
+  const token = typeof window !== 'undefined' ? localStorage.getItem("accessToken") : null;
+  if (!token) {
+    return <Navigate to="/auth-login" replace />;
+  }
+  return children;
+};
+
 const Router = () => {
   return (
     <BrowserRouter
@@ -207,9 +216,21 @@ const Router = () => {
             </Route>
             <Route element={<Layout />}>
               {/* <Route index element={<Crypto />}></Route> */}
-              <Route path="overview" element={<Crypto />}></Route>
-              <Route path="analytics" element={<Analytics />}></Route>
-              <Route path="sales" element={<Sales />}></Route>
+              <Route path="overview" element={
+                <RequireAuth>
+                  <Crypto />
+                </RequireAuth>
+              }></Route>
+              <Route path="analytics" element={
+                <RequireAuth>
+                  <Analytics />
+                </RequireAuth>
+              }></Route>
+              <Route path="sales" element={
+                <RequireAuth>
+                  <Sales />
+                </RequireAuth>
+              }></Route>
               <Route path="_blank" element={<Blank />}></Route>
 
               <Route path="project-card" element={<ProjectCardPage />}></Route>
@@ -218,54 +239,102 @@ const Router = () => {
               <Route element={<UserContextProvider />}>
                 <Route
                   path="user-list-regular"
-                  element={<UserListRegular />}
+                  element={
+                    <RequireAuth>
+                      <UserListRegular />
+                    </RequireAuth>
+                  }
                 ></Route>
                 <Route
                   path="user-list-compact"
-                  element={<UserListCompact />}
+                  element={
+                    <RequireAuth>
+                      <UserListCompact />
+                    </RequireAuth>
+                  }
                 ></Route>
                 <Route
                   path="user-contact-card"
-                  element={<UserContactCard />}
+                  element={
+                    <RequireAuth>
+                      <UserContactCard />
+                    </RequireAuth>
+                  }
                 ></Route>
                 <Route
                   path="user-details-regular/:userId"
-                  element={<UserDetails />}
+                  element={
+                    <RequireAuth>
+                      <UserDetails />
+                    </RequireAuth>
+                  }
                 ></Route>
               </Route>
 
               <Route>
                 <Route
                   path="user-profile-notification"
-                  element={<UserProfileNotification />}
+                  element={
+                    <RequireAuth>
+                      <UserProfileNotification />
+                    </RequireAuth>
+                  }
                 ></Route>
                 <Route
                   path="user-profile-regular"
-                  element={<UserProfileRegular />}
+                  element={
+                    <RequireAuth>
+                      <UserProfileRegular />
+                    </RequireAuth>
+                  }
                 ></Route>
                 <Route
                   path="user-profile-activity"
-                  element={<UserProfileActivity />}
+                  element={
+                    <RequireAuth>
+                      <UserProfileActivity />
+                    </RequireAuth>
+                  }
                 ></Route>
                 <Route
                   path="user-profile-setting"
-                  element={<UserProfileSetting />}
+                  element={
+                    <RequireAuth>
+                      <UserProfileSetting />
+                    </RequireAuth>
+                  }
                 ></Route>
               </Route>
 
               <Route
                 path="kyc-list-regular"
-                element={<KycListRegular />}
+                element={
+                  <RequireAuth>
+                    <KycListRegular />
+                  </RequireAuth>
+                }
               ></Route>
               <Route
                 path="kyc-details-regular/:kycId"
-                element={<KycDetailsRegular />}
+                element={
+                  <RequireAuth>
+                    <KycDetailsRegular />
+                  </RequireAuth>
+                }
               ></Route>
               <Route
                 path="transaction-basic"
-                element={<TransListBasic />}
+                element={
+                  <RequireAuth>
+                    <TransListBasic />
+                  </RequireAuth>
+                }
               ></Route>
-              <Route path="transaction" element={<TransListCrypto />}></Route>
+              <Route path="transaction" element={
+                <RequireAuth>
+                  <TransListCrypto />
+                </RequireAuth>
+              }></Route>
               <Route element={<ProductContextProvider />}>
                 <Route path="product-list" element={<ProductList />}></Route>
                 <Route path="product-card" element={<ProductCard />}></Route>
@@ -275,10 +344,18 @@ const Router = () => {
                 ></Route>
               </Route>
 
-              <Route path="invoice-list" element={<InvoiceList />}></Route>
+              <Route path="invoice-list" element={
+                <RequireAuth>
+                  <InvoiceList />
+                </RequireAuth>
+              }></Route>
               <Route
                 path="invoice-details/:invoiceId"
-                element={<InvoiceDetails />}
+                element={
+                  <RequireAuth>
+                    <InvoiceDetails />
+                  </RequireAuth>
+                }
               ></Route>
               <Route path="pricing-table" element={<PricingTable />}></Route>
               <Route path="image-gallery" element={<GalleryPreview />}></Route>
@@ -291,24 +368,44 @@ const Router = () => {
                 <Route path="regular-v2" element={<Regularv2 />}></Route>
               </Route>
 
-              <Route path="app-messages" element={<AppMessages />}></Route>
-              <Route path="app-chat" element={<Chat />}></Route>
-              <Route path="app-calender" element={<Calender />}></Route>
-              <Route path="app-inbox" element={<Inbox />}></Route>
-              <Route path="app-kanban" element={<Kanban />}></Route>
+              <Route path="app-messages" element={
+                <RequireAuth>
+                  <AppMessages />
+                </RequireAuth>
+              }></Route>
+              <Route path="app-chat" element={
+                <RequireAuth>
+                  <Chat />
+                </RequireAuth>
+              }></Route>
+              <Route path="app-calender" element={
+                <RequireAuth>
+                  <Calender />
+                </RequireAuth>
+              }></Route>
+              <Route path="app-inbox" element={
+                <RequireAuth>
+                  <Inbox />
+                </RequireAuth>
+              }></Route>
+              <Route path="app-kanban" element={
+                <RequireAuth>
+                  <Kanban />
+                </RequireAuth>
+              }></Route>
 
               <Route path="app-file-manager">
-                <Route index element={<FileManager />}></Route>
-                <Route path="files" element={<FileManagerFiles />}></Route>
-                <Route path="starred" element={<FileManagerStarred />}></Route>
-                <Route path="shared" element={<FileManagerShared />}></Route>
+                <Route index element={<RequireAuth><FileManager /></RequireAuth>}></Route>
+                <Route path="files" element={<RequireAuth><FileManagerFiles /></RequireAuth>}></Route>
+                <Route path="starred" element={<RequireAuth><FileManagerStarred /></RequireAuth>}></Route>
+                <Route path="shared" element={<RequireAuth><FileManagerShared /></RequireAuth>}></Route>
                 <Route
                   path="recovery"
-                  element={<FileManagerRecovery />}
+                  element={<RequireAuth><FileManagerRecovery /></RequireAuth>}
                 ></Route>
                 <Route
                   path="settings"
-                  element={<FileManagerSettings />}
+                  element={<RequireAuth><FileManagerSettings /></RequireAuth>}
                 ></Route>
               </Route>
 
