@@ -137,8 +137,10 @@ class AdminService {
    */
   async downloadFileMedia (imagePath) {
     try {
+      // Extract only the filename from the path
+      const filename = imagePath.split('/').pop();
       const response = await apiClient.get('/ekyc/download-file', {
-        params: { filename: imagePath },
+        params: { filename },
         responseType: 'blob', // Important for handling binary data
       });
       return response;

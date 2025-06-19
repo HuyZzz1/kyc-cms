@@ -1,17 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UserAvatar from "@/components/user/UserAvatar";
 import { DropdownToggle, DropdownMenu, Dropdown } from "reactstrap";
 import { Icon } from "@/components/Component";
 import { LinkList, LinkItem } from "@/components/links/Links";
 import { useTheme, useThemeUpdate } from "@/layout/provider/Theme";
 import { useNavigate } from "react-router-dom";
+import adminService from "@/services/adminService";
+import { getOrganizationUserInfo } from "@/utils/authUtils";
 
 const User = () => {
   const theme = useTheme();
   const themeUpdate = useThemeUpdate();
   const [open, setOpen] = useState(false);
+  const [profile, setProfile] = useState(getOrganizationUserInfo());
   const toggle = () => setOpen((prevState) => !prevState);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await adminService.getProfile();
+        // Tùy vào API trả về, lấy đúng trường dữ liệu
+        if (res) {
+          setProfile(res);
+        }
+      } catch {
+        // Không cần xử lý lỗi, giữ nguyên thông tin cũ
+      }
+    }
+    fetchProfile();
+  }, []);
 
   // Hàm xử lý đăng xuất
   const handleSignOut = (e) => {
@@ -44,7 +62,7 @@ const User = () => {
             >
               {window.location.pathname.split("/")[2] === "invest" ? "Unverified" : "Admininstrator"}
             </div>
-            <div className="user-name dropdown-indicator">Abu Bin Ishityak</div>
+            <div className="user-name dropdown-indicator">{profile?.name || profile?.identifier || "-"}</div>
           </div>
         </div>
       </DropdownToggle>
@@ -55,8 +73,8 @@ const User = () => {
               <span>AB</span>
             </div>
             <div className="user-info">
-              <span className="lead-text">Abu Bin Ishtiyak</span>
-              <span className="sub-text">info@softnio.com</span>
+              <span className="lead-text">{profile?.name || profile?.identifier || "-"}</span>
+              <span className="sub-text">{profile?.email || profile?.identifier || "-"}</span>
             </div>
           </div>
         </div>
