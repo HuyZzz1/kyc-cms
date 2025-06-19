@@ -15,21 +15,33 @@ import {
 import { Spinner } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { registerOrganization } from "@/services/adminService";
 
 const Register = () => {
   const [passState, setPassState] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async (data) => {
     setLoading(true);
-    setTimeout(() => {
+    setError("");
+    try {
+      await registerOrganization({
+        name: data.name,
+        identifier: data.identifier,
+        password: data.passcode,
+      });
       navigate(`/auth-success`);
-    }, 1000);
+    } catch (err) {
+      setError(err.message || "Đăng ký thất bại");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <>
@@ -54,6 +66,7 @@ const Register = () => {
             </BlockContent>
           </BlockHead>
           <form className="is-alter" onSubmit={handleSubmit(handleFormSubmit)}>
+            {error && <div className="alert alert-danger">{error}</div>}
             <div className="form-group">
               <label className="form-label" htmlFor="name">
                 Tên
@@ -79,11 +92,11 @@ const Register = () => {
                 <input
                   type="text"
                   id="default-01"
-                  {...register("email", { required: true })}
+                  {...register("identifier", { required: true })}
                   className="form-control-lg form-control"
                   placeholder="Nhập email hoặc tên người dùng của bạn"
                 />
-                {errors.email && <p className="invalid">Trường này bắt buộc</p>}
+                {errors.identifier && <p className="invalid">Trường này bắt buộc</p>}
               </div>
             </div>
             <div className="form-group">

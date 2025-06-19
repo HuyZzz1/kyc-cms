@@ -1,10 +1,17 @@
 import axios from 'axios';
+import { getOrganizationToken } from "@/utils/authUtils";
 
-const API_URL = import.meta.env.VITE_API_DOMAIN + "/api/admin/dashboard";
+const API_URL = import.meta.env.VITE_API_DOMAIN + "/api/organization/dashboard";
+
+const getAuthHeaders = () => {
+  const token = getOrganizationToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
 
 export const getKycOverview = async (days = 15) => {
   try {
-    const response = await axios.get(`${API_URL}/kyc-overview?days=${days}`);
+    const response = await axios.get(`${API_URL}/kyc-overview?days=${days}`,
+      { headers: getAuthHeaders() });
     return response.data;
   } catch (error) {
     console.error('Error fetching KYC overview:', error);
@@ -14,7 +21,8 @@ export const getKycOverview = async (days = 15) => {
 
 export const getDataSources = async (days = 15) => {
   try {
-    const response = await axios.get(`${API_URL}/data-sources?days=${days}`);
+    const response = await axios.get(`${API_URL}/data-sources?days=${days}`,
+      { headers: getAuthHeaders() });
     return response.data;
   } catch (error) {
     console.error('Error fetching data sources:', error);
@@ -24,7 +32,8 @@ export const getDataSources = async (days = 15) => {
 
 export const getUserActivity = async (days = 15) => {
   try {
-    const response = await axios.get(`${API_URL}/user-activity?days=${days}`);
+    const response = await axios.get(`${API_URL}/user-activity?days=${days}`,
+      { headers: getAuthHeaders() });
     return response.data;
   } catch (error) {
     console.error('Error fetching user activity:', error);
@@ -34,7 +43,8 @@ export const getUserActivity = async (days = 15) => {
 
 export const getUrgentTasks = async () => {
   try {
-    const response = await axios.get(`${API_URL}/urgent-tasks`);
+    const response = await axios.get(`${API_URL}/urgent-tasks`,
+      { headers: getAuthHeaders() });
     return response.data;
   } catch (error) {
     console.error('Error fetching urgent tasks:', error);
@@ -44,7 +54,8 @@ export const getUrgentTasks = async () => {
 
 export const getKycActivities = async (page = 1, limit = 10, status = 'all') => {
   try {
-    const response = await axios.get(`${API_URL}/kyc-activities?page=${page}&limit=${limit}&status=${status}`);
+    const response = await axios.get(`${API_URL}/kyc-activities?page=${page}&limit=${limit}&status=${status}`,
+      { headers: getAuthHeaders() });
     return response.data;
   } catch (error) {
     console.error('Error fetching KYC activities:', error);

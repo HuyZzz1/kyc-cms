@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAdminToken } from "@/utils/authUtils";
+import { getOrganizationToken } from "@/utils/authUtils";
 
 // Get base URL from environment variable or use default
 const BASE_URL = import.meta.env.VITE_API_DOMAIN || "http://localhost:4000";
@@ -8,7 +8,7 @@ const BASE_URL = import.meta.env.VITE_API_DOMAIN || "http://localhost:4000";
  * Create axios instance with default configuration
  */
 const apiClient = axios.create({
-  baseURL: BASE_URL + '/api/admin',
+  baseURL: BASE_URL + '/api/organization',
   headers: {
     'Content-Type': 'application/json'
   }
@@ -20,7 +20,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // Add token to all admin API requests
-    const token = getAdminToken();
+    const token = getOrganizationToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
       console.log("Setting auth token for request:", config.url);
@@ -56,9 +56,9 @@ class AdminService {
    */
   async getProfile() {
     try {
-      const token = getAdminToken();
+      const token = getOrganizationToken();
       if (!token) {
-        throw new Error("No admin token found");
+        throw new Error("No organization token found");
       }
 
       const response = await apiClient.get('/profile');
@@ -178,3 +178,24 @@ class AdminService {
 
 const adminService = new AdminService();
 export default adminService;
+
+/**
+ * Register a new organization
+ * @param {Object} data - Registration data { name, email, password }
+ * @returns {Promise} - API response
+ */
+export async function registerOrganization(data) {
+  try {
+    const response = await axios.post(
+      BASE_URL + "/api/organization/register",
+      data,
+      { headers: { "Content-Type": "application/json" } }
+    );
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Registration failed");
+    }
+    throw error;
+  }
+}

@@ -3,116 +3,88 @@
  */
 import { setCookie, getCookie, removeCookie } from './cookieUtils';
 
-// Cookie names
-const ADMIN_TOKEN_COOKIE = 'adminToken';
-const ADMIN_STATUS_COOKIE = 'isAdmin';
-const ADMIN_INFO_COOKIE = 'adminInfo';
-const ADMIN_PROFILE_COOKIE = 'adminProfile';
-const TOKEN_EXPIRY_COOKIE = 'adminTokenExpiry';
+// Organization token
+const ORGANIZATION_TOKEN_COOKIE = 'organizationToken';
+const ORGANIZATION_STATUS_COOKIE = 'isOrganization';
+const ORGANIZATION_INFO_COOKIE = 'organizationInfo';
+const ORGANIZATION_TOKEN_EXPIRY_COOKIE = 'organizationTokenExpiry';
 
 /**
- * Set admin authentication data in cookies
- * @param {string} token - JWT token for admin authentication
- * @param {object} userData - Admin user data (optional)
+ * Set organization authentication data in cookies
+ * @param {string} token - JWT token for organization authentication
+ * @param {object} userData - Organization user data (optional)
  */
-export const setAdminAuth = (token, userData = null) => {
+export const setOrganizationAuth = (token, userData = null) => {
   if (!token) return;
-  
-  // Store token in a secure cookie (expires in 1 day by default)
-  setCookie(ADMIN_TOKEN_COOKIE, token, { days: 1 });
-  setCookie(ADMIN_STATUS_COOKIE, "true", { days: 1 });
-  
+  setCookie(ORGANIZATION_TOKEN_COOKIE, token, { days: 1 });
+  setCookie(ORGANIZATION_STATUS_COOKIE, "true", { days: 1 });
   if (userData) {
-    setCookie(ADMIN_INFO_COOKIE, JSON.stringify(userData), { days: 1 });
+    setCookie(ORGANIZATION_INFO_COOKIE, JSON.stringify(userData), { days: 1 });
   }
-  
-  // Set token expiration (default to 24 hours if not in token)
-  // This is a simple implementation. In a real app, decode JWT to get actual expiry
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + 24);
-  setCookie(TOKEN_EXPIRY_COOKIE, expiresAt.toISOString(), { days: 1 });
+  setCookie(ORGANIZATION_TOKEN_EXPIRY_COOKIE, expiresAt.toISOString(), { days: 1 });
 };
 
 /**
- * Check if admin token is expired
+ * Check if organization token is expired
  * @returns {boolean} - True if token is expired or not present
  */
-export const isAdminTokenExpired = () => {
-  const expiresAt = getCookie(TOKEN_EXPIRY_COOKIE);
+export const isOrganizationTokenExpired = () => {
+  const expiresAt = getCookie(ORGANIZATION_TOKEN_EXPIRY_COOKIE);
   if (!expiresAt) return true;
-  
   return new Date() > new Date(expiresAt);
 };
 
 /**
- * Get admin authentication token
- * @returns {string|null} - The admin token or null if not found/expired
+ * Get organization authentication token
+ * @returns {string|null} - The organization token or null if not found/expired
  */
-export const getAdminToken = () => {
-  const token = getCookie(ADMIN_TOKEN_COOKIE);
-  if (!token || isAdminTokenExpired()) {
+export const getOrganizationToken = () => {
+  const token = getCookie(ORGANIZATION_TOKEN_COOKIE);
+  if (!token || isOrganizationTokenExpired()) {
     return null;
   }
   return token;
 };
 
 /**
- * Clear admin authentication data
+ * Clear organization authentication data
  */
-export const clearAdminAuth = () => {
-  removeCookie(ADMIN_TOKEN_COOKIE);
-  removeCookie(ADMIN_STATUS_COOKIE);
-  removeCookie(ADMIN_INFO_COOKIE);
-  removeCookie(ADMIN_PROFILE_COOKIE);
-  removeCookie(TOKEN_EXPIRY_COOKIE);
+export const clearOrganizationAuth = () => {
+  removeCookie(ORGANIZATION_TOKEN_COOKIE);
+  removeCookie(ORGANIZATION_STATUS_COOKIE);
+  removeCookie(ORGANIZATION_INFO_COOKIE);
+  removeCookie(ORGANIZATION_TOKEN_EXPIRY_COOKIE);
 };
 
 /**
- * Check if user is authenticated as admin
- * @returns {boolean} - True if user has valid admin token
+ * Check if user is authenticated as organization
+ * @returns {boolean} - True if user has valid organization token
  */
-export const isAdminAuthenticated = () => {
-  return !!getAdminToken() && getCookie(ADMIN_STATUS_COOKIE) === "true";
+export const isOrganizationAuthenticated = () => {
+  return !!getOrganizationToken() && getCookie(ORGANIZATION_STATUS_COOKIE) === "true";
 };
 
 /**
- * Get admin user information
- * @returns {object|null} - Admin user data or null if not authenticated
+ * Get organization user information
+ * @returns {object|null} - Organization user data or null if not authenticated
  */
-export const getAdminUserInfo = () => {
-  if (!isAdminAuthenticated()) return null;
-  
+export const getOrganizationUserInfo = () => {
+  if (!isOrganizationAuthenticated()) return null;
   try {
-    const adminInfo = getCookie(ADMIN_INFO_COOKIE);
-    return adminInfo ? JSON.parse(adminInfo) : null;
+    const orgInfo = getCookie(ORGANIZATION_INFO_COOKIE);
+    return orgInfo ? JSON.parse(orgInfo) : null;
   } catch (error) {
-    console.error("Error parsing admin info:", error);
+    console.error("Error parsing organization info:", error);
     return null;
   }
 };
 
-/**
- * Format admin name for display (first letter of first and last names)
- * @param {string} name - Full name of the admin
- * @returns {string} - Initials (up to 2 characters)
- */
-export const formatAdminInitials = (name) => {
-  if (!name) return "AD";
-  
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) {
-    return parts[0].substring(0, 2).toUpperCase();
-  }
-  
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-};
-
 export default {
-  setAdminAuth,
-  getAdminToken,
-  clearAdminAuth,
-  isAdminAuthenticated,
-  isAdminTokenExpired,
-  getAdminUserInfo,
-  formatAdminInitials
+  setOrganizationAuth,
+  getOrganizationToken,
+  clearOrganizationAuth,
+  isOrganizationAuthenticated,
+  getOrganizationUserInfo
 };
