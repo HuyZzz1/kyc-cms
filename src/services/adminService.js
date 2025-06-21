@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getOrganizationToken } from "@/utils/authUtils";
+import { getAdminToken } from "@/utils/authUtils";
 
 // Get base URL from environment variable or use default
 const BASE_URL = import.meta.env.VITE_API_DOMAIN || "http://localhost:4000";
@@ -8,19 +8,19 @@ const BASE_URL = import.meta.env.VITE_API_DOMAIN || "http://localhost:4000";
  * Create axios instance with default configuration
  */
 const apiClient = axios.create({
-  baseURL: BASE_URL + '/api/organization',
+  baseURL: BASE_URL + '/api/admin',
   headers: {
     'Content-Type': 'application/json'
   }
 });
 
 /**
- * Add request interceptor to add auth token to requests
+ * Add request interceptor to add admin auth token to requests
  */
 apiClient.interceptors.request.use(
   (config) => {
     // Add token to all admin API requests
-    const token = getOrganizationToken();
+    const token = getAdminToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
       console.log("Setting auth token for request:", config.url);
@@ -56,9 +56,9 @@ class AdminService {
    */
   async getProfile() {
     try {
-      const token = getOrganizationToken();
+      const token = getAdminToken();
       if (!token) {
-        throw new Error("No organization token found");
+        throw new Error("No admin token found");
       }
 
       const response = await apiClient.get('/profile');

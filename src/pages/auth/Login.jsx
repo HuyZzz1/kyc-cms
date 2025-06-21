@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Head from "@/layout/head/Head";
 import AuthFooter from "./AuthFooter";
 import adminService from "@/services/adminService";
-import { setOrganizationAuth } from "@/utils/authUtils";
+import { setAdminAuth } from "@/utils/authUtils";
 import {
   Block,
   BlockContent,
@@ -38,13 +38,13 @@ const Login = () => {
     try {
       // Gọi API đăng nhập
       const loginDto = {
-        identifier: formData.name,
+        username: formData.name,
         password: formData.passcode
       };
       const response = await adminService.login(loginDto);
       const token = response?.accessToken;
-      const userData = response.account;
-      setOrganizationAuth(token, userData);
+      const userData = response.admin;
+      setAdminAuth(token, userData);
       // Lưu token vào localStorage để kiểm tra đăng nhập
       localStorage.setItem("accessToken", token);
       // Lưu profile nếu có

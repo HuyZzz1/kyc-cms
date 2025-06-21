@@ -6,13 +6,13 @@ import { LinkList, LinkItem } from "@/components/links/Links";
 import { useTheme, useThemeUpdate } from "@/layout/provider/Theme";
 import { useNavigate } from "react-router-dom";
 import adminService from "@/services/adminService";
-import { getOrganizationUserInfo } from "@/utils/authUtils";
+import { getAdminUserInfo } from "@/utils/authUtils";
 
 const User = () => {
   const theme = useTheme();
   const themeUpdate = useThemeUpdate();
   const [open, setOpen] = useState(false);
-  const [profile, setProfile] = useState(getOrganizationUserInfo());
+  const [profile, setProfile] = useState(getAdminUserInfo());
   const toggle = () => setOpen((prevState) => !prevState);
   const navigate = useNavigate();
 
@@ -21,8 +21,8 @@ const User = () => {
       try {
         const res = await adminService.getProfile();
         // Tùy vào API trả về, lấy đúng trường dữ liệu
-        if (res) {
-          setProfile(res);
+        if (res && res.data) {
+          setProfile(res.data);
         }
       } catch {
         // Không cần xử lý lỗi, giữ nguyên thông tin cũ
@@ -62,7 +62,7 @@ const User = () => {
             >
               {window.location.pathname.split("/")[2] === "invest" ? "Unverified" : "Admininstrator"}
             </div>
-            <div className="user-name dropdown-indicator">{profile?.name || profile?.identifier || "-"}</div>
+            <div className="user-name dropdown-indicator">{profile?.fullName || "-"}</div>
           </div>
         </div>
       </DropdownToggle>
@@ -73,8 +73,8 @@ const User = () => {
               <span>AB</span>
             </div>
             <div className="user-info">
-              <span className="lead-text">{profile?.name || profile?.identifier || "-"}</span>
-              <span className="sub-text">{profile?.email || profile?.identifier || "-"}</span>
+              <span className="lead-text">{profile?.fullName || "-"}</span>
+              <span className="sub-text">{profile?.email || "-"}</span>
             </div>
           </div>
         </div>

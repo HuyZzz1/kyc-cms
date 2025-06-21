@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { getOrganizationToken } from "@/utils/authUtils";
+import { getAdminToken } from "@/utils/authUtils";
 
-const API_URL = import.meta.env.VITE_API_DOMAIN + "/api/organization/dashboard";
+const API_URL = import.meta.env.VITE_API_DOMAIN + "/api/admin/dashboard";
 
 const getAuthHeaders = () => {
-  const token = getOrganizationToken();
+  const token = getAdminToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
