@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  TimeOnSiteData,
   NewUsersData,
   PageviewsData,
   BounceRateData,
 } from "@/components/partials/charts/analytics/AnalyticsData";
 import { WPCharts } from "@/components/partials/charts/analytics/AnalyticsCharts";
 import { Icon, TooltipComponent } from "@/components/Component";
+import { getStatsKycMetrics } from "../../../../services/dashboard";
 
 const WebsitePerformance = () => {
+  const [data, setData] = useState();
+
+  const fetchData = async () => {
+    try {
+      const data = await getStatsKycMetrics();
+      setData(data);
+    } catch (error) {
+      console.error("Error fetching:", error);
+    }
+  };
+
+  console.log("data", data);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <React.Fragment>
       <div className="card-title-group align-start pb-3 g-2">
@@ -39,9 +56,18 @@ const WebsitePerformance = () => {
               </div>
             </div>
             <div className="analytic-wp-text">
-              <div className="amount amount-sm">8.4%</div>
+              <div className="amount amount-sm">
+                {data?.failureRate?.current}%
+              </div>
               <div className="change up">
-                <Icon name="arrow-long-up"></Icon>1.2%
+                <Icon
+                  name={
+                    data?.failureRate?.trend === "stable"
+                      ? "arrow-long-up"
+                      : "arrow-long-down"
+                  }
+                ></Icon>{" "}
+                {data?.failureRate?.change}%
               </div>
               <div className="subtitle">so với tháng trước</div>
             </div>
@@ -57,9 +83,18 @@ const WebsitePerformance = () => {
               </div>
             </div>
             <div className="analytic-wp-text">
-              <div className="amount amount-sm">1.14</div>
-              <div className="change down">
-                <Icon name="arrow-long-down"></Icon>3.1%
+              <div className="amount amount-sm">
+                {data?.attemptsPerUser?.current}%
+              </div>
+              <div className="change up">
+                <Icon
+                  name={
+                    data?.attemptsPerUser?.trend === "stable"
+                      ? "arrow-long-up"
+                      : "arrow-long-down"
+                  }
+                ></Icon>{" "}
+                {data?.attemptsPerUser?.change}%
               </div>
               <div className="subtitle">so với tháng trước</div>
             </div>
@@ -75,14 +110,23 @@ const WebsitePerformance = () => {
               </div>
             </div>
             <div className="analytic-wp-text">
-              <div className="amount amount-sm">294</div>
+              <div className="amount amount-sm">
+                {data?.newUsersPerDay?.current}%
+              </div>
               <div className="change up">
-                <Icon name="arrow-long-up"></Icon>6.7%
+                <Icon
+                  name={
+                    data?.newUsersPerDay?.trend === "stable"
+                      ? "arrow-long-up"
+                      : "arrow-long-down"
+                  }
+                ></Icon>{" "}
+                {data?.newUsersPerDay?.change}%
               </div>
               <div className="subtitle">so với tháng trước</div>
             </div>
           </div>
-          <div className="analytic-data analytic-wp-data">
+          {/* <div className="analytic-data analytic-wp-data">
             <div className="analytic-wp-graph">
               <div className="title text-nowrap">Thời gian trên hệ thống</div>
               <div className="analytic-wp-ck">
@@ -99,7 +143,7 @@ const WebsitePerformance = () => {
               </div>
               <div className="subtitle">so với tháng trước</div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </React.Fragment>

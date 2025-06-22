@@ -1,32 +1,53 @@
 import { VectorMap } from "@react-jvectormap/core";
 import { asiaMill } from "@react-jvectormap/asia";
 
-const mapDataList = {
-  30: [
-    { country: "Việt Nam", code: "VN", amount: 6840 },
-    { country: "Indonesia", code: "ID", amount: 3412 },
-    { country: "Thailand", code: "TH", amount: 2230 },
-    { country: "Malaysia", code: "MY", amount: 1950 },
-  ],
-  // Bạn có thể thêm dữ liệu 15 và 7 ngày tương tự nếu cần
+const countryNameToCodeMap = {
+  "Việt Nam": "VN",
+  Vietnam: "VN",
+  Indonesia: "ID",
+  Thailand: "TH",
+  Malaysia: "MY",
+  Philippines: "PH",
+  Singapore: "SG",
+  Lào: "LA",
+  Cambodia: "KH",
+  Campuchia: "KH",
+  Myanmar: "MM",
+  Brunei: "BN",
+  "Đông Timor": "TL",
+  // Thêm nếu cần...
+};
+
+const normalizeCode = (item) => {
+  const rawName = item.countryName?.trim();
+  const fallbackCode = countryNameToCodeMap[rawName];
+  return {
+    ...item,
+    code: item.code || fallbackCode,
+  };
 };
 
 const toRegionData = (list) =>
   list.reduce((acc, item) => {
-    acc[item.code] = item.amount;
+    const normalized = normalizeCode(item);
+    if (normalized.code) {
+      acc[normalized.code] = normalized.count;
+    }
     return acc;
   }, {});
 
 const toTooltips = (list) =>
   list.reduce((acc, item) => {
-    acc[item.code] = item.country;
+    const normalized = normalizeCode(item);
+    if (normalized.code) {
+      acc[normalized.code] = normalized.countryName || "Không rõ";
+    }
     return acc;
   }, {});
 
-const Map = ({ set = "30" }) => {
-  const dataList = mapDataList[set] || mapDataList["30"];
-  const selectedData = toRegionData(dataList);
-  const tooltipData = toTooltips(dataList);
+const Map = ({ statistics = [] }) => {
+  const selectedData = toRegionData(statistics);
+  const tooltipData = toTooltips(statistics);
 
   return (
     <div

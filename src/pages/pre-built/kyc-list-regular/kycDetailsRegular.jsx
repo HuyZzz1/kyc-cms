@@ -60,6 +60,7 @@ const KycDetailsRegular = () => {
               : "Chưa được duyệt",
             personalInfo: record.personalInfo || {},
             recordVideo: record?.video?.filename || null,
+            organization: record?.organization || null,
           });
         } else {
           setError("Không thể lấy chi tiết giấy tờ");
@@ -84,9 +85,9 @@ const KycDetailsRegular = () => {
 
       // Create a download link and trigger download
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', filename);
+      link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -118,7 +119,9 @@ const KycDetailsRegular = () => {
         <Head title="Chi tiết KYC"></Head>
         <Content>
           <div className="d-flex flex-column justify-content-center align-items-center p-5">
-            <div className="text-danger mb-3"><Icon name="cross-circle" /></div>
+            <div className="text-danger mb-3">
+              <Icon name="cross-circle" />
+            </div>
             <h4>Lỗi tải chi tiết</h4>
             <p>{error}</p>
             <Link to="/kyc-list-regular">
@@ -140,7 +143,8 @@ const KycDetailsRegular = () => {
               <BlockHeadContent>
                 <div className="d-flex align-items-center">
                   <BlockTitle page>
-                    Hồ sơ KYC / <strong className="text-primary small">{user.name}</strong>
+                    Hồ sơ KYC /{" "}
+                    <strong className="text-primary small">{user.name}</strong>
                   </BlockTitle>
                 </div>
                 <BlockDes className="text-soft">
@@ -156,11 +160,19 @@ const KycDetailsRegular = () => {
               </BlockHeadContent>
               <BlockHeadContent>
                 <Link to={`/kyc-list-regular`}>
-                  <Button color="light" outline className="bg-white d-none d-sm-inline-flex">
+                  <Button
+                    color="light"
+                    outline
+                    className="bg-white d-none d-sm-inline-flex"
+                  >
                     <Icon name="arrow-left"></Icon>
                     <span>Quay lại</span>
                   </Button>
-                  <Button color="light" outline className="btn-icon bg-white d-inline-flex d-sm-none">
+                  <Button
+                    color="light"
+                    outline
+                    className="btn-icon bg-white d-inline-flex d-sm-none"
+                  >
                     <Icon name="arrow-left"></Icon>
                   </Button>
                 </Link>
@@ -179,6 +191,14 @@ const KycDetailsRegular = () => {
                 </BlockHead>
                 <Card className="card-bordered">
                   <ul className="data-list is-compact">
+                    <li className="data-item">
+                      <div className="data-col">
+                        <div className="data-label">Tổ chức</div>
+                        <div className="data-value">
+                          {user?.organization?.name}
+                        </div>
+                      </div>
+                    </li>
                     <li className="data-item">
                       <div className="data-col">
                         <div className="data-label">Người nộp</div>
@@ -201,12 +221,16 @@ const KycDetailsRegular = () => {
                               user.status === KYC_STATUS.APPROVED
                                 ? "outline-success"
                                 : user.status === KYC_STATUS.PENDING
-                                  ? "outline-info"
-                                  : "outline-danger"
+                                ? "outline-info"
+                                : "outline-danger"
                             }
                             className="badge-dim"
                           >
-                            {user.status === KYC_STATUS.PENDING ? "Đang chờ xử lý" : user.status === KYC_STATUS.APPROVED ? "Đã phê duyệt" : "Đã từ chối"}
+                            {user.status === KYC_STATUS.PENDING
+                              ? "Đang chờ xử lý"
+                              : user.status === KYC_STATUS.APPROVED
+                              ? "Đã phê duyệt"
+                              : "Đã từ chối"}
                           </Badge>
                         </div>
                       </div>
@@ -216,7 +240,10 @@ const KycDetailsRegular = () => {
                         <div className="data-label">Người duyệt</div>
                         <div className="data-value">
                           <div className="user-card">
-                            <UserAvatar theme="orange-dim" text={findUpper(user.checked)}></UserAvatar>
+                            <UserAvatar
+                              theme="orange-dim"
+                              text={findUpper(user.checked)}
+                            ></UserAvatar>
                             <div className="user-info">
                               <span className="tb-lead">{user.checked}</span>
                             </div>
@@ -257,12 +284,17 @@ const KycDetailsRegular = () => {
                               className="text-primary"
                               onClick={(e) => {
                                 e.preventDefault();
-                                downloadDocument(user.frontImagePath, `${user.name}-front.jpg`);
+                                downloadDocument(
+                                  user.frontImagePath,
+                                  `${user.name}-front.jpg`
+                                );
                               }}
                             >
                               <Icon name="download"></Icon> Tải ảnh mặt trước
                             </a>
-                          ) : "Không có"}
+                          ) : (
+                            "Không có"
+                          )}
                         </div>
                       </div>
                     </li>
@@ -270,18 +302,24 @@ const KycDetailsRegular = () => {
                       <div className="data-col">
                         <div className="data-label">Ảnh mặt sau</div>
                         <div className="data-value">
-                          {user.documentType !== "PASSPORT" && user.backImagePath ? (
+                          {user.documentType !== "PASSPORT" &&
+                          user.backImagePath ? (
                             <a
                               href="#download"
                               className="text-primary"
                               onClick={(e) => {
                                 e.preventDefault();
-                                downloadDocument(user.backImagePath, `${user.name}-back.jpg`);
+                                downloadDocument(
+                                  user.backImagePath,
+                                  `${user.name}-back.jpg`
+                                );
                               }}
                             >
                               <Icon name="download"></Icon> Tải ảnh mặt sau
                             </a>
-                          ) : "Không áp dụng"}
+                          ) : (
+                            "Không áp dụng"
+                          )}
                         </div>
                       </div>
                     </li>
@@ -295,12 +333,17 @@ const KycDetailsRegular = () => {
                               className="text-primary"
                               onClick={(e) => {
                                 e.preventDefault();
-                                downloadDocument(user.faceImagePath, `${user.name}-face.jpg`);
+                                downloadDocument(
+                                  user.faceImagePath,
+                                  `${user.name}-face.jpg`
+                                );
                               }}
                             >
                               <Icon name="download"></Icon> Tải ảnh chân dung
                             </a>
-                          ) : "Không có"}
+                          ) : (
+                            "Không có"
+                          )}
                         </div>
                       </div>
                     </li>
@@ -314,12 +357,17 @@ const KycDetailsRegular = () => {
                               className="text-primary"
                               onClick={(e) => {
                                 e.preventDefault();
-                                downloadDocument(user.recordVideo, `${user.name}-face-scan.webm`);
+                                downloadDocument(
+                                  user.recordVideo,
+                                  `${user.name}-face-scan.webm`
+                                );
                               }}
                             >
                               <Icon name="download" /> Tải video
                             </a>
-                          ) : "Không có"}
+                          ) : (
+                            "Không có"
+                          )}
                         </div>
                       </div>
                     </li>
@@ -330,12 +378,21 @@ const KycDetailsRegular = () => {
                     width="100%"
                     height="auto"
                     controls
-                    style={{ borderRadius: '8px', maxHeight: '480px', marginTop: '1.25rem' }}
+                    style={{
+                      borderRadius: "8px",
+                      maxHeight: "480px",
+                      marginTop: "1.25rem",
+                    }}
                   >
-                    <source src={urlVideo(user.recordVideo)} type="video/webm" />
+                    <source
+                      src={urlVideo(user.recordVideo)}
+                      type="video/webm"
+                    />
                     Trình duyệt không hỗ trợ phát video
                   </video>
-                ) : <div></div>}
+                ) : (
+                  <div></div>
+                )}
               </Col>
 
               <Col lg="7">
@@ -347,33 +404,40 @@ const KycDetailsRegular = () => {
                 </BlockHead>
                 <Card className="card-bordered">
                   <ul className="data-list is-compact">
-                    {user.personalInfo && Object.entries(user.personalInfo).map(([key, value]) => {
-                      // Map the key to the corresponding translation key
-                      const fieldTranslationMap = {
-                        name: 'Họ và tên',
-                        id: 'Số CCCD/CMND',
-                        birthDay: 'Ngày sinh',
-                        gender: 'Giới tính',
-                        originLocation: 'Quê quán',
-                        recentLocation: 'Nơi thường trú',
-                        issueDate: 'Ngày cấp',
-                        issuePlace: 'Nơi cấp',
-                        validDate: 'Ngày hết hạn',
-                        cardType: 'Loại giấy tờ',
-                        isLegal: 'Giấy tờ hợp lệ'
-                      };
-                      const label = fieldTranslationMap[key] || key.charAt(0).toUpperCase() + key.slice(1);
-                      return (
-                        <li className="data-item" key={key}>
-                          <div className="data-col">
-                            <div className="data-label">{label}</div>
-                            <div className="data-value text-break">
-                              {typeof value === 'boolean' ? (value ? 'Hợp lệ' : 'Không hợp lệ') : value}
+                    {user.personalInfo &&
+                      Object.entries(user.personalInfo).map(([key, value]) => {
+                        // Map the key to the corresponding translation key
+                        const fieldTranslationMap = {
+                          name: "Họ và tên",
+                          id: "Số CCCD/CMND",
+                          birthDay: "Ngày sinh",
+                          gender: "Giới tính",
+                          originLocation: "Quê quán",
+                          recentLocation: "Nơi thường trú",
+                          issueDate: "Ngày cấp",
+                          issuePlace: "Nơi cấp",
+                          validDate: "Ngày hết hạn",
+                          cardType: "Loại giấy tờ",
+                          isLegal: "Giấy tờ hợp lệ",
+                        };
+                        const label =
+                          fieldTranslationMap[key] ||
+                          key.charAt(0).toUpperCase() + key.slice(1);
+                        return (
+                          <li className="data-item" key={key}>
+                            <div className="data-col">
+                              <div className="data-label">{label}</div>
+                              <div className="data-value text-break">
+                                {typeof value === "boolean"
+                                  ? value
+                                    ? "Hợp lệ"
+                                    : "Không hợp lệ"
+                                  : value}
+                              </div>
                             </div>
-                          </div>
-                        </li>
-                      );
-                    })}
+                          </li>
+                        );
+                      })}
                   </ul>
                 </Card>
               </Col>

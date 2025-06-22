@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Content from "@/layout/content/Content";
@@ -43,33 +42,36 @@ import { findUpper } from "@/utils/Utils";
 const filterStatus = () => [
   { value: KYC_STATUS.PENDING, label: "Đang chờ xử lý" },
   { value: KYC_STATUS.APPROVED, label: "Đã phê duyệt" },
-  { value: KYC_STATUS.REJECTED, label: "Đã từ chối" }
+  { value: KYC_STATUS.REJECTED, label: "Đã từ chối" },
 ];
 
 const filterDoc = () => [
   { value: "PASSPORT", label: "Hộ chiếu" },
   { value: "NATIONAL_ID", label: "CCCD/CMND" },
-  { value: "DRIVING_LICENSE", label: "Bằng lái xe" }
+  { value: "DRIVING_LICENSE", label: "Bằng lái xe" },
 ];
 
 const bulkActionKycOptions = () => [
   { value: KYC_STATUS.APPROVED, label: "Phê duyệt" },
-  { value: KYC_STATUS.REJECTED, label: "Từ chối" }
+  { value: KYC_STATUS.REJECTED, label: "Từ chối" },
 ];
 
 const DOC_TYPE = {
   PASSPORT: "PASSPORT",
   ID_CARD: "ID_CARD",
   DRIVING_LICENSE: "DRIVING_LICENSE",
-}
+};
 
 const KycListRegular = () => {
   // Định nghĩa text tiếng Việt cho các loại giấy tờ
-  const DOC_TYPE_NAME = useMemo(() => ({
-    PASSPORT: "Hộ chiếu",
-    DRIVING_LICENSE: "Bằng lái xe",
-    ID_CARD: "CCCD/CMND"
-  }), []);
+  const DOC_TYPE_NAME = useMemo(
+    () => ({
+      PASSPORT: "Hộ chiếu",
+      DRIVING_LICENSE: "Bằng lái xe",
+      ID_CARD: "CCCD/CMND",
+    }),
+    []
+  );
   // Khởi tạo các option filter và state
   const translatedFilterStatus = useMemo(() => filterStatus(), []);
   const translatedFilterDoc = useMemo(() => filterDoc(), []);
@@ -102,7 +104,7 @@ const KycListRegular = () => {
           setData(
             records.map((record) => ({
               id: record._id,
-              safeId: `id_${record._id.replace(/[^a-zA-Z0-9]/g, '_')}`,
+              safeId: `id_${record._id.replace(/[^a-zA-Z0-9]/g, "_")}`,
               name: `${record.firstName || ""} ${record.lastName || ""}`.trim(),
               doc: DOC_TYPE_NAME[record.documentType] || "CCCD/CMND",
               front: true,
@@ -125,6 +127,7 @@ const KycListRegular = () => {
               backImagePath: record.backImage,
               userImage: record.userImage,
               recordVideo: record?.video?.filename || null,
+              organization: record?.organization,
             }))
           );
           setTotalItems(pagination.total);
@@ -135,7 +138,7 @@ const KycListRegular = () => {
         console.error("Lỗi khi lấy dữ liệu eKYC:", error);
       }
     };
-    
+
     fetchEkycData();
   }, [currentPage, itemPerPage, DOC_TYPE_NAME]);
 
@@ -149,14 +152,18 @@ const KycListRegular = () => {
       let sortedData = defaultData.sort((a, b) => b.name.localeCompare(a.name));
       setData([...sortedData]);
     }
-  };    // Changing state value when searching name  // Debounced search effect
+  }; // Changing state value when searching name  // Debounced search effect
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (onSearchText !== "") {
-        setData(prevData => {
+        setData((prevData) => {
           const filteredObject = prevData.filter((item) => {
-            return item?.personalInfo?.name?.toLowerCase().includes(onSearchText.toLowerCase()) || 
-                   item?.id?.toLowerCase().includes(onSearchText.toLowerCase());
+            return (
+              item?.personalInfo?.name
+                ?.toLowerCase()
+                .includes(onSearchText.toLowerCase()) ||
+              item?.id?.toLowerCase().includes(onSearchText.toLowerCase())
+            );
           });
           return [...filteredObject];
         });
@@ -216,7 +223,7 @@ const KycListRegular = () => {
       // Call the admin approval API
       const response = await adminService.adminVerifyDocument(id, {
         adminName: currentAdmin,
-        status: KYC_STATUS.APPROVED
+        status: KYC_STATUS.APPROVED,
       });
 
       if (response.success) {
@@ -225,7 +232,7 @@ const KycListRegular = () => {
         let index = newData.findIndex((item) => item.id === id);
         newData[index].status = response?.data?.status;
         newData[index].checked = response?.data?.adminVerifiedBy;
-        newData[index].adminVerifiedAt = response?.data?.adminVerifiedAt
+        newData[index].adminVerifiedAt = response?.data?.adminVerifiedAt;
         setData([...newData]);
 
         // Show success notification (you can implement a toast notification)
@@ -247,7 +254,7 @@ const KycListRegular = () => {
       // Call the admin approval API with rejected status
       const response = await adminService.adminVerifyDocument(id, {
         adminName: currentAdmin,
-        status: KYC_STATUS.REJECTED
+        status: KYC_STATUS.REJECTED,
       });
 
       if (response.success) {
@@ -256,7 +263,7 @@ const KycListRegular = () => {
         let index = newData.findIndex((item) => item.id === id);
         newData[index].status = response?.data?.status;
         newData[index].checked = response?.data?.adminVerifiedBy;
-        newData[index].adminVerifiedAt = response?.data?.adminVerifiedAt
+        newData[index].adminVerifiedAt = response?.data?.adminVerifiedAt;
         setData([...newData]);
 
         // Show success notification (you can implement a toast notification)
@@ -278,9 +285,9 @@ const KycListRegular = () => {
 
       // Create a download link and trigger download
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', filename);
+      link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -322,11 +329,19 @@ const KycListRegular = () => {
               </BlockDes>
             </BlockHeadContent>
             <BlockHeadContent>
-              <Button color="light" outline className="bg-white d-none d-sm-inline-flex">
+              <Button
+                color="light"
+                outline
+                className="bg-white d-none d-sm-inline-flex"
+              >
                 <Icon name="download-cloud"></Icon>
                 <span>Xuất</span>
               </Button>
-              <Button color="light" outline className="btn-icon bg-white d-inline-flex d-sm-none">
+              <Button
+                color="light"
+                outline
+                className="btn-icon bg-white d-inline-flex d-sm-none"
+              >
                 <Icon name="download-cloud"></Icon>
               </Button>
             </BlockHeadContent>
@@ -390,12 +405,18 @@ const KycListRegular = () => {
                     <li>
                       <div className="toggle-wrap">
                         <Button
-                          className={`btn-icon btn-trigger toggle ${tablesm ? "active" : ""}`}
+                          className={`btn-icon btn-trigger toggle ${
+                            tablesm ? "active" : ""
+                          }`}
                           onClick={() => updateTableSm(true)}
                         >
                           <Icon name="menu-right"></Icon>
                         </Button>
-                        <div className={`toggle-content ${tablesm ? "content-active" : ""}`}>
+                        <div
+                          className={`toggle-content ${
+                            tablesm ? "content-active" : ""
+                          }`}
+                        >
                           <ul className="btn-toolbar gx-1">
                             <li className="toggle-close">
                               <Button className="btn-icon btn-trigger toggle">
@@ -404,7 +425,10 @@ const KycListRegular = () => {
                             </li>
                             <li>
                               <UncontrolledDropdown>
-                                <DropdownToggle tag="a" className="btn btn-trigger btn-icon dropdown-toggle">
+                                <DropdownToggle
+                                  tag="a"
+                                  className="btn btn-trigger btn-icon dropdown-toggle"
+                                >
                                   <div className="dot dot-primary"></div>
                                   <Icon name="filter-alt"></Icon>
                                 </DropdownToggle>
@@ -414,25 +438,40 @@ const KycListRegular = () => {
                                   style={{ overflow: "visible" }}
                                 >
                                   <div className="dropdown-head">
-                                    <span className="sub-title dropdown-title">Bộ lọc nâng cao</span>
+                                    <span className="sub-title dropdown-title">
+                                      Bộ lọc nâng cao
+                                    </span>
                                   </div>
                                   <div className="dropdown-body dropdown-body-rg">
                                     <Row className="gx-6 gy-3">
                                       <Col size="6">
                                         <div className="form-group">
-                                          <label className="overline-title overline-title-alt">Loại giấy tờ</label>
-                                          <RSelect options={translatedFilterDoc} placeholder="Tất cả loại" />
+                                          <label className="overline-title overline-title-alt">
+                                            Loại giấy tờ
+                                          </label>
+                                          <RSelect
+                                            options={translatedFilterDoc}
+                                            placeholder="Tất cả loại"
+                                          />
                                         </div>
                                       </Col>
                                       <Col size="6">
                                         <div className="form-group">
-                                          <label className="overline-title overline-title-alt">Trạng thái</label>
-                                          <RSelect options={translatedFilterStatus} placeholder="Tất cả trạng thái" />
+                                          <label className="overline-title overline-title-alt">
+                                            Trạng thái
+                                          </label>
+                                          <RSelect
+                                            options={translatedFilterStatus}
+                                            placeholder="Tất cả trạng thái"
+                                          />
                                         </div>
                                       </Col>
                                       <Col size="12">
                                         <div className="form-group">
-                                          <Button type="button" color="secondary">
+                                          <Button
+                                            type="button"
+                                            color="secondary"
+                                          >
                                             Lọc
                                           </Button>
                                         </div>
@@ -463,7 +502,10 @@ const KycListRegular = () => {
                             </li>
                             <li>
                               <UncontrolledDropdown>
-                                <DropdownToggle tag="a" className="btn btn-trigger btn-icon dropdown-toggle">
+                                <DropdownToggle
+                                  tag="a"
+                                  className="btn btn-trigger btn-icon dropdown-toggle"
+                                >
                                   <Icon name="setting"></Icon>
                                 </DropdownToggle>
                                 <DropdownMenu end className="dropdown-menu-xs">
@@ -471,7 +513,11 @@ const KycListRegular = () => {
                                     <li>
                                       <span>Hiển thị</span>
                                     </li>
-                                    <li className={itemPerPage === 10 ? "active" : ""}>
+                                    <li
+                                      className={
+                                        itemPerPage === 10 ? "active" : ""
+                                      }
+                                    >
                                       <DropdownItem
                                         tag="a"
                                         href="#dropdownitem"
@@ -483,7 +529,11 @@ const KycListRegular = () => {
                                         10
                                       </DropdownItem>
                                     </li>
-                                    <li className={itemPerPage === 15 ? "active" : ""}>
+                                    <li
+                                      className={
+                                        itemPerPage === 15 ? "active" : ""
+                                      }
+                                    >
                                       <DropdownItem
                                         tag="a"
                                         href="#dropdownitem"
@@ -500,7 +550,9 @@ const KycListRegular = () => {
                                     <li>
                                       <span>Sắp xếp</span>
                                     </li>
-                                    <li className={sort === "dsc" ? "active" : ""}>
+                                    <li
+                                      className={sort === "dsc" ? "active" : ""}
+                                    >
                                       <DropdownItem
                                         tag="a"
                                         href="#dropdownitem"
@@ -513,7 +565,9 @@ const KycListRegular = () => {
                                         Giảm dần
                                       </DropdownItem>
                                     </li>
-                                    <li className={sort === "asc" ? "active" : ""}>
+                                    <li
+                                      className={sort === "asc" ? "active" : ""}
+                                    >
                                       <DropdownItem
                                         tag="a"
                                         href="#dropdownitem"
@@ -537,7 +591,9 @@ const KycListRegular = () => {
                   </ul>
                 </div>
               </div>
-              <div className={`card-search search-wrap ${!onSearch && "active"}`}>
+              <div
+                className={`card-search search-wrap ${!onSearch && "active"}`}
+              >
                 <div className="card-body">
                   <div className="search-content">
                     <Button
@@ -573,9 +629,16 @@ const KycListRegular = () => {
                       id="uid_1"
                       onChange={(e) => selectorCheck(e)}
                     />
-                    <label className="custom-control-label" htmlFor="uid_1"></label>
+                    <label
+                      className="custom-control-label"
+                      htmlFor="uid_1"
+                    ></label>
                   </div>
-                </DataTableRow>                <DataTableRow>
+                </DataTableRow>{" "}
+                <DataTableRow>
+                  <span>Tổ chức</span>
+                </DataTableRow>
+                <DataTableRow>
                   <span>Người dùng</span>
                 </DataTableRow>
                 <DataTableRow size="mb">
@@ -598,233 +661,293 @@ const KycListRegular = () => {
 
               {currentItems.length > 0
                 ? currentItems.map((item) => {
-                  return (
-                    <DataTableItem key={item.id}>
-                      <DataTableRow className="nk-tb-col-check">
-                        <div className="custom-control custom-control-sm custom-checkbox notext">
-                          <input
-                            type="checkbox"
-                            className="custom-control-input"
-                            defaultChecked={item.check}
-                            id={`uid1_${item.safeId}`}
-                            key={Math.random()}
-                            onChange={(e) => onSelectChange(e, item.id)}
-                          />
-                          <label className="custom-control-label" htmlFor={`uid1_${item.safeId}`}></label>
-                        </div>
-                      </DataTableRow>
-                      <DataTableRow>
-                        <Link to={`/kyc-details-regular/${item.id}`}>
+                    return (
+                      <DataTableItem key={item.id}>
+                        <DataTableRow className="nk-tb-col-check">
+                          <div className="custom-control custom-control-sm custom-checkbox notext">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              defaultChecked={item.check}
+                              id={`uid1_${item.safeId}`}
+                              key={Math.random()}
+                              onChange={(e) => onSelectChange(e, item.id)}
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor={`uid1_${item.safeId}`}
+                            ></label>
+                          </div>
+                        </DataTableRow>
+                        <DataTableRow>
                           <div className="user-card">
-                            {/* <UserAvatar
+                            <div className="user-info">
+                              <span className="tb-lead">
+                                {item?.organization?.name}
+                              </span>
+                              <span>{item?.organization?.email}</span>
+                            </div>
+                          </div>
+                        </DataTableRow>
+                        <DataTableRow>
+                          <Link to={`/kyc-details-regular/${item.id}`}>
+                            <div className="user-card">
+                              {/* <UserAvatar
                                   theme={item.avatarBg}
                                   text={findUpper(item.name)}
                                   image={item.image}
                                 ></UserAvatar> */}
-                            <div className="user-info">
-                              <span className="tb-lead">
-                                {item?.personalInfo?.name}
-                                <span
-                                  className={`dot dot-${item.status === KYC_STATUS.APPROVED
-                                      ? "success"
-                                      : item.status === KYC_STATUS.PENDING
+                              <div className="user-info">
+                                <span className="tb-lead">
+                                  {item?.personalInfo?.name}
+                                  <span
+                                    className={`dot dot-${
+                                      item.status === KYC_STATUS.APPROVED
+                                        ? "success"
+                                        : item.status === KYC_STATUS.PENDING
                                         ? "info"
                                         : "danger"
                                     } d-md-none ms-1`}
-                                ></span>
-                              </span>
-                              <span>{item?.id}</span>
+                                  ></span>
+                                </span>
+                                <span>{item?.id}</span>
+                              </div>
                             </div>
-                          </div>
-                        </Link>
-                      </DataTableRow>
-                      <DataTableRow size="mb">
-                        <span className="tb-lead-sub">{item.doc}</span>
-                      </DataTableRow>
-                      <DataTableRow size="md">
-                        <DownloadDropdown item={item} downloadDocumentImage={downloadDocumentImage} />
-                      </DataTableRow>
-                      <DataTableRow size="lg">
-                        <span className="tb-date">{item.date}</span>
-                      </DataTableRow>
-                      <DataTableRow size="md">
-                        <span
-                          className={`tb-status text-${
-                            item.status === KYC_STATUS.APPROVED 
-                              ? "success" 
-                              : item.status === KYC_STATUS.PENDING 
-                                ? "info" 
+                          </Link>
+                        </DataTableRow>
+                        <DataTableRow size="mb">
+                          <span className="tb-lead-sub">{item.doc}</span>
+                        </DataTableRow>
+                        <DataTableRow size="md">
+                          <DownloadDropdown
+                            item={item}
+                            downloadDocumentImage={downloadDocumentImage}
+                          />
+                        </DataTableRow>
+                        <DataTableRow size="lg">
+                          <span className="tb-date">{item.date}</span>
+                        </DataTableRow>
+                        <DataTableRow size="md">
+                          <span
+                            className={`tb-status text-${
+                              item.status === KYC_STATUS.APPROVED
+                                ? "success"
+                                : item.status === KYC_STATUS.PENDING
+                                ? "info"
                                 : "danger"
-                          }`}
-                        >
-                          {item.status === KYC_STATUS.PENDING ? "Đang chờ xử lý" : item.status === KYC_STATUS.APPROVED ? "Đã phê duyệt" : "Đã từ chối"}
-                        </span>                        {item.status !== KYC_STATUS.PENDING && (
-                          <TooltipComponent
-                            icon="info"
-                            direction="top"
-                            id={`tooltip_status_${item.safeId}`}
-                            text={`$${item.status === KYC_STATUS.APPROVED ? "Đã phê duyệt" : "Đã từ chối"} lúc ${item.adminVerifiedAt}`}
-                          ></TooltipComponent>
-                        )}
-                        {!item.status === KYC_STATUS.PENDING && (
-                          <span>
+                            }`}
+                          >
+                            {item.status === KYC_STATUS.PENDING
+                              ? "Đang chờ xử lý"
+                              : item.status === KYC_STATUS.APPROVED
+                              ? "Đã phê duyệt"
+                              : "Đã từ chối"}
+                          </span>{" "}
+                          {item.status !== KYC_STATUS.PENDING && (
                             <TooltipComponent
                               icon="info"
                               direction="top"
-                              text={`Đã nộp lúc ${item.date}`}
-                              id={`tooltip_date_${item.safeId}`}
-                            />
-                          </span>
-                        )}
-                      </DataTableRow>
-                      <DataTableRow size="lg">
-                        <div className="user-card">
-                          <UserAvatar theme="orange-dim" size="xs" text={findUpper(item.checked)}></UserAvatar>
-                          <div className="user-name">
-                            <span className="tb-lead">{item.checked} </span>
+                              id={`tooltip_status_${item.safeId}`}
+                              text={`$${
+                                item.status === KYC_STATUS.APPROVED
+                                  ? "Đã phê duyệt"
+                                  : "Đã từ chối"
+                              } lúc ${item.adminVerifiedAt}`}
+                            ></TooltipComponent>
+                          )}
+                          {!item.status === KYC_STATUS.PENDING && (
+                            <span>
+                              <TooltipComponent
+                                icon="info"
+                                direction="top"
+                                text={`Đã nộp lúc ${item.date}`}
+                                id={`tooltip_date_${item.safeId}`}
+                              />
+                            </span>
+                          )}
+                        </DataTableRow>
+                        <DataTableRow size="lg">
+                          <div className="user-card">
+                            <UserAvatar
+                              theme="orange-dim"
+                              size="xs"
+                              text={findUpper(item.checked)}
+                            ></UserAvatar>
+                            <div className="user-name">
+                              <span className="tb-lead">{item.checked} </span>
+                            </div>
                           </div>
-                        </div>
-                      </DataTableRow>
-                      <DataTableRow className="nk-tb-col-tools">
-                        <ul className="nk-tb-actions gx-1">
-                          <li
-                            className="nk-tb-action-hidden"
-                            onClick={() => {
-                              loadDetail(item.id);
-                              setViewModal(true);
-                            }}
-                          >                            <TooltipComponent
-                              tag="a"
-                              containerClassName="btn btn-trigger btn-icon"
-                              id={`view_${item.safeId}`}
-                              icon="eye-fill"
-                              direction="top"
-                              text="Xem nhanh"
-                            />
-                          </li>
-                          {item.status === KYC_STATUS.REJECTED ? null : item.status === KYC_STATUS.APPROVED ? (
-                            <li className="nk-tb-action-hidden" onClick={() => onRejectClick(item.id)}>                              <TooltipComponent
+                        </DataTableRow>
+                        <DataTableRow className="nk-tb-col-tools">
+                          <ul className="nk-tb-actions gx-1">
+                            <li
+                              className="nk-tb-action-hidden"
+                              onClick={() => {
+                                loadDetail(item.id);
+                                setViewModal(true);
+                              }}
+                            >
+                              {" "}
+                              <TooltipComponent
                                 tag="a"
                                 containerClassName="btn btn-trigger btn-icon"
-                                id={`reject_${item.safeId}`}
-                                icon="cross-fill-c"
+                                id={`view_${item.safeId}`}
+                                icon="eye-fill"
                                 direction="top"
-                                text="Từ chối"
+                                text="Xem nhanh"
                               />
                             </li>
-                          ) : (
-                            <React.Fragment>
-                              <li className="nk-tb-action-hidden">
-                                <Button
-                                  disabled={isProcessing}
-                                  className="btn-trigger btn-icon"
-                                  onClick={() => onApproveClick(item.id)}
-                                >                                <TooltipComponent
-                                    tag="a"
-                                    containerClassName="btn-trigger btn-icon"
-                                    id={`approve_${item.safeId}`}
-                                    icon={isProcessing ? "loader" : "check-fill-c"}
-                                    direction="top"
-                                    text="Phê duyệt"
-                                  />
-                                </Button>
+                            {item.status ===
+                            KYC_STATUS.REJECTED ? null : item.status ===
+                              KYC_STATUS.APPROVED ? (
+                              <li
+                                className="nk-tb-action-hidden"
+                                onClick={() => onRejectClick(item.id)}
+                              >
+                                {" "}
+                                <TooltipComponent
+                                  tag="a"
+                                  containerClassName="btn btn-trigger btn-icon"
+                                  id={`reject_${item.safeId}`}
+                                  icon="cross-fill-c"
+                                  direction="top"
+                                  text="Từ chối"
+                                />
                               </li>
-                              <li className="nk-tb-action-hidden">
-                                <Button
-                                  disabled={isProcessing}
-                                  className="btn-trigger btn-icon"
-                                  onClick={() => onRejectClick(item.id)}
-                                >                                  <TooltipComponent
-                                    tag="a"
-                                    containerClassName="btn-trigger btn-icon"
-                                    id={`reject_${item.safeId}`}
-                                    icon={isProcessing ? "loader" : "cross-fill-c"}
-                                    direction="top"
-                                    text="Từ chối"
-                                  />
-                                </Button>
-                              </li>
-                            </React.Fragment>
-                          )}
-                          <li>
-                            <UncontrolledDropdown>
-                              <DropdownToggle tag="a" className="dropdown-toggle btn btn-icon btn-trigger">
-                                <Icon name="more-h"></Icon>
-                              </DropdownToggle>
-                              <DropdownMenu end>
-                                <ul className="link-list-opt no-bdr">
-                                  <li>
-                                    <DropdownItem
+                            ) : (
+                              <React.Fragment>
+                                <li className="nk-tb-action-hidden">
+                                  <Button
+                                    disabled={isProcessing}
+                                    className="btn-trigger btn-icon"
+                                    onClick={() => onApproveClick(item.id)}
+                                  >
+                                    {" "}
+                                    <TooltipComponent
                                       tag="a"
-                                      href="#view"
-                                      onClick={(ev) => {
-                                        ev.preventDefault();
-                                        loadDetail(item.id);
-                                        setViewModal(true);
-                                      }}
-                                    >
-                                      <Icon name="eye"></Icon>
-                                      <span>Xem nhanh</span>
-                                    </DropdownItem>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      to={`/kyc-details-regular/${item.id}`}
-                                    >
-                                      <Icon name="focus"></Icon>
-                                      <span>Xem chi tiết</span>
-                                    </Link>
-                                  </li>
-                                  {item.status === KYC_STATUS.REJECTED ? null : item.status === KYC_STATUS.APPROVED ? (
-                                    <li onClick={() => onRejectClick(item.id)}>
+                                      containerClassName="btn-trigger btn-icon"
+                                      id={`approve_${item.safeId}`}
+                                      icon={
+                                        isProcessing ? "loader" : "check-fill-c"
+                                      }
+                                      direction="top"
+                                      text="Phê duyệt"
+                                    />
+                                  </Button>
+                                </li>
+                                <li className="nk-tb-action-hidden">
+                                  <Button
+                                    disabled={isProcessing}
+                                    className="btn-trigger btn-icon"
+                                    onClick={() => onRejectClick(item.id)}
+                                  >
+                                    {" "}
+                                    <TooltipComponent
+                                      tag="a"
+                                      containerClassName="btn-trigger btn-icon"
+                                      id={`reject_${item.safeId}`}
+                                      icon={
+                                        isProcessing ? "loader" : "cross-fill-c"
+                                      }
+                                      direction="top"
+                                      text="Từ chối"
+                                    />
+                                  </Button>
+                                </li>
+                              </React.Fragment>
+                            )}
+                            <li>
+                              <UncontrolledDropdown>
+                                <DropdownToggle
+                                  tag="a"
+                                  className="dropdown-toggle btn btn-icon btn-trigger"
+                                >
+                                  <Icon name="more-h"></Icon>
+                                </DropdownToggle>
+                                <DropdownMenu end>
+                                  <ul className="link-list-opt no-bdr">
+                                    <li>
                                       <DropdownItem
                                         tag="a"
-                                        href="#reject"
+                                        href="#view"
                                         onClick={(ev) => {
                                           ev.preventDefault();
+                                          loadDetail(item.id);
+                                          setViewModal(true);
                                         }}
                                       >
-                                        <Icon name="na"></Icon>
-                                        <span>Từ chối người dùng</span>
+                                        <Icon name="eye"></Icon>
+                                        <span>Xem nhanh</span>
                                       </DropdownItem>
                                     </li>
-                                  ) : (
-                                    <React.Fragment>
-                                      <li onClick={() => onApproveClick(item.id)}>
+                                    <li>
+                                      <Link
+                                        to={`/kyc-details-regular/${item.id}`}
+                                      >
+                                        <Icon name="focus"></Icon>
+                                        <span>Xem chi tiết</span>
+                                      </Link>
+                                    </li>
+                                    {item.status ===
+                                    KYC_STATUS.REJECTED ? null : item.status ===
+                                      KYC_STATUS.APPROVED ? (
+                                      <li
+                                        onClick={() => onRejectClick(item.id)}
+                                      >
                                         <DropdownItem
                                           tag="a"
-                                          href="#approve"
-                                          onClick={(ev) => {
-                                            ev.preventDefault();
-                                          }}
-                                        >
-                                          <Icon name="check-thick"></Icon>
-                                          <span>Phê duyệt</span>
-                                        </DropdownItem>
-                                      </li>
-                                      <li onClick={() => onRejectClick(item.id)}>
-                                        <DropdownItem
-                                          tag="a"
-                                          href="#suspend"
+                                          href="#reject"
                                           onClick={(ev) => {
                                             ev.preventDefault();
                                           }}
                                         >
                                           <Icon name="na"></Icon>
-                                          <span>Tạm khóa người dùng</span>
+                                          <span>Từ chối người dùng</span>
                                         </DropdownItem>
                                       </li>
-                                    </React.Fragment>
-                                  )}
-                                </ul>
-                              </DropdownMenu>
-                            </UncontrolledDropdown>
-                          </li>
-                        </ul>
-                      </DataTableRow>
-                    </DataTableItem>
-                  );
-                })
+                                    ) : (
+                                      <React.Fragment>
+                                        <li
+                                          onClick={() =>
+                                            onApproveClick(item.id)
+                                          }
+                                        >
+                                          <DropdownItem
+                                            tag="a"
+                                            href="#approve"
+                                            onClick={(ev) => {
+                                              ev.preventDefault();
+                                            }}
+                                          >
+                                            <Icon name="check-thick"></Icon>
+                                            <span>Phê duyệt</span>
+                                          </DropdownItem>
+                                        </li>
+                                        <li
+                                          onClick={() => onRejectClick(item.id)}
+                                        >
+                                          <DropdownItem
+                                            tag="a"
+                                            href="#suspend"
+                                            onClick={(ev) => {
+                                              ev.preventDefault();
+                                            }}
+                                          >
+                                            <Icon name="na"></Icon>
+                                            <span>Tạm khóa người dùng</span>
+                                          </DropdownItem>
+                                        </li>
+                                      </React.Fragment>
+                                    )}
+                                  </ul>
+                                </DropdownMenu>
+                              </UncontrolledDropdown>
+                            </li>
+                          </ul>
+                        </DataTableRow>
+                      </DataTableItem>
+                    );
+                  })
                 : null}
             </DataTableBody>
             <div className="card-inner">
@@ -846,7 +969,12 @@ const KycListRegular = () => {
         </Block>
       </Content>
 
-      <Modal isOpen={viewModal} toggle={() => setViewModal(false)} className="modal-dialog-centered" size="lg">
+      <Modal
+        isOpen={viewModal}
+        toggle={() => setViewModal(false)}
+        className="modal-dialog-centered"
+        size="lg"
+      >
         <ModalBody>
           <a
             href="#cancel"
@@ -860,18 +988,27 @@ const KycListRegular = () => {
           </a>
           <div className="nk-modal-head">
             <h4 className="nk-modal-title title">
-              Chi tiết hồ sơ KYC <small className="text-primary"> {detail.id}</small>
+              Chi tiết hồ sơ KYC{" "}
+              <small className="text-primary"> {detail.id}</small>
             </h4>
           </div>
           <div className="nk-tnx-details mt-sm-3">
             <Row className="gy-3">
+              <Col lg={24}>
+                <span className="sub-text">Tổ chức</span>
+                <span className="caption-text">
+                  {detail?.organization?.name}
+                </span>
+              </Col>
               <Col lg={6}>
                 <span className="sub-text"> Mã hồ sơ</span>
                 <span className="caption-text">{detail.id}</span>
               </Col>
               <Col lg={6}>
                 <span className="sub-text">Tên người nộp </span>
-                <span className="caption-text text-break">{detail?.personalInfo?.name || detail?.id}</span>
+                <span className="caption-text text-break">
+                  {detail?.personalInfo?.name || detail?.id}
+                </span>
               </Col>
               <Col lg={6}>
                 <span className="sub-text">Loại giấy tờ </span>
@@ -880,10 +1017,20 @@ const KycListRegular = () => {
               <Col lg={6}>
                 <span className="sub-text">Trạng thái</span>
                 <Badge
-                  color={detail.status === KYC_STATUS.APPROVED ? "success" : detail.status === KYC_STATUS.PENDING ? "info" : "danger"}
+                  color={
+                    detail.status === KYC_STATUS.APPROVED
+                      ? "success"
+                      : detail.status === KYC_STATUS.PENDING
+                      ? "info"
+                      : "danger"
+                  }
                   size="md"
                 >
-                  {detail.status === KYC_STATUS.PENDING ? "Đang chờ xử lý" : detail.status === KYC_STATUS.APPROVED ? "Đã phê duyệt" : "Đã từ chối"}
+                  {detail.status === KYC_STATUS.PENDING
+                    ? "Đang chờ xử lý"
+                    : detail.status === KYC_STATUS.APPROVED
+                    ? "Đã phê duyệt"
+                    : "Đã từ chối"}
                 </Badge>
               </Col>
               <Col lg={6}>

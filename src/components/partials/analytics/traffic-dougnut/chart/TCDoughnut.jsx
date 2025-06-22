@@ -1,5 +1,4 @@
 import { Doughnut } from "react-chartjs-2";
-
 import {
   Chart,
   CategoryScale,
@@ -10,6 +9,7 @@ import {
   Filler,
   Legend,
 } from "chart.js";
+
 Chart.register(
   CategoryScale,
   LinearScale,
@@ -19,36 +19,23 @@ Chart.register(
   Filler,
   Legend
 );
-const data = {
-  labels: [
-    "Tài chính/Ngân hàng",
-    "Bảo hiểm",
-    "Thương mại điện tử",
-    "Viễn thông",
-    "Khác",
-  ],
-  dataUnit: "%",
-  legend: false,
-  datasets: [
-    {
-      borderColor: "#fff",
-      backgroundColor: [
-        "#A19DE0", // Tài chính/Ngân hàng
-        "#B5B4E9", // Bảo hiểm
-        "#D2D1F4", // Thương mại điện tử
-        "#E8E7F8", // Viễn thông
-        "#FADE8C", // Khác
-      ],
-      data: [38.5, 21.4, 17.3, 12.8, 10],
-    },
-  ],
-};
 
-const TCDoughnut = ({ className }) => {
+const TCDoughnut = ({ className, data = [], colors = [] }) => {
+  const chartData = {
+    labels: data.map((item) => item.industryName || "Không rõ"),
+    datasets: [
+      {
+        borderColor: "#fff",
+        backgroundColor: colors.slice(0, data.length),
+        data: data.map((item) => item.percentage),
+      },
+    ],
+  };
+
   return (
     <Doughnut
       className={className}
-      data={data}
+      data={chartData}
       options={{
         plugins: {
           legend: {
@@ -59,13 +46,13 @@ const TCDoughnut = ({ className }) => {
             displayColors: false,
             backgroundColor: "#eff6ff",
             titleFont: {
-              size: "13px",
+              size: 13,
             },
             titleColor: "#6783b8",
             titleMarginBottom: 6,
             bodyColor: "#9eaecf",
             bodyFont: {
-              size: "12px",
+              size: 12,
             },
             bodySpacing: 4,
             padding: 10,
@@ -79,10 +66,10 @@ const TCDoughnut = ({ className }) => {
           },
         },
         rotation: -1.5,
-        cutoutPercentage: 70,
+        cutout: "70%", // tương đương với cutoutPercentage: 70
         maintainAspectRatio: false,
       }}
-    ></Doughnut>
+    />
   );
 };
 

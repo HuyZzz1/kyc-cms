@@ -1,5 +1,4 @@
 import { Line } from "react-chartjs-2";
-
 import {
   Chart,
   CategoryScale,
@@ -10,6 +9,12 @@ import {
   Filler,
   Legend,
 } from "chart.js";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { useMemo } from "react";
+
+dayjs.extend(customParseFormat);
+
 Chart.register(
   CategoryScale,
   LinearScale,
@@ -19,11 +24,39 @@ Chart.register(
   Filler,
   Legend
 );
+
 const AudienceLineChart = ({ data }) => {
+  const chartData = useMemo(() => {
+    return {
+      labels: data.map((item) =>
+        dayjs(item.date, "DD/MM/YYYY").format("DD/MM")
+      ),
+      datasets: [
+        {
+          label: "Active Users",
+          borderWidth: 2,
+          fill: false,
+          tension: 0.4,
+          borderColor: "rgba(157, 114, 255, 0.5)",
+          backgroundColor: "rgba(157, 114, 255, 0.5)",
+          pointBorderColor: "transparent",
+          pointBackgroundColor: "transparent",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(157, 114, 255, 0.5)",
+          pointBorderWidth: 2,
+          pointHoverRadius: 4,
+          pointHoverBorderWidth: 2,
+          pointRadius: 0,
+          data: data.map((item) => item.users),
+        },
+      ],
+    };
+  }, [data]);
+
   return (
     <Line
       className="analytics-line-large"
-      data={data}
+      data={chartData}
       options={{
         plugins: {
           legend: {
@@ -34,13 +67,13 @@ const AudienceLineChart = ({ data }) => {
             displayColors: false,
             backgroundColor: "#eff6ff",
             titleFont: {
-              size: "13px",
+              size: 13,
             },
             titleColor: "#6783b8",
             titleMarginBottom: 6,
             bodyColor: "#9eaecf",
             bodyFont: {
-              size: "12px",
+              size: 12,
             },
             bodySpacing: 4,
             padding: 10,
@@ -60,7 +93,7 @@ const AudienceLineChart = ({ data }) => {
               beginAtZero: true,
               color: "#9eaecf",
               font: {
-                size: "11px",
+                size: 11,
               },
               padding: 8,
               stepSize: 2400,
@@ -68,29 +101,26 @@ const AudienceLineChart = ({ data }) => {
             grid: {
               color: "rgba(82, 100, 132, 0.2)",
               tickMarkLength: 0,
-              zeroLineColor: "rgba(82, 100, 132,0.2)",
             },
           },
           x: {
-            display: false,
+            display: true, // ✅ Show x-axis
             ticks: {
               color: "#9eaecf",
               font: {
-                size: "12px",
+                size: 12,
               },
-              source: "auto",
-              padding: 0,
+              padding: 8,
             },
             grid: {
               color: "transparent",
               tickMarkLength: 0,
-              zeroLineColor: "transparent",
               offsetGridLines: true,
             },
           },
         },
       }}
-    ></Line>
+    />
   );
 };
 

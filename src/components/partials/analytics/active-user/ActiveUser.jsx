@@ -47,10 +47,10 @@ const ActiveUser = () => {
         <div className="analytic-au-ck">
           <ActiveUserBarChart />
         </div>
-        <div className="chart-label-group">
+        {/* <div className="chart-label-group">
           <div className="chart-label">01 Jan, 2020</div>
           <div className="chart-label">30 Jan, 2020</div>
-        </div>
+        </div> */}
       </div>
     </React.Fragment>
   );

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import {
   UncontrolledDropdown,
   DropdownToggle,
@@ -6,9 +7,26 @@ import {
   DropdownItem,
 } from "reactstrap";
 import Map from "./chart/Map";
+import { getStatsCountries } from "../../../../services/dashboard";
 
 const UserMap = () => {
-  const [mapState, setMapState] = useState("30");
+  const [mapState, setMapState] = useState("7");
+
+  const [data, setData] = useState();
+
+  const fetchData = async () => {
+    try {
+      const data = await getStatsCountries(mapState);
+      setData(data);
+    } catch (error) {
+      console.error("Error fetching:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [mapState]);
+
   return (
     <React.Fragment>
       <div className="card-title-group">
@@ -62,31 +80,20 @@ const UserMap = () => {
         </UncontrolledDropdown>
       </div>
       <div className="analytics-map">
-        <Map set="30" />
-        <table className="analytics-map-data-list">
-          <tbody>
-            <tr className="analytics-map-data">
-              <td className="country">Việt Nam</td>
-              <td className="amount">6,840</td>
-              <td className="percent">41.3 %</td>
-            </tr>
-            <tr className="analytics-map-data">
-              <td className="country">Indonesia</td>
-              <td className="amount">3,412</td>
-              <td className="percent">20.6 %</td>
-            </tr>
-            <tr className="analytics-map-data">
-              <td className="country">Thailand</td>
-              <td className="amount">2,230</td>
-              <td className="percent">13.5 %</td>
-            </tr>
-            <tr className="analytics-map-data">
-              <td className="country">Malaysia</td>
-              <td className="amount">1,950</td>
-              <td className="percent"> 11.8 %</td>
-            </tr>
-          </tbody>
-        </table>
+        <Map statistics={data?.statistics || []} />
+        {data?.statistics?.length > 0 && (
+          <table className="analytics-map-data-list">
+            <tbody>
+              {data.statistics.map((item, index) => (
+                <tr className="analytics-map-data" key={index}>
+                  <td className="country">{item.countryName || "Không rõ"}</td>
+                  <td className="amount">{item.count}</td>
+                  <td className="percent">{item.percentage} %</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </React.Fragment>
   );

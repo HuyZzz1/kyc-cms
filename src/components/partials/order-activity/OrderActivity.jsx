@@ -6,10 +6,9 @@ import {
   DataTableItem,
   DataTableRow,
 } from "@/components/table/DataTable";
-import { Link } from "react-router-dom";
 import { getKycActivities } from "@/services/dashboard";
 import { PaginationComponent } from "@/components/Component";
-import Icon from "@/components/icon/Icon";
+// import Icon from "@/components/icon/Icon";
 
 const OrderActivity = () => {
   const [orderData, setOrderData] = useState([]);
@@ -21,7 +20,12 @@ const OrderActivity = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const status = orderActivity === "Buy" ? "APPROVED" : orderActivity === "Sell" ? "REJECTED" : "all";
+        const status =
+          orderActivity === "Buy"
+            ? "APPROVED"
+            : orderActivity === "Sell"
+            ? "REJECTED"
+            : "all";
         const data = await getKycActivities(currentPage, itemPerPage, status);
         setOrderData(data.data || []);
         setTotalItems(data.total || 0);
@@ -36,11 +40,11 @@ const OrderActivity = () => {
 
   const getStatusLabel = (status) => {
     switch (status) {
-      case 'APPROVED':
+      case "APPROVED":
         return "Đã xác minh";
-      case 'PENDING':
+      case "PENDING":
         return "Đang kiểm tra";
-      case 'REJECTED':
+      case "REJECTED":
         return "Từ chối";
       default:
         return status;
@@ -49,29 +53,29 @@ const OrderActivity = () => {
 
   const getDescriptionLabel = (description) => {
     switch (description) {
-      case 'OCR_FAILED':
+      case "OCR_FAILED":
         return "Chưa nhận diện xong OCR";
-      case 'FACE_LIVENESS_FAILED':
+      case "FACE_LIVENESS_FAILED":
         return "Xác thực khuôn mặt thất bại";
-      case 'FACE_NOT_MATCHED':
+      case "FACE_NOT_MATCHED":
         return "Khuôn mặt không khớp";
       default:
-        return 'Trùng khớp ID & ảnh selfie';
+        return "Trùng khớp ID & ảnh selfie";
     }
   };
 
-  const getTypeIcons = (type) => {
-    switch (type) {
-      case 'SUCCESS':
-        return { icon1: "check-circle bg-success-dim icon-circle", icon2: "" };
-      case 'INCOMPLETE':
-        return { icon1: "alert-circle bg-warning-dim icon-circle", icon2: "" };
-      case 'FAKE':
-        return { icon1: "cross-circle bg-danger-dim icon-circle", icon2: "" };
-      default:
-        return { icon1: "info-circle bg-primary-dim icon-circle", icon2: "" };
-    }
-  };
+  // const getTypeIcons = (type) => {
+  //   switch (type) {
+  //     case "SUCCESS":
+  //       return { icon1: "check-circle bg-success-dim icon-circle", icon2: "" };
+  //     case "INCOMPLETE":
+  //       return { icon1: "alert-circle bg-warning-dim icon-circle", icon2: "" };
+  //     case "FAKE":
+  //       return { icon1: "cross-circle bg-danger-dim icon-circle", icon2: "" };
+  //     default:
+  //       return { icon1: "info-circle bg-primary-dim icon-circle", icon2: "" };
+  //   }
+  // };
 
   return (
     <React.Fragment>
@@ -80,12 +84,12 @@ const OrderActivity = () => {
           <CardTitle>
             <h6 className="title">
               <span className="me-2">Hoạt động KYC</span>{" "}
-              <Link
+              {/* <Link
                 to={`/transaction-crypto`}
                 className="link d-none d-sm-inline"
               >
                 Xem lịch sử
-              </Link>
+              </Link> */}
             </h6>
           </CardTitle>
           <div className="card-tools">
@@ -135,19 +139,19 @@ const OrderActivity = () => {
       </div>
       <div style={{ overflowX: "auto", width: "100%" }}>
         <div className="min-w-[900px]">
-          <DataTableBody className="border-top" bodyclass="nk-tb-orders">
+          <DataTableBody className="border-top w-full" bodyclass="nk-tb-orders">
             <DataTableHead>
-              <DataTableRow className="nk-tb-orders-type">
-                <span>Loại</span>
+              <DataTableRow>
+                <span>Tổ chức</span>
               </DataTableRow>
+              {/* <DataTableRow>
+                <span>Loại</span>
+              </DataTableRow> */}
               <DataTableRow>
                 <span>Mô tả</span>
               </DataTableRow>
               <DataTableRow>
-                <span>Ngày</span>
-              </DataTableRow>
-              <DataTableRow>
-                <span>Giờ</span>
+                <span>Thời gian</span>
               </DataTableRow>
               <DataTableRow>
                 <span>Mã tham chiếu</span>
@@ -161,32 +165,27 @@ const OrderActivity = () => {
             </DataTableHead>
             {orderData.length > 0
               ? orderData.map((item) => {
-                  const icons = getTypeIcons(item.type);
                   return (
                     <DataTableItem key={item.reference}>
-                      <DataTableRow className="nk-tb-orders-type">
-                        <ul className="icon-overlap">
-                          <li>
-                            <Icon name={icons.icon1}></Icon>
-                          </li>
-                          {icons.icon2 && (
-                            <li>
-                              <Icon name={icons.icon2}></Icon>
-                            </li>
-                          )}
-                        </ul>
+                      <DataTableRow>
+                        <span className="tb-sub text-nowrap">
+                          {item.organization?.name}
+                        </span>
                       </DataTableRow>
                       <DataTableRow>
-                        <span className="tb-lead text-nowrap">{getDescriptionLabel(item.description)}</span>
+                        <span className="tb-lead text-nowrap">
+                          {getDescriptionLabel(item.description)}
+                        </span>
                       </DataTableRow>
                       <DataTableRow>
-                        <span className="tb-sub text-nowrap">{item.date}</span>
+                        <span className="tb-sub text-nowrap">
+                          {item.date} {item?.time}
+                        </span>
                       </DataTableRow>
                       <DataTableRow>
-                        <span className="tb-sub text-nowrap">{item.time}</span>
-                      </DataTableRow>
-                      <DataTableRow>
-                        <span className="tb-sub text-primary text-nowrap">{item.reference || '-'}</span>
+                        <span className="tb-sub text-primary text-nowrap">
+                          {item.reference || "-"}
+                        </span>
                       </DataTableRow>
                       <DataTableRow>
                         <span className="tb-sub text-nowrap">
@@ -194,15 +193,24 @@ const OrderActivity = () => {
                         </span>
                       </DataTableRow>
                       <DataTableRow>
-                        <span className="tb-sub text-nowrap">{item.note || 'Không có'}</span>
+                        <span className="tb-sub text-nowrap">
+                          {item.note || "Không có"}
+                        </span>
                       </DataTableRow>
                     </DataTableItem>
                   );
                 })
               : null}
           </DataTableBody>
+
+          {orderData.length === 0 && (
+            <div className="text-center flex  align-items-center justify-content-center pt-5">
+              <span className="text-silent">No data found</span>
+            </div>
+          )}
+
           <div className="card-inner">
-            {orderData.length > 0 ? (
+            {totalItems > itemPerPage && (
               <PaginationComponent
                 noDown
                 itemPerPage={itemPerPage}
@@ -210,10 +218,6 @@ const OrderActivity = () => {
                 paginate={paginate}
                 currentPage={currentPage}
               />
-            ) : (
-              <div className="text-center">
-                <span className="text-silent">No data found</span>
-              </div>
             )}
           </div>
         </div>

@@ -36,8 +36,9 @@ const User = () => {
     e.preventDefault();
     localStorage.removeItem("accessToken");
     // Xóa cookie adminProfile nếu có
-    if (typeof document !== 'undefined') {
-      document.cookie = "adminProfile=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    if (typeof document !== "undefined") {
+      document.cookie =
+        "adminProfile=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
     navigate("/auth-login");
   };
@@ -57,12 +58,18 @@ const User = () => {
           <div className="user-info d-none d-xl-block">
             <div
               className={`user-status ${
-                window.location.pathname.split("/")[2] === "invest" ? "user-status-unverified" : ""
+                window.location.pathname.split("/")[2] === "invest"
+                  ? "user-status-unverified"
+                  : ""
               }`}
             >
-              {window.location.pathname.split("/")[2] === "invest" ? "Unverified" : "Admininstrator"}
+              {window.location.pathname.split("/")[2] === "invest"
+                ? "Unverified"
+                : "Admininstrator"}
             </div>
-            <div className="user-name dropdown-indicator">{profile?.fullName || "-"}</div>
+            <div className="user-name dropdown-indicator">
+              {profile?.fullName || "-"}
+            </div>
           </div>
         </div>
       </DropdownToggle>
@@ -81,7 +88,11 @@ const User = () => {
         <div className="dropdown-inner">
           <LinkList>
             <LinkItem
-              link={window.location.pathname.split("/")[2] === "invest" ? "/invest/profile" : "/user-profile-regular"}
+              link={
+                window.location.pathname.split("/")[2] === "invest"
+                  ? "/invest/profile"
+                  : "/user-profile-regular"
+              }
               icon="user-alt"
               onClick={toggle}
             >
@@ -111,16 +122,27 @@ const User = () => {
             </LinkItem>
 
             <li>
-              <a className={`dark-switch ${theme.skin === 'dark' ? 'active' : ''}`} href="#" 
-              onClick={(ev) => {
-                ev.preventDefault();
-                themeUpdate.skin(theme.skin === 'dark' ? 'light' : 'dark');
-              }}>
-                {theme.skin === 'dark' ? 
-                  <><em className="icon ni ni-sun"></em><span>Light Mode</span></> 
-                  : 
-                  <><em className="icon ni ni-moon"></em><span>Dark Mode</span></>
-                }
+              <a
+                className={`dark-switch ${
+                  theme.skin === "dark" ? "active" : ""
+                }`}
+                href="#"
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  themeUpdate.skin(theme.skin === "dark" ? "light" : "dark");
+                }}
+              >
+                {theme.skin === "dark" ? (
+                  <>
+                    <em className="icon ni ni-sun"></em>
+                    <span>Light Mode</span>
+                  </>
+                ) : (
+                  <>
+                    <em className="icon ni ni-moon"></em>
+                    <span>Dark Mode</span>
+                  </>
+                )}
               </a>
             </li>
           </LinkList>
