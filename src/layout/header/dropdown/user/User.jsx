@@ -1,15 +1,46 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import UserAvatar from "@/components/user/UserAvatar";
 import { DropdownToggle, DropdownMenu, Dropdown } from "reactstrap";
 import { Icon } from "@/components/Component";
 import { LinkList, LinkItem } from "@/components/links/Links";
 import { useTheme, useThemeUpdate } from "@/layout/provider/Theme";
+import { useNavigate } from "react-router-dom";
+import adminService from "@/services/adminService";
+import { getAdminUserInfo } from "@/utils/authUtils";
 
 const User = () => {
   const theme = useTheme();
   const themeUpdate = useThemeUpdate();
   const [open, setOpen] = useState(false);
+  const [profile, setProfile] = useState(getAdminUserInfo());
   const toggle = () => setOpen((prevState) => !prevState);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await adminService.getProfile();
+        // Tùy vào API trả về, lấy đúng trường dữ liệu
+        if (res && res.data) {
+          setProfile(res.data);
+        }
+      } catch {
+        // Không cần xử lý lỗi, giữ nguyên thông tin cũ
+      }
+    }
+    fetchProfile();
+  }, []);
+
+  // Hàm xử lý đăng xuất
+  const handleSignOut = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("accessToken");
+    // Xóa cookie adminProfile nếu có
+    if (typeof document !== 'undefined') {
+      document.cookie = "adminProfile=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+    navigate("/auth-login");
+  };
 
   return (
     <Dropdown isOpen={open} className="user-dropdown" toggle={toggle}>
@@ -31,7 +62,7 @@ const User = () => {
             >
               {window.location.pathname.split("/")[2] === "invest" ? "Unverified" : "Admininstrator"}
             </div>
-            <div className="user-name dropdown-indicator">Abu Bin Ishityak</div>
+            <div className="user-name dropdown-indicator">{profile?.fullName || "-"}</div>
           </div>
         </div>
       </DropdownToggle>
@@ -42,8 +73,8 @@ const User = () => {
               <span>AB</span>
             </div>
             <div className="user-info">
-              <span className="lead-text">Abu Bin Ishtiyak</span>
-              <span className="sub-text">info@softnio.com</span>
+              <span className="lead-text">{profile?.fullName || "-"}</span>
+              <span className="sub-text">{profile?.email || "-"}</span>
             </div>
           </div>
         </div>
@@ -96,7 +127,7 @@ const User = () => {
         </div>
         <div className="dropdown-inner">
           <LinkList>
-            <a href={`/auth-login`}>
+            <a href="/auth-login" onClick={handleSignOut}>
               <Icon name="signout"></Icon>
               <span>Sign Out</span>
             </a>

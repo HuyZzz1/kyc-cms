@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Head from "@/layout/head/Head";
 import AuthFooter from "./AuthFooter";
+import adminService from "@/services/adminService";
+import { setAdminAuth } from "@/utils/authUtils";
 import {
   Block,
   BlockContent,
@@ -22,20 +24,47 @@ const Login = () => {
   const [errorVal, setError] = useState("");
   const navigate = useNavigate();
 
-  const onFormSubmit = (formData) => {
+  // Nếu đã đăng nhập thì redirect sang /overview
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      navigate("/overview");
+    }
+  }, [navigate]);
+
+  const onFormSubmit = async (formData) => {
     setLoading(true);
-    const loginName = "admin@gmail.com";
-    const pass = "123123";
-    if (formData.name === loginName && formData.passcode === pass) {
-      localStorage.setItem("accessToken", "token");
+    setError("");
+    try {
+      // Gọi API đăng nhập
+      const loginDto = {
+        username: formData.name,
+        password: formData.passcode
+      };
+      const response = await adminService.login(loginDto);
+      const token = response?.accessToken;
+      const userData = response.admin;
+      setAdminAuth(token, userData);
+      // Lưu token vào localStorage để kiểm tra đăng nhập
+      localStorage.setItem("accessToken", token);
+      // Lưu profile nếu có
+      try {
+        const profileData = await adminService.getProfile();
+        if (profileData && profileData.data) {
+          import("@/utils/cookieUtils").then(({ setCookie }) => {
+            setCookie("adminProfile", JSON.stringify(profileData.data), { days: 1 });
+          });
+        }
+      } catch (profileError) {
+        // Không quan trọng, chỉ log
+        console.error("Lỗi lấy profile:", profileError);
+      }
       setTimeout(() => {
         navigate("/overview");
       }, 1000);
-    } else {
-      setTimeout(() => {
-        setError("Cannot login with credentials");
-        setLoading(false);
-      }, 1000);
+    } catch (error) {
+      setError(error.message || "Sai tài khoản hoặc mật khẩu");
+      setLoading(false);
     }
   };
 
@@ -47,7 +76,7 @@ const Login = () => {
 
   return (
     <>
-      <Head title="Login" />
+      <Head title="Đăng nhập" />
       <Block className="nk-block-middle nk-auth-body  wide-xs">
         <div className="brand-logo pb-4 text-center">
           <img
@@ -71,7 +100,7 @@ const Login = () => {
           {errorVal && (
             <div className="mb-3">
               <Alert color="danger" className="alert-icon">
-                <Icon name="alert-circle" /> Unable to login with credentials{" "}
+                <Icon name="alert-circle" /> {errorVal}
               </Alert>
             </div>
           )}
@@ -87,7 +116,6 @@ const Login = () => {
                   type="text"
                   id="default-01"
                   {...register("name", { required: "Trường này bắt buộc" })}
-                  defaultValue="admin@gmail.com"
                   placeholder="Nhập email hoặc tên người dùng của bạn"
                   className="form-control-lg form-control"
                 />
@@ -117,7 +145,6 @@ const Login = () => {
                   }`}
                 >
                   <Icon name="eye" className="passcode-icon icon-show"></Icon>
-
                   <Icon
                     name="eye-off"
                     className="passcode-icon icon-hide"
@@ -129,7 +156,6 @@ const Login = () => {
                   {...register("passcode", {
                     required: "Trường này bắt buộc",
                   })}
-                  defaultValue="123123"
                   placeholder="Nhập mật khẩu của bạn"
                   className={`form-control-lg form-control ${
                     passState ? "is-hidden" : "is-shown"

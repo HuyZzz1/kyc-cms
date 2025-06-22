@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Icon from "@/components/icon/Icon";
-import { orderActivityData } from "./OrderData";
 import { CardTitle } from "reactstrap";
 import {
   DataTableBody,
@@ -9,25 +7,72 @@ import {
   DataTableRow,
 } from "@/components/table/DataTable";
 import { Link } from "react-router-dom";
+import { getKycActivities } from "@/services/dashboard";
+import { PaginationComponent } from "@/components/Component";
+import Icon from "@/components/icon/Icon";
 
 const OrderActivity = () => {
-  const [orderData, setOrderData] = useState(orderActivityData);
+  const [orderData, setOrderData] = useState([]);
   const [orderActivity, setActivity] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemPerPage = 10;
+
   useEffect(() => {
-    let data;
-    if (orderActivity === "Buy") {
-      data = orderActivityData.filter(
-        (item) => item.desc.split(" ")[0] === "Buy"
-      );
-    } else if (orderActivity === "Sell") {
-      data = orderActivityData.filter(
-        (item) => item.desc.split(" ")[0] === "Sell"
-      );
-    } else {
-      data = orderActivityData;
+    const fetchData = async () => {
+      try {
+        const status = orderActivity === "Buy" ? "APPROVED" : orderActivity === "Sell" ? "REJECTED" : "all";
+        const data = await getKycActivities(currentPage, itemPerPage, status);
+        setOrderData(data.data || []);
+        setTotalItems(data.total || 0);
+      } catch (error) {
+        console.error("Error fetching KYC activities:", error);
+      }
+    };
+    fetchData();
+  }, [orderActivity, currentPage]);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case 'APPROVED':
+        return "Đã xác minh";
+      case 'PENDING':
+        return "Đang kiểm tra";
+      case 'REJECTED':
+        return "Từ chối";
+      default:
+        return status;
     }
-    setOrderData(data);
-  }, [orderActivity]);
+  };
+
+  const getDescriptionLabel = (description) => {
+    switch (description) {
+      case 'OCR_FAILED':
+        return "Chưa nhận diện xong OCR";
+      case 'FACE_LIVENESS_FAILED':
+        return "Xác thực khuôn mặt thất bại";
+      case 'FACE_NOT_MATCHED':
+        return "Khuôn mặt không khớp";
+      default:
+        return 'Trùng khớp ID & ảnh selfie';
+    }
+  };
+
+  const getTypeIcons = (type) => {
+    switch (type) {
+      case 'SUCCESS':
+        return { icon1: "check-circle bg-success-dim icon-circle", icon2: "" };
+      case 'INCOMPLETE':
+        return { icon1: "alert-circle bg-warning-dim icon-circle", icon2: "" };
+      case 'FAKE':
+        return { icon1: "cross-circle bg-danger-dim icon-circle", icon2: "" };
+      default:
+        return { icon1: "info-circle bg-primary-dim icon-circle", icon2: "" };
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="card-inner">
@@ -114,43 +159,63 @@ const OrderActivity = () => {
                 <span>Ghi chú</span>
               </DataTableRow>
             </DataTableHead>
-            {orderData.map((item) => {
-              return (
-                <DataTableItem key={item.id}>
-                  <DataTableRow className="nk-tb-orders-type">
-                    <ul className="icon-overlap">
-                      <li>
-                        <Icon name={item.icon1}></Icon>
-                      </li>
-                      <li>
-                        <Icon name={item.icon2}></Icon>
-                      </li>
-                    </ul>
-                  </DataTableRow>
-                  <DataTableRow>
-                    <span className="tb-lead text-nowrap">{item.desc}</span>
-                  </DataTableRow>
-                  <DataTableRow>
-                    <span className="tb-sub text-nowrap">{item.date}</span>
-                  </DataTableRow>
-                  <DataTableRow>
-                    <span className="tb-sub text-nowrap">{item.time}</span>
-                  </DataTableRow>
-                  <DataTableRow>
-                    <span className="tb-sub text-primary text-nowrap">
-                      {item.ref}
-                    </span>
-                  </DataTableRow>
-                  <DataTableRow>
-                    <span className="tb-sub text-nowrap">{item.status}</span>
-                  </DataTableRow>
-                  <DataTableRow>
-                    <span className="tb-sub text-nowrap">{item.note}</span>
-                  </DataTableRow>
-                </DataTableItem>
-              );
-            })}
+            {orderData.length > 0
+              ? orderData.map((item) => {
+                  const icons = getTypeIcons(item.type);
+                  return (
+                    <DataTableItem key={item.reference}>
+                      <DataTableRow className="nk-tb-orders-type">
+                        <ul className="icon-overlap">
+                          <li>
+                            <Icon name={icons.icon1}></Icon>
+                          </li>
+                          {icons.icon2 && (
+                            <li>
+                              <Icon name={icons.icon2}></Icon>
+                            </li>
+                          )}
+                        </ul>
+                      </DataTableRow>
+                      <DataTableRow>
+                        <span className="tb-lead text-nowrap">{getDescriptionLabel(item.description)}</span>
+                      </DataTableRow>
+                      <DataTableRow>
+                        <span className="tb-sub text-nowrap">{item.date}</span>
+                      </DataTableRow>
+                      <DataTableRow>
+                        <span className="tb-sub text-nowrap">{item.time}</span>
+                      </DataTableRow>
+                      <DataTableRow>
+                        <span className="tb-sub text-primary text-nowrap">{item.reference || '-'}</span>
+                      </DataTableRow>
+                      <DataTableRow>
+                        <span className="tb-sub text-nowrap">
+                          {getStatusLabel(item.status)}
+                        </span>
+                      </DataTableRow>
+                      <DataTableRow>
+                        <span className="tb-sub text-nowrap">{item.note || 'Không có'}</span>
+                      </DataTableRow>
+                    </DataTableItem>
+                  );
+                })
+              : null}
           </DataTableBody>
+          <div className="card-inner">
+            {orderData.length > 0 ? (
+              <PaginationComponent
+                noDown
+                itemPerPage={itemPerPage}
+                totalItems={totalItems}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
+            ) : (
+              <div className="text-center">
+                <span className="text-silent">No data found</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </React.Fragment>

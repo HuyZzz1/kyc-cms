@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "@/components/icon/Icon";
 import {
   UncontrolledDropdown,
@@ -10,17 +10,62 @@ import {
 import { Row, Col } from "@/components/grid/Grid";
 import { Link } from "react-router-dom";
 import DoubleBarChart from "./chart/DoubleBar";
-import { orderOverviewSet1 } from "../../../../utils/mockData";
+import { getKycOverview } from "@/services/dashboard";
 
 const OrderOverview = () => {
   const [orderOverview, setOverview] = useState("");
+  const [overviewData, setOverviewData] = useState({
+    summary: {
+      successful: 0,
+      rejected: 0,
+      submitted: 0,
+      failed: 0
+    },
+    daily_stats: []
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const days = orderOverview === "day" ? 30 : 15;
+        const data = await getKycOverview(days);
+        setOverviewData(data);
+      } catch (error) {
+        console.error("Error fetching KYC overview:", error);
+      }
+    };
+    fetchData();
+  }, [orderOverview]);
+
+  const chartData = {
+    labels: overviewData.daily_stats.map(stat => stat.date),
+    datasets: [
+      {
+        label: "Xác minh thành công",
+        color: "#8feac5",
+        backgroundColor: "#8feac5",
+        barPercentage: 0.8,
+        categoryPercentage: 0.6,
+        data: overviewData.daily_stats.map(stat => stat.successful)
+      },
+      {
+        label: "Xác minh thất bại",
+        color: "#9cabff",
+        backgroundColor: "#9cabff",
+        barPercentage: 0.8,
+        categoryPercentage: 0.6,
+        data: overviewData.daily_stats.map(stat => stat.rejected)
+      }
+    ]
+  };
+
   return (
     <React.Fragment>
       <div className="card-title-group align-start mb-3">
         <CardTitle className="card-title">
           <h6 className="title">Tổng quan KYC</h6>
           <p>
-            Tổng quan các xác minh trong 15 ngày qua
+            Tổng quan các xác minh trong {orderOverview === "day" ? "30" : "15"} ngày qua
             <Link to={`/invoice-list`} className="link link-sm ps-1">
               Thống kê chi tiết
             </Link>
@@ -38,23 +83,21 @@ const OrderOverview = () => {
               <ul className="link-list-opt no-bdr">
                 <li className={orderOverview === "" ? "active" : ""}>
                   <DropdownItem
-                    tag="a"
                     href="#dropdownitem"
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onClick={(ev) => {
+                      ev.preventDefault();
                       setOverview("");
                     }}
                   >
                     <span>15 Days</span>
                   </DropdownItem>
                 </li>
-                <li className={orderOverview === "set2" ? "active" : ""}>
+                <li className={orderOverview === "day" ? "active" : ""}>
                   <DropdownItem
-                    tag="a"
                     href="#dropdownitem"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setOverview("set2");
+                    onClick={(ev) => {
+                      ev.preventDefault();
+                      setOverview("day");
                     }}
                   >
                     <span>30 Days</span>
@@ -69,7 +112,7 @@ const OrderOverview = () => {
         <Row className="g-4 align-end">
           <Col xxl="8">
             <div className="nk-order-ovwg-ck">
-              <DoubleBarChart data={orderOverviewSet1} />
+              <DoubleBarChart data={chartData} />
             </div>
           </Col>
           <Col xxl="4">
@@ -77,16 +120,16 @@ const OrderOverview = () => {
               <Col xxl="12" sm="6">
                 <div className="nk-order-ovwg-data buy pb-1">
                   <div className="amount lh-1 pb-2">
-                    4,252
-                    <small className="currenct currency-usd ps-1 ">
+                    {overviewData.summary.successful}
+                    <small className="currenct currency-usd ps-1">
                       xác minh thành công
                     </small>
                   </div>
-                  <div className="info ">
-                    Trong 15 ngày qua
+                  <div className="info">
+                    Trong {orderOverview === "day" ? "30" : "15"} ngày qua
                     <strong className="ps-1">
                       <span className="currenct currency-usd">
-                        9,740 yêu cầu được gửi
+                        {overviewData.summary.submitted} yêu cầu được gửi
                       </span>
                     </strong>
                   </div>
@@ -95,16 +138,16 @@ const OrderOverview = () => {
               <Col xxl="12" sm="6">
                 <div className="nk-order-ovwg-data sell pb-1">
                   <div className="amount lh-1 pb-2">
-                    1,108
+                    {overviewData.summary.rejected}
                     <small className="currenct currency-usd ps-1">
                       bị từ chối
                     </small>
                   </div>
-                  <div className="info ">
-                    Trong 15 ngày qua
+                  <div className="info">
+                    Trong {orderOverview === "day" ? "30" : "15"} ngày qua
                     <strong className="ps-1">
                       <span className="currenct currency-usd">
-                        2,125 yêu cầu thất bại
+                        {overviewData.summary.failed} yêu cầu thất bại
                       </span>
                     </strong>
                   </div>

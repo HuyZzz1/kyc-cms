@@ -1,0 +1,60 @@
+.download-dropdown {
+  position: relative;
+  display: inline-block;
+  font-size: 14px;
+}
+
+.download-dropdown .dropdown-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 14px;
+  color: #1a73e8;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+}
+
+.download-dropdown .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-top: 6px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  z-index: 999;
+  padding: 4px 0;
+  list-style: none;
+  min-width: max-content; /* độ rộng vừa với nội dung */
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.download-dropdown .dropdown-menu li {
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.download-dropdown .dropdown-menu li a {
+  text-decoration: none;
+  color: #6b7280; /* text màu xám nhạt */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 500;
+}
+
+.download-dropdown .dropdown-menu li:hover {
+  background-color: #f9fafb;
+}
+
+.download-dropdown .dropdown-menu li a svg {
+  color: #1a73e8; /* icon xanh */
+  font-size: 16px;
+  margin-left: 8px;
+}
