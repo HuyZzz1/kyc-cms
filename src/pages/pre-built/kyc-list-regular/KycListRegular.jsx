@@ -153,25 +153,6 @@ const KycListRegular = () => {
       setData([...sortedData]);
     }
   }; // Changing state value when searching name  // Debounced search effect
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (onSearchText !== "") {
-        setData((prevData) => {
-          const filteredObject = prevData.filter((item) => {
-            return (
-              item?.personalInfo?.name
-                ?.toLowerCase()
-                .includes(onSearchText.toLowerCase()) ||
-              item?.id?.toLowerCase().includes(onSearchText.toLowerCase())
-            );
-          });
-          return [...filteredObject];
-        });
-      }
-    }, 300); // 300ms debounce
-
-    return () => clearTimeout(timeoutId);
-  }, [onSearchText]);
 
   // onChange function for searching name
   const onFilterChange = (e) => {

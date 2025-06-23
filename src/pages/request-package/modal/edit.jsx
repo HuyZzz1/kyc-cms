@@ -1,14 +1,16 @@
+/* eslint-disable no-unused-vars */
 import { useState, forwardRef, useImperativeHandle } from "react";
 import { Button, Icon, Row, Col } from "@/components/Component";
 import { useForm } from "react-hook-form";
 import { ModalBody, Modal, Form } from "reactstrap";
 import { toast } from "react-toastify";
-import { createPackages } from "../../../services/dashboard";
+import { updatePackage } from "../../../services/dashboard";
 import { formatToVND } from "../../../utils/Utils";
 
-const CreateModal = forwardRef(({ fetchData }, ref) => {
-  const [modal, setModal] = useState({ add: false });
+const EditModal = forwardRef(({ fetchData }, ref) => {
+  const [modal, setModal] = useState({ edit: false });
   const [displayPrice, setDisplayPrice] = useState("");
+  const [item, setItem] = useState(null);
 
   const {
     register,
@@ -27,34 +29,51 @@ const CreateModal = forwardRef(({ fetchData }, ref) => {
   });
 
   const onFormCancel = () => {
-    setModal({ add: false });
+    setModal({ edit: false });
     reset();
+    setDisplayPrice("");
+    setItem(null);
   };
 
   const onFormSubmit = async (values) => {
     try {
-      await createPackages({
+      await updatePackage({
         ...values,
+        id: item._id,
         requestCount: Number(values.requestCount),
         durationInMonths: Number(values.durationInMonths),
         price: Number(values.price),
       });
-      toast.success("Tạo gói thành công!");
+      toast.success("Cập nhật gói thành công!");
       fetchData();
       onFormCancel();
     } catch (error) {
-      toast.error(error || "Tạo thất bại!");
+      toast.error("Cập nhật thất bại!");
     }
   };
 
   useImperativeHandle(ref, () => ({
-    open: () => setModal({ add: true }),
-    close: () => onFormCancel(),
+    open: (data) => {
+      setItem(data);
+      setModal({ edit: true });
+
+      // Gán lại giá trị cho form
+      reset({
+        name: data.name,
+        description: data.description,
+        requestCount: data.requestCount,
+        durationInMonths: data.durationInMonths,
+        price: data.price,
+      });
+
+      // Hiển thị giá format
+      setDisplayPrice(formatToVND(data.price));
+    },
   }));
 
   return (
     <Modal
-      isOpen={modal.add}
+      isOpen={modal.edit}
       toggle={onFormCancel}
       className="modal-dialog-centered"
       size="lg"
@@ -71,7 +90,7 @@ const CreateModal = forwardRef(({ fetchData }, ref) => {
           <Icon name="cross-sm" />
         </a>
         <div className="p-2">
-          <h5 className="title">Tạo gói</h5>
+          <h5 className="title">Chỉnh sửa thông tin gói</h5>
           <Form
             className="mt-4"
             onSubmit={handleSubmit(onFormSubmit)}
@@ -169,6 +188,7 @@ const CreateModal = forwardRef(({ fetchData }, ref) => {
                 </div>
               </Col>
             </Row>
+
             <Col size="12">
               <ul className="align-center justify-content-center flex-wrap flex-sm-nowrap gx-2 gy-2 pt-5">
                 <li>
@@ -198,6 +218,6 @@ const CreateModal = forwardRef(({ fetchData }, ref) => {
   );
 });
 
-CreateModal.displayName = "CreateModal";
+EditModal.displayName = "EditModal";
 
-export default CreateModal;
+export default EditModal;

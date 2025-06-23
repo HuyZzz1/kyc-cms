@@ -168,3 +168,51 @@ export const createPackages = async (params) => {
     throw error;
   }
 };
+
+export const updatePackage = async (params) => {
+  try {
+    const response = await axios.patch(
+      `${API_URL}/request-packages/${params.id}`,
+      params,
+      {
+        headers: getAuthHeaders(),
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error updating package:", error);
+    throw error;
+  }
+};
+
+export const updatePackagePopular = async (params) => {
+  try {
+    const response = await axios.patch(
+      `${API_URL}/request-packages/${params.id}/toggle-popular`,
+      {},
+      {
+        headers: getAuthHeaders(),
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error updating request package:", error);
+    throw error;
+  }
+};
+
+export const deletePackage = async (params) => {
+  try {
+    const response = await axios.delete(
+      `${API_URL}/request-packages/${params.id}`,
+
+      {
+        headers: getAuthHeaders(),
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error updating request package:", error);
+    throw error;
+  }
+};
