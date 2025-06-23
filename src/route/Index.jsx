@@ -148,6 +148,7 @@ import LayoutNoSidebar from "@/layout/Index-nosidebar";
 import ThemeProvider from "@/layout/provider/Theme";
 import KycGuide from "../pages/others/KycGuide";
 import RequestPackage from "../pages/request-package";
+import OrganizationManagement from "../pages/organization-management";
 
 const ScrollToTop = (props) => {
   const location = useLocation();
@@ -245,6 +246,14 @@ const Router = () => {
                 element={
                   <RequireAuth>
                     <Sales />
+                  </RequireAuth>
+                }
+              ></Route>
+              <Route
+                path="organization-management"
+                element={
+                  <RequireAuth>
+                    <OrganizationManagement />
                   </RequireAuth>
                 }
               ></Route>

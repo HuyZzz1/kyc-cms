@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Head from "@/layout/head/Head";
@@ -31,10 +32,6 @@ const Register = () => {
   const [listCountries, setListCountries] = useState();
   const [listIndustries, setListIndustries] = useState();
   const [listPackage, setListPackage] = useState();
-
-  console.log("listCountries", listCountries);
-  console.log("listIndustries", listIndustries);
-  console.log("listPackage", listPackage);
 
   const fetchListCountries = async () => {
     try {

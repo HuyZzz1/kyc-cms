@@ -242,3 +242,33 @@ export const getListIndustries = async () => {
     throw error;
   }
 };
+
+//Organization Management
+export const getListOrganizationManagement = async (params) => {
+  try {
+    const response = await axios.get(`${API_URL}/admin/organizations`, {
+      headers: getAuthHeaders(),
+      params,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching request packages:", error);
+    throw error;
+  }
+};
+
+export const updateOrganization = async (params) => {
+  try {
+    const response = await axios.put(
+      `${API_URL}/admin/organizations/${params.id}/status`,
+      { ...params },
+      {
+        headers: getAuthHeaders(),
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};

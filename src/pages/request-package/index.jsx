@@ -45,10 +45,11 @@ const RequestPackage = () => {
   const [onSearch, setonSearch] = useState(true);
   const [onSearchText, setSearchText] = useState("");
   const [data, setData] = useState([]);
-  const [tempFilterPopular, setTempFilterPopular] = useState(null); // lưu giá trị tạm
-  const [filterPopular, setFilterPopular] = useState(null); // dùng để lọc thật
+  const [tempFilterPopular, setTempFilterPopular] = useState(null);
+  const [filterPopular, setFilterPopular] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
 
   const createRef = useRef();
@@ -373,6 +374,20 @@ const RequestPackage = () => {
                                             href="#approve"
                                             onClick={(ev) => {
                                               ev.preventDefault();
+                                              setSelectedPackage(item);
+                                              setShowDetailModal(true);
+                                            }}
+                                          >
+                                            <Icon name="eye"></Icon>
+                                            <span>Chi tiết</span>
+                                          </DropdownItem>
+                                        </li>
+                                        <li>
+                                          <DropdownItem
+                                            tag="a"
+                                            href="#approve"
+                                            onClick={(ev) => {
+                                              ev.preventDefault();
                                               editRef?.current?.open(item);
                                             }}
                                           >
@@ -506,6 +521,55 @@ const RequestPackage = () => {
               }}
             >
               Xác nhận
+            </Button>
+          </div>
+        </ModalBody>
+      </Modal>
+
+      <Modal
+        isOpen={showDetailModal}
+        toggle={() => setShowDetailModal(false)}
+        centered
+      >
+        <ModalBody>
+          <h5 className="text-center mb-4">Chi tiết gói</h5>
+          {selectedPackage && (
+            <div className="text-start">
+              <p>
+                <strong>Ngày tạo:</strong>{" "}
+                {dayjs(selectedPackage.createdAt).format("HH:mm DD/MM/YYYY")}
+              </p>
+              <p>
+                <strong>Loại phổ biến:</strong>{" "}
+                {selectedPackage.isPopular ? "Có" : "Không"}
+              </p>
+              <p>
+                <strong>Tên gói:</strong> {selectedPackage.name}
+              </p>
+              <p>
+                <strong>Giá:</strong> {formatToVND(selectedPackage.price)}
+              </p>
+              <p>
+                <strong>Số lượt:</strong> {selectedPackage.requestCount}
+              </p>
+              <p>
+                <strong>Số tháng:</strong> {selectedPackage.durationInMonths}
+              </p>
+
+              <p>
+                <strong>Mô tả:</strong>{" "}
+                {selectedPackage.description || "Không có"}
+              </p>
+            </div>
+          )}
+
+          <div className="text-center pt-3">
+            <Button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setShowDetailModal(false)}
+            >
+              Đóng
             </Button>
           </div>
         </ModalBody>

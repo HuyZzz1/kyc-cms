@@ -84,8 +84,8 @@ const KycListRegular = () => {
   const [detail, setDetail] = useState({});
   const [actionText, setActionText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemPerPage, setItemPerPage] = useState(10);
-  const [sort, setSortState] = useState("");
+  // const [itemPerPage, setItemPerPage] = useState(10);
+  // const [sort, setSortState] = useState("");
   const [totalItems, setTotalItems] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentAdmin] = useState("Admin"); // Thay bằng thông tin admin thực tế từ auth
@@ -96,7 +96,7 @@ const KycListRegular = () => {
       try {
         const response = await adminService.getEkycList({
           page: currentPage,
-          limit: itemPerPage,
+          limit: 10,
         });
 
         if (response.success) {
@@ -140,19 +140,19 @@ const KycListRegular = () => {
     };
 
     fetchEkycData();
-  }, [currentPage, itemPerPage, DOC_TYPE_NAME]);
+  }, [currentPage, DOC_TYPE_NAME]);
 
   // Sorting data
-  const sortFunc = (params) => {
-    let defaultData = data;
-    if (params === "asc") {
-      let sortedData = defaultData.sort((a, b) => a.name.localeCompare(b.name));
-      setData([...sortedData]);
-    } else if (params === "dsc") {
-      let sortedData = defaultData.sort((a, b) => b.name.localeCompare(a.name));
-      setData([...sortedData]);
-    }
-  }; // Changing state value when searching name  // Debounced search effect
+  // const sortFunc = (params) => {
+  //   let defaultData = data;
+  //   if (params === "asc") {
+  //     let sortedData = defaultData.sort((a, b) => a.name.localeCompare(b.name));
+  //     setData([...sortedData]);
+  //   } else if (params === "dsc") {
+  //     let sortedData = defaultData.sort((a, b) => b.name.localeCompare(a.name));
+  //     setData([...sortedData]);
+  //   }
+  // };
 
   // onChange function for searching name
   const onFilterChange = (e) => {
@@ -481,7 +481,7 @@ const KycListRegular = () => {
                                 </DropdownMenu>
                               </UncontrolledDropdown>
                             </li>
-                            <li>
+                            {/* <li>
                               <UncontrolledDropdown>
                                 <DropdownToggle
                                   tag="a"
@@ -564,7 +564,7 @@ const KycListRegular = () => {
                                   </ul>
                                 </DropdownMenu>
                               </UncontrolledDropdown>
-                            </li>
+                            </li> */}
                           </ul>
                         </div>
                       </div>
@@ -935,7 +935,7 @@ const KycListRegular = () => {
               {currentItems.length > 0 ? (
                 <PaginationComponent
                   noDown
-                  itemPerPage={itemPerPage}
+                  itemPerPage={10}
                   totalItems={totalItems}
                   paginate={paginate}
                   currentPage={currentPage}

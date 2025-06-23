@@ -14,6 +14,10 @@ const menu = [
         text: "Quản lý File",
         link: "/app-file-manager",
       },
+      {
+        text: "Quản lý Tổ Chức",
+        link: "/organization-management",
+      },
     ],
   },
   {
