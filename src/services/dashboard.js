@@ -216,3 +216,29 @@ export const deletePackage = async (params) => {
     throw error;
   }
 };
+
+//Countries
+export const getListCountries = async () => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/organization/meta/countries`
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error ", error);
+    throw error;
+  }
+};
+
+//Industries
+export const getListIndustries = async () => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/organization/meta/industries`
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error ", error);
+    throw error;
+  }
+};
