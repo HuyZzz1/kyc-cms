@@ -20,8 +20,6 @@ const WebsitePerformance = () => {
     }
   };
 
-  console.log("data", data);
-
   useEffect(() => {
     fetchData();
   }, []);

@@ -58,8 +58,10 @@
     "sass": "1.56.1",
     "simplebar-react": "^3.2.6",
     "slick-carousel": "^1.8.1",
+    "sonner": "^2.0.5",
     "styled-components": "^6.1.13",
     "sweetalert2": "11.4.8",
+    "tiny-toast": "^1.2.0",
     "tinymce": "^7.4.1"
   },
   "devDependencies": {

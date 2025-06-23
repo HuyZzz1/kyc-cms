@@ -1,5 +1,11 @@
 import { useEffect } from "react";
-import { Routes, Route, useLocation, BrowserRouter, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  BrowserRouter,
+  Navigate,
+} from "react-router-dom";
 import { ProductContextProvider } from "@/pages/pre-built/products/ProductContext";
 import { UserContextProvider } from "@/pages/pre-built/user-manage/UserContext";
 
@@ -141,6 +147,7 @@ import LayoutInvest from "@/layout/Index-invest";
 import LayoutNoSidebar from "@/layout/Index-nosidebar";
 import ThemeProvider from "@/layout/provider/Theme";
 import KycGuide from "../pages/others/KycGuide";
+import RequestPackage from "../pages/request-package";
 
 const ScrollToTop = (props) => {
   const location = useLocation();
@@ -153,7 +160,8 @@ const ScrollToTop = (props) => {
 
 // RequireAuth component
 const RequireAuth = ({ children }) => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem("accessToken") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
   if (!token) {
     return <Navigate to="/auth-login" replace />;
   }
@@ -216,21 +224,30 @@ const Router = () => {
             </Route>
             <Route element={<Layout />}>
               {/* <Route index element={<Crypto />}></Route> */}
-              <Route path="overview" element={
-                <RequireAuth>
-                  <Crypto />
-                </RequireAuth>
-              }></Route>
-              <Route path="analytics" element={
-                <RequireAuth>
-                  <Analytics />
-                </RequireAuth>
-              }></Route>
-              <Route path="sales" element={
-                <RequireAuth>
-                  <Sales />
-                </RequireAuth>
-              }></Route>
+              <Route
+                path="overview"
+                element={
+                  <RequireAuth>
+                    <Crypto />
+                  </RequireAuth>
+                }
+              ></Route>
+              <Route
+                path="analytics"
+                element={
+                  <RequireAuth>
+                    <Analytics />
+                  </RequireAuth>
+                }
+              ></Route>
+              <Route
+                path="sales"
+                element={
+                  <RequireAuth>
+                    <Sales />
+                  </RequireAuth>
+                }
+              ></Route>
               <Route path="_blank" element={<Blank />}></Route>
 
               <Route path="project-card" element={<ProjectCardPage />}></Route>
@@ -307,6 +324,15 @@ const Router = () => {
               </Route>
 
               <Route
+                path="request-package"
+                element={
+                  <RequireAuth>
+                    <RequestPackage />
+                  </RequireAuth>
+                }
+              ></Route>
+
+              <Route
                 path="kyc-list-regular"
                 element={
                   <RequireAuth>
@@ -330,11 +356,14 @@ const Router = () => {
                   </RequireAuth>
                 }
               ></Route>
-              <Route path="transaction" element={
-                <RequireAuth>
-                  <TransListCrypto />
-                </RequireAuth>
-              }></Route>
+              <Route
+                path="transaction"
+                element={
+                  <RequireAuth>
+                    <TransListCrypto />
+                  </RequireAuth>
+                }
+              ></Route>
               <Route element={<ProductContextProvider />}>
                 <Route path="product-list" element={<ProductList />}></Route>
                 <Route path="product-card" element={<ProductCard />}></Route>
@@ -344,11 +373,14 @@ const Router = () => {
                 ></Route>
               </Route>
 
-              <Route path="invoice-list" element={
-                <RequireAuth>
-                  <InvoiceList />
-                </RequireAuth>
-              }></Route>
+              <Route
+                path="invoice-list"
+                element={
+                  <RequireAuth>
+                    <InvoiceList />
+                  </RequireAuth>
+                }
+              ></Route>
               <Route
                 path="invoice-details/:invoiceId"
                 element={
@@ -368,44 +400,95 @@ const Router = () => {
                 <Route path="regular-v2" element={<Regularv2 />}></Route>
               </Route>
 
-              <Route path="app-messages" element={
-                <RequireAuth>
-                  <AppMessages />
-                </RequireAuth>
-              }></Route>
-              <Route path="app-chat" element={
-                <RequireAuth>
-                  <Chat />
-                </RequireAuth>
-              }></Route>
-              <Route path="app-calender" element={
-                <RequireAuth>
-                  <Calender />
-                </RequireAuth>
-              }></Route>
-              <Route path="app-inbox" element={
-                <RequireAuth>
-                  <Inbox />
-                </RequireAuth>
-              }></Route>
-              <Route path="app-kanban" element={
-                <RequireAuth>
-                  <Kanban />
-                </RequireAuth>
-              }></Route>
+              <Route
+                path="app-messages"
+                element={
+                  <RequireAuth>
+                    <AppMessages />
+                  </RequireAuth>
+                }
+              ></Route>
+              <Route
+                path="app-chat"
+                element={
+                  <RequireAuth>
+                    <Chat />
+                  </RequireAuth>
+                }
+              ></Route>
+              <Route
+                path="app-calender"
+                element={
+                  <RequireAuth>
+                    <Calender />
+                  </RequireAuth>
+                }
+              ></Route>
+              <Route
+                path="app-inbox"
+                element={
+                  <RequireAuth>
+                    <Inbox />
+                  </RequireAuth>
+                }
+              ></Route>
+              <Route
+                path="app-kanban"
+                element={
+                  <RequireAuth>
+                    <Kanban />
+                  </RequireAuth>
+                }
+              ></Route>
 
               <Route path="app-file-manager">
-                <Route index element={<RequireAuth><FileManager /></RequireAuth>}></Route>
-                <Route path="files" element={<RequireAuth><FileManagerFiles /></RequireAuth>}></Route>
-                <Route path="starred" element={<RequireAuth><FileManagerStarred /></RequireAuth>}></Route>
-                <Route path="shared" element={<RequireAuth><FileManagerShared /></RequireAuth>}></Route>
+                <Route
+                  index
+                  element={
+                    <RequireAuth>
+                      <FileManager />
+                    </RequireAuth>
+                  }
+                ></Route>
+                <Route
+                  path="files"
+                  element={
+                    <RequireAuth>
+                      <FileManagerFiles />
+                    </RequireAuth>
+                  }
+                ></Route>
+                <Route
+                  path="starred"
+                  element={
+                    <RequireAuth>
+                      <FileManagerStarred />
+                    </RequireAuth>
+                  }
+                ></Route>
+                <Route
+                  path="shared"
+                  element={
+                    <RequireAuth>
+                      <FileManagerShared />
+                    </RequireAuth>
+                  }
+                ></Route>
                 <Route
                   path="recovery"
-                  element={<RequireAuth><FileManagerRecovery /></RequireAuth>}
+                  element={
+                    <RequireAuth>
+                      <FileManagerRecovery />
+                    </RequireAuth>
+                  }
                 ></Route>
                 <Route
                   path="settings"
-                  element={<RequireAuth><FileManagerSettings /></RequireAuth>}
+                  element={
+                    <RequireAuth>
+                      <FileManagerSettings />
+                    </RequireAuth>
+                  }
                 ></Route>
               </Route>
 

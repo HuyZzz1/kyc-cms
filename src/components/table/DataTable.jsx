@@ -4,7 +4,7 @@ import { Card } from "reactstrap";
 
 export const DataTable = ({ className, bodyClassName, title, ...props }) => {
   return (
-    <Card className={`card-bordered ${className ? className : ""}`}>
+    <Card {...props} className={`card-bordered ${className ? className : ""}`}>
       <div className="card-inner-group">{props.children}</div>
     </Card>
   );
@@ -12,7 +12,7 @@ export const DataTable = ({ className, bodyClassName, title, ...props }) => {
 
 export const DataTableTitle = ({ ...props }) => {
   return (
-    <div className="card-inner position-relative card-tools-toggle">
+    <div {...props} className="card-inner position-relative card-tools-toggle">
       <div className="card-title-group">{props.children}</div>
     </div>
   );
@@ -20,8 +20,12 @@ export const DataTableTitle = ({ ...props }) => {
 
 export const DataTableBody = ({ compact, className, bodyclass, ...props }) => {
   return (
-    <div className={`card-inner p-0 ${className ? className : ""}`}>
-      <div className={`nk-tb-list nk-tb-ulist ${bodyclass ? bodyclass : ""} ${compact ? "is-compact" : ""}`}>
+    <div {...props} className={`card-inner p-0 ${className ? className : ""}`}>
+      <div
+        className={`nk-tb-list nk-tb-ulist ${bodyclass ? bodyclass : ""} ${
+          compact ? "is-compact" : ""
+        }`}
+      >
         {props.children}
       </div>
     </div>
@@ -29,7 +33,11 @@ export const DataTableBody = ({ compact, className, bodyclass, ...props }) => {
 };
 
 export const DataTableHead = ({ ...props }) => {
-  return <div className="nk-tb-item nk-tb-head">{props.children}</div>;
+  return (
+    <div {...props} className="nk-tb-item nk-tb-head">
+      {props.children}
+    </div>
+  );
 };
 
 export const DataTableRow = ({ className, size, ...props }) => {
@@ -38,9 +46,17 @@ export const DataTableRow = ({ className, size, ...props }) => {
     [`${className}`]: className,
     [`tb-col-${size}`]: size,
   });
-  return <div className={rowClass}>{props.children}</div>;
+  return (
+    <div {...props} className={rowClass}>
+      {props.children}
+    </div>
+  );
 };
 
 export const DataTableItem = ({ className, ...props }) => {
-  return <div className={`nk-tb-item ${className ? className : ""}`}>{props.children}</div>;
+  return (
+    <div {...props} className={`nk-tb-item ${className ? className : ""}`}>
+      {props.children}
+    </div>
+  );
 };

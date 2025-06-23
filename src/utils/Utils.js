@@ -6,7 +6,7 @@ if (import.meta.env.NODE_ENV === "development") {
   url = window.location.host.split("/")[1];
   if (url) {
     url = `/${window.location.host.split("/")[1]}`;
-  } else url = '/'; /// ADD YOUR CPANEL SUB-URL
+  } else url = "/"; /// ADD YOUR CPANEL SUB-URL
 }
 
 // Logs out user
@@ -30,7 +30,10 @@ export const findUpper = (string) => {
   let extractedString = [];
 
   for (var i = 0; i < string.length; i++) {
-    if (string.charAt(i) === string.charAt(i).toUpperCase() && string.charAt(i) !== " ") {
+    if (
+      string.charAt(i) === string.charAt(i).toUpperCase() &&
+      string.charAt(i) !== " "
+    ) {
       extractedString.push(string.charAt(i));
     }
   }
@@ -83,7 +86,9 @@ export const dateFormatterAlt = (date, reverse) => {
   let d = date.getDate();
   let m = date.getMonth() + 1;
   let y = date.getFullYear();
-  reverse ? (date = m + " - " + d + " - " + y) : (date = y + " - " + d + " - " + m);
+  reverse
+    ? (date = m + " - " + d + " - " + y)
+    : (date = y + " - " + d + " - " + m);
   return date;
 };
 
@@ -121,7 +126,9 @@ export const calcPercentage = (str1, str2) => {
 };
 
 export const truncate = (str, n) => {
-  return str.length > n ? str.substr(0, n - 1) + " " + truncate(str.substr(n - 1, str.length), n) : str;
+  return str.length > n
+    ? str.substr(0, n - 1) + " " + truncate(str.substr(n - 1, str.length), n)
+    : str;
 };
 
 // returns upload url
@@ -190,76 +197,95 @@ export const returnLevel = (currency, data, upperCase) => {
   }
 };
 
-/* eslint-disable no-unused-expressions */
-export const slideUp = (target, duration=500) => {
-  target.style.transitionProperty = 'height, margin, padding';
-  target.style.transitionDuration = duration + 'ms';
-  target.style.boxSizing = 'border-box';
-  target.style.height = target.offsetHeight + 'px';
-  target.offsetHeight; target.style.overflow = 'hidden'; target.style.height = 0;
-  target.style.paddingTop = 0; target.style.paddingBottom = 0;
-  target.style.marginTop = 0; target.style.marginBottom = 0;
-  window.setTimeout( () => {
-      target.style.display = 'none';
-      target.style.removeProperty('height');
-      target.style.removeProperty('padding-top');
-      target.style.removeProperty('padding-bottom');
-      target.style.removeProperty('margin-top');
-      target.style.removeProperty('margin-bottom');
-      target.style.removeProperty('overflow');
-      target.style.removeProperty('transition-duration');
-      target.style.removeProperty('transition-property');
-  }, duration);
-}
-
-/* eslint-disable no-unused-expressions */
-export const slideDown = (target, duration=500) => {
-  target.style.removeProperty('display');
-  let display = window.getComputedStyle(target).display;
-  if (display === 'none') display = 'block';
-  target.style.display = display;
-  let height = target.offsetHeight; 
-  target.style.overflow = 'hidden'; target.style.height = 0; target.style.paddingTop = 0;
-  target.style.paddingBottom = 0; target.style.marginTop = 0;
-  target.style.marginBottom = 0; target.offsetHeight;
-  target.style.boxSizing = 'border-box';
+export const slideUp = (target, duration = 500) => {
   target.style.transitionProperty = "height, margin, padding";
-  target.style.transitionDuration = duration + 'ms';
-  target.style.height = height + 'px';
-  target.style.removeProperty('padding-top'); target.style.removeProperty('padding-bottom');
-  target.style.removeProperty('margin-top'); target.style.removeProperty('margin-bottom');
-  window.setTimeout( () => {
-      target.style.removeProperty('height');
-      target.style.removeProperty('overflow');
-      target.style.removeProperty('transition-duration');
-      target.style.removeProperty('transition-property');
+  target.style.transitionDuration = duration + "ms";
+  target.style.boxSizing = "border-box";
+  target.style.height = target.offsetHeight + "px";
+  target.offsetHeight;
+  target.style.overflow = "hidden";
+  target.style.height = 0;
+  target.style.paddingTop = 0;
+  target.style.paddingBottom = 0;
+  target.style.marginTop = 0;
+  target.style.marginBottom = 0;
+  window.setTimeout(() => {
+    target.style.display = "none";
+    target.style.removeProperty("height");
+    target.style.removeProperty("padding-top");
+    target.style.removeProperty("padding-bottom");
+    target.style.removeProperty("margin-top");
+    target.style.removeProperty("margin-bottom");
+    target.style.removeProperty("overflow");
+    target.style.removeProperty("transition-duration");
+    target.style.removeProperty("transition-property");
   }, duration);
-}
+};
 
-export const slideToggle = (target, duration=500) => {
-  if (window.getComputedStyle(target).display === 'none') {
-      return slideUp(target, duration);
-    } else {
-      return slideDown(target, duration);
+export const slideDown = (target, duration = 500) => {
+  target.style.removeProperty("display");
+  let display = window.getComputedStyle(target).display;
+  if (display === "none") display = "block";
+  target.style.display = display;
+  let height = target.offsetHeight;
+  target.style.overflow = "hidden";
+  target.style.height = 0;
+  target.style.paddingTop = 0;
+  target.style.paddingBottom = 0;
+  target.style.marginTop = 0;
+  target.style.marginBottom = 0;
+  target.offsetHeight;
+  target.style.boxSizing = "border-box";
+  target.style.transitionProperty = "height, margin, padding";
+  target.style.transitionDuration = duration + "ms";
+  target.style.height = height + "px";
+  target.style.removeProperty("padding-top");
+  target.style.removeProperty("padding-bottom");
+  target.style.removeProperty("margin-top");
+  target.style.removeProperty("margin-bottom");
+  window.setTimeout(() => {
+    target.style.removeProperty("height");
+    target.style.removeProperty("overflow");
+    target.style.removeProperty("transition-duration");
+    target.style.removeProperty("transition-property");
+  }, duration);
+};
+
+export const slideToggle = (target, duration = 500) => {
+  if (window.getComputedStyle(target).display === "none") {
+    return slideUp(target, duration);
+  } else {
+    return slideDown(target, duration);
   }
 };
 
 export const getParents = (el, selector, filter) => {
   // If no selector defined will bubble up all the way to *document*
-  let parentSelector = (selector === undefined) ? document : document.querySelector(selector);
+  let parentSelector =
+    selector === undefined ? document : document.querySelector(selector);
   var parents = [];
   var pNode = el.parentNode;
-  
-  while (pNode !== parentSelector) {
-      var element = pNode;
 
-      if(filter === undefined){
-          parents.push(element); // Push that parentSelector you wanted to stop at
-      }else{
-          element.classList.contains(filter) && parents.push(element);
-      }
-      pNode = element.parentNode;
+  while (pNode !== parentSelector) {
+    var element = pNode;
+
+    if (filter === undefined) {
+      parents.push(element); // Push that parentSelector you wanted to stop at
+    } else {
+      element.classList.contains(filter) && parents.push(element);
+    }
+    pNode = element.parentNode;
   }
-  
+
   return parents;
+};
+
+export function formatToVND(value) {
+  const number = Number(value);
+  if (isNaN(number)) return "";
+  return number.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+    maximumFractionDigits: 0,
+  });
 }

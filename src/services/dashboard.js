@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getAdminToken } from "@/utils/authUtils";
 
-const API_URL = import.meta.env.VITE_API_DOMAIN + "/api/admin";
+const API_URL = import.meta.env.VITE_API_DOMAIN + "/api";
 
 const getAuthHeaders = () => {
   const token = getAdminToken();
@@ -11,7 +11,7 @@ const getAuthHeaders = () => {
 export const getKycOverview = async (days = 15) => {
   try {
     const response = await axios.get(
-      `${API_URL}/dashboard/kyc-overview?days=${days}`,
+      `${API_URL}/admin/dashboard/kyc-overview?days=${days}`,
       {
         headers: getAuthHeaders(),
       }
@@ -26,7 +26,7 @@ export const getKycOverview = async (days = 15) => {
 export const getDataSources = async (days = 15) => {
   try {
     const response = await axios.get(
-      `${API_URL}/dashboard/data-sources?days=${days}`,
+      `${API_URL}/admin/dashboard/data-sources?days=${days}`,
       {
         headers: getAuthHeaders(),
       }
@@ -41,7 +41,7 @@ export const getDataSources = async (days = 15) => {
 export const getUserActivity = async (days = 15) => {
   try {
     const response = await axios.get(
-      `${API_URL}/dashboard/user-activity?days=${days}`,
+      `${API_URL}/admin/dashboard/user-activity?days=${days}`,
       {
         headers: getAuthHeaders(),
       }
@@ -55,9 +55,12 @@ export const getUserActivity = async (days = 15) => {
 
 export const getUrgentTasks = async () => {
   try {
-    const response = await axios.get(`${API_URL}/dashboard/urgent-tasks`, {
-      headers: getAuthHeaders(),
-    });
+    const response = await axios.get(
+      `${API_URL}/admin/dashboard/urgent-tasks`,
+      {
+        headers: getAuthHeaders(),
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching urgent tasks:", error);
@@ -72,7 +75,7 @@ export const getKycActivities = async (
 ) => {
   try {
     const response = await axios.get(
-      `${API_URL}/dashboard/kyc-activities?page=${page}&limit=${limit}&status=${status}`,
+      `${API_URL}/admin/dashboard/kyc-activities?page=${page}&limit=${limit}&status=${status}`,
       { headers: getAuthHeaders() }
     );
     return response.data;
@@ -84,9 +87,12 @@ export const getKycActivities = async (
 
 export const getStatsOverview = async (days = 7) => {
   try {
-    const response = await axios.get(`${API_URL}/stats/overview?days=${days}`, {
-      headers: getAuthHeaders(),
-    });
+    const response = await axios.get(
+      `${API_URL}/admin/stats/overview?days=${days}`,
+      {
+        headers: getAuthHeaders(),
+      }
+    );
     return response.data.data;
   } catch (error) {
     console.error("Error fetching user activity:", error);
@@ -96,7 +102,7 @@ export const getStatsOverview = async (days = 7) => {
 
 export const getStatsKycMetrics = async () => {
   try {
-    const response = await axios.get(`${API_URL}/stats/kyc-metrics`, {
+    const response = await axios.get(`${API_URL}/admin/stats/kyc-metrics`, {
       headers: getAuthHeaders(),
     });
     return response.data.data;
@@ -109,7 +115,7 @@ export const getStatsKycMetrics = async () => {
 export const getStatsCountries = async (days = 7) => {
   try {
     const response = await axios.get(
-      `${API_URL}/stats/countries?days=${days}`,
+      `${API_URL}/admin/stats/countries?days=${days}`,
       {
         headers: getAuthHeaders(),
       }
@@ -124,7 +130,7 @@ export const getStatsCountries = async (days = 7) => {
 export const getStatsIndustries = async (days = 7) => {
   try {
     const response = await axios.get(
-      `${API_URL}/stats/industries?days=${days}`,
+      `${API_URL}/admin/stats/industries?days=${days}`,
       {
         headers: getAuthHeaders(),
       }
@@ -132,6 +138,33 @@ export const getStatsIndustries = async (days = 7) => {
     return response.data.data;
   } catch (error) {
     console.error("Error fetching user activity:", error);
+    throw error;
+  }
+};
+
+//Request-Packages
+
+export const getListPackages = async (params) => {
+  try {
+    const response = await axios.get(`${API_URL}/request-packages`, {
+      headers: getAuthHeaders(),
+      params,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching request packages:", error);
+    throw error;
+  }
+};
+
+export const createPackages = async (params) => {
+  try {
+    const response = await axios.post(`${API_URL}/request-packages`, params, {
+      headers: getAuthHeaders(),
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("Error creating request package:", error);
     throw error;
   }
 };

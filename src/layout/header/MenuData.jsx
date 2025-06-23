@@ -20,6 +20,10 @@ const menu = [
     text: "Quản Lý KYC",
     subMenu: [
       {
+        text: "Danh sách gói",
+        link: "/request-package",
+      },
+      {
         text: "Danh sách KYC",
         link: "/kyc-list-regular",
       },
