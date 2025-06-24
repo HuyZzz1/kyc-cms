@@ -252,7 +252,7 @@ export const getListOrganizationManagement = async (params) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error fetching request packages:", error);
+    console.error("Error:", error);
     throw error;
   }
 };
@@ -266,6 +266,20 @@ export const updateOrganization = async (params) => {
         headers: getAuthHeaders(),
       }
     );
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
+
+//Package Purchases
+export const getListPackagePurchasesManagement = async (params) => {
+  try {
+    const response = await axios.get(`${API_URL}/package-purchases`, {
+      headers: getAuthHeaders(),
+      params,
+    });
     return response.data;
   } catch (error) {
     console.error("Error:", error);
