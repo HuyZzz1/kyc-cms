@@ -33,7 +33,7 @@ const menu = [
       },
       {
         text: "Danh sách Thanh Toán",
-        link: "/transaction",
+        link: "/transaction-history",
       },
       {
         text: "Danh sách Hóa Đơn",

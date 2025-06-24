@@ -89,7 +89,7 @@ import UserProfileActivity from "@/pages/pre-built/user-manage/UserProfileActivi
 import KycListRegular from "@/pages/pre-built/kyc-list-regular/KycListRegular";
 import KycDetailsRegular from "@/pages/pre-built/kyc-list-regular/kycDetailsRegular";
 import TransListBasic from "@/pages/pre-built/trans-list/TransListBasic";
-import TransListCrypto from "@/pages/pre-built/trans-list/TransListCrypto";
+// import TransListCrypto from "@/pages/pre-built/trans-list/TransListCrypto";
 import ProductCard from "@/pages/pre-built/products/ProductCard";
 import ProductList from "@/pages/pre-built/products/ProductList";
 import ProductDetails from "@/pages/pre-built/products/ProductDetails";
@@ -149,6 +149,7 @@ import ThemeProvider from "@/layout/provider/Theme";
 import KycGuide from "../pages/others/KycGuide";
 import RequestPackage from "../pages/request-package";
 import OrganizationManagement from "../pages/organization-management";
+import TransactionHistory from "../pages/transaction-history";
 
 const ScrollToTop = (props) => {
   const location = useLocation();
@@ -366,10 +367,10 @@ const Router = () => {
                 }
               ></Route>
               <Route
-                path="transaction"
+                path="transaction-history"
                 element={
                   <RequireAuth>
-                    <TransListCrypto />
+                    <TransactionHistory />
                   </RequireAuth>
                 }
               ></Route>

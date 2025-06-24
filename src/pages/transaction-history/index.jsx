@@ -24,9 +24,7 @@ import {
   PaginationComponent,
 } from "@/components/Component";
 import {
-  getListCountries,
-  getListIndustries,
-  getListOrganizationManagement,
+  getListPackagePurchasesManagement,
   updateOrganization,
 } from "../../services/dashboard";
 import dayjs from "dayjs";
@@ -40,17 +38,18 @@ import {
   UncontrolledDropdown,
 } from "reactstrap";
 import { toast } from "react-toastify";
+import { formatToVND } from "../../utils/Utils";
+import * as XLSX from "xlsx";
 
-const OrganizationManagement = () => {
+const TransactionHistory = () => {
   const [onSearch, setonSearch] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [listCountries, setListCountries] = useState();
-  const [listIndustries, setListIndustries] = useState();
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   const [data, setData] = useState({
-    organizations: [],
+    transaction: [],
     total: 0,
     page: 1,
     limit: 10,
@@ -59,20 +58,17 @@ const OrganizationManagement = () => {
   const [filterParams, setFilterParams] = useState({
     page: 1,
     limit: 10,
-    country: null,
-    industry: null,
     status: null,
     search: "",
+    from: null,
+    to: null,
   });
 
   const [tempFilter, setTempFilter] = useState({
-    country: null,
-    industry: null,
+    from: null,
+    to: null,
     status: null,
   });
-
-  const createRef = useRef();
-  const editRef = useRef();
 
   const handleFilterChange = (key, value) => {
     setFilterParams((prev) => ({
@@ -82,40 +78,37 @@ const OrganizationManagement = () => {
   };
 
   const toggle = () => setonSearch(!onSearch);
-
   const fetchData = async () => {
     try {
-      const result = await getListOrganizationManagement(filterParams);
-      setData(result);
+      const result = await getListPackagePurchasesManagement(filterParams);
+      setData({
+        transaction: result.data,
+        total: result.total,
+        page: result.page,
+        limit: result.limit,
+      });
     } catch (error) {
       console.error("Lỗi khi lấy danh sách:", error);
     }
   };
 
-  const fetchListCountries = async () => {
-    try {
-      const result = await getListCountries();
-      const formatted = result.map((item) => ({
-        label: item.name,
-        value: item.code,
-      }));
-      setListCountries(formatted);
-    } catch (error) {
-      console.error("Error", error);
-    }
-  };
+  const handleExportExcel = () => {
+    const exportData = data.transaction.map((item) => ({
+      "Ngày mua": dayjs(item.purchaseDate).format("HH:mm DD/MM/YYYY"),
+      "Tổ chức": item.organization?.name,
+      Email: item.organization?.email,
+      Gói: item.packageName,
+      "Số lượt KYC": item.requestCount,
+      "Thời hạn (tháng)": item.durationInMonths,
+      Giá: formatToVND(item.price),
+      "Trạng thái": item.status === "active" ? "Kích hoạt" : "Ngừng hoạt động",
+    }));
 
-  const fetchListIndustries = async () => {
-    try {
-      const result = await getListIndustries();
-      const formatted = result.map((item) => ({
-        label: item.name,
-        value: item.code,
-      }));
-      setListIndustries(formatted);
-    } catch (error) {
-      console.error("Error", error);
-    }
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Danh sách");
+
+    XLSX.writeFile(workbook, "Danh sách thanh toán KYC.xlsx");
   };
 
   useEffect(() => {
@@ -127,39 +120,35 @@ const OrganizationManagement = () => {
   }, [searchText]);
 
   useEffect(() => {
-    fetchListCountries();
-    fetchListIndustries();
-  }, []);
-
-  useEffect(() => {
     fetchData();
   }, [filterParams]);
 
   return (
     <React.Fragment>
-      <Head title="Danh sách Tổ Chức"></Head>
+      <Head title="Quản lý thanh toán dịch vụ KYC"></Head>
       <Content>
         <BlockHead>
           <BlockBetween>
             <BlockHeadContent>
               <div className="d-flex align-items-center">
-                <BlockTitle page>Quản lí Tổ Chức</BlockTitle>
+                <BlockTitle page>Quản lý thanh toán dịch vụ KYC</BlockTitle>
                 <AdminBadge />
               </div>
               <BlockDes className="text-soft">
-                <p>Danh sách các Tổ Chức</p>
+                <p>Tổng số giao dịch đã ghi nhận: {data?.total}</p>
               </BlockDes>
             </BlockHeadContent>
-            {/* <BlockHeadContent>
+            <BlockHeadContent>
               <Button
-                color="primary"
-                className="btn-icon px-2 ps-0"
-                onClick={() => createRef?.current?.open()}
+                color="light"
+                outline
+                className="btn-white"
+                onClick={handleExportExcel}
               >
-                <Icon name="plus"></Icon>
-                Tạo mới
+                <Icon name="download-cloud"></Icon>
+                <span>Xuất dữ liệu</span>
               </Button>
-            </BlockHeadContent> */}
+            </BlockHeadContent>
           </BlockBetween>
         </BlockHead>
 
@@ -168,7 +157,7 @@ const OrganizationManagement = () => {
             <div className="card-inner">
               <div className="card-title-group">
                 <div className="card-title">
-                  <h5 className="title">Tất cả Tổ Chức</h5>
+                  <h5 className="title">Tất cả giao dịch</h5>
                 </div>
                 <div className="card-tools me-n1">
                   <ul className="btn-toolbar gx-1">
@@ -213,64 +202,54 @@ const OrganizationManagement = () => {
                               <Col size="12">
                                 <div className="form-group">
                                   <label className="overline-title overline-title-alt">
-                                    Quốc gia
+                                    Từ ngày
                                   </label>
-                                  <RSelect
-                                    placeholder="Chọn quốc gia"
-                                    value={
-                                      tempFilter.country
-                                        ? {
-                                            label:
-                                              listCountries?.find(
-                                                (c) =>
-                                                  c.value === tempFilter.country
-                                              )?.label || tempFilter.country,
-                                            value: tempFilter.country,
-                                          }
-                                        : null
-                                    }
-                                    options={listCountries}
-                                    onChange={(selected) =>
+                                  <input
+                                    type="date"
+                                    ref={(ref) => {
+                                      if (ref) {
+                                        ref.addEventListener("focus", () =>
+                                          ref.showPicker?.()
+                                        );
+                                      }
+                                    }}
+                                    className="form-control"
+                                    value={tempFilter.from || ""}
+                                    onChange={(e) =>
                                       setTempFilter((prev) => ({
                                         ...prev,
-                                        country: selected?.value || null,
+                                        from: e.target.value || null,
                                       }))
                                     }
-                                    isClearable
                                   />
                                 </div>
                               </Col>
                               <Col size="12">
                                 <div className="form-group">
                                   <label className="overline-title overline-title-alt">
-                                    Ngành nghề
+                                    Đến ngày
                                   </label>
-                                  <RSelect
-                                    placeholder="Chọn ngành nghề"
-                                    value={
-                                      tempFilter.industry
-                                        ? {
-                                            label:
-                                              listIndustries?.find(
-                                                (c) =>
-                                                  c.value ===
-                                                  tempFilter.industry
-                                              )?.label || tempFilter.industry,
-                                            value: tempFilter.industry,
-                                          }
-                                        : null
-                                    }
-                                    options={listIndustries}
-                                    onChange={(selected) =>
+                                  <input
+                                    type="date"
+                                    ref={(ref) => {
+                                      if (ref) {
+                                        ref.addEventListener("focus", () =>
+                                          ref.showPicker?.()
+                                        );
+                                      }
+                                    }}
+                                    className="form-control"
+                                    value={tempFilter.to || ""}
+                                    onChange={(e) =>
                                       setTempFilter((prev) => ({
                                         ...prev,
-                                        industry: selected?.value || null,
+                                        to: e.target.value || null,
                                       }))
                                     }
-                                    isClearable
                                   />
                                 </div>
                               </Col>
+
                               <Col size="12">
                                 <div className="form-group">
                                   <label className="overline-title overline-title-alt">
@@ -296,7 +275,7 @@ const OrganizationManagement = () => {
                                       },
                                       {
                                         label: "Ngừng hoạt động",
-                                        value: "inactive",
+                                        value: "cancelled",
                                       },
                                     ]}
                                     onChange={(selected) =>
@@ -335,9 +314,9 @@ const OrganizationManagement = () => {
                               onClick={(ev) => {
                                 ev.preventDefault();
                                 const reset = {
-                                  country: null,
-                                  industry: null,
                                   status: null,
+                                  from: null,
+                                  to: null,
                                 };
                                 setTempFilter(reset);
                                 setFilterParams((prev) => ({
@@ -388,17 +367,27 @@ const OrganizationManagement = () => {
               <div className="min-w-[900px]">
                 <DataTableBody>
                   <DataTableHead>
+                    <DataTableRow
+                      style={{
+                        width: 150,
+                      }}
+                    >
+                      <span>Ngày mua</span>
+                    </DataTableRow>
                     <DataTableRow>
                       <span>Tổ chức</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Quốc gia</span>
+                      <span>Gói</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Ngành nghề</span>
+                      <span>Số lượt KYC</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Thông tin gói</span>
+                      <span>Số tháng</span>
+                    </DataTableRow>
+                    <DataTableRow>
+                      <span>Giá</span>
                     </DataTableRow>
                     <DataTableRow
                       style={{
@@ -407,13 +396,7 @@ const OrganizationManagement = () => {
                     >
                       <span>Trạng thái</span>
                     </DataTableRow>
-                    <DataTableRow
-                      style={{
-                        width: 200,
-                      }}
-                    >
-                      <span>Ngày tạo</span>
-                    </DataTableRow>
+
                     <DataTableRow
                       style={{
                         width: 200,
@@ -421,43 +404,44 @@ const OrganizationManagement = () => {
                       className="nk-tb-col-tools"
                     ></DataTableRow>
                   </DataTableHead>
-                  {data.organizations.length > 0
-                    ? data.organizations.map((item) => {
+                  {data.transaction.length > 0
+                    ? data.transaction.map((item) => {
                         return (
                           <DataTableItem key={item._id}>
                             <DataTableRow>
+                              <span>
+                                {dayjs(item.purchaseDate).format(
+                                  "HH:mm DD/MM/YYYY"
+                                )}
+                              </span>
+                            </DataTableRow>
+                            <DataTableRow>
                               <div className=" tb-lead-sub fw-semibold">
-                                {item.name}
+                                {item?.organization?.name}
                               </div>
-                              <div className="tb-lead-sub">{item.email}</div>
+                              <div className="tb-lead-sub">
+                                {item.organization?.email}
+                              </div>
                             </DataTableRow>
-
                             <DataTableRow>
-                              <span className="tb-lead-sub">
-                                {item.country?.name || "--"}
-                              </span>
+                              <div className="tb-lead-sub">
+                                {item.packageName}
+                              </div>
                             </DataTableRow>
-
                             <DataTableRow>
-                              <span className="tb-lead-sub">
-                                {item.industry?.name || "--"}
-                              </span>
+                              <div className="tb-lead-sub">
+                                {item.requestCount} lượt
+                              </div>
                             </DataTableRow>
-
                             <DataTableRow>
-                              {item.currentPackage ? (
-                                <div className="tb-lead-sub">
-                                  <div className="fw-semibold">
-                                    {item.currentPackage.name}
-                                  </div>
-                                  <div className="tb-lead-sub">
-                                    {item.currentPackage.requestUsed}/
-                                    {item.currentPackage.requestLimit} lượt
-                                  </div>
-                                </div>
-                              ) : (
-                                <span className="text-muted">Chưa có gói</span>
-                              )}
+                              <div className="tb-lead-sub">
+                                {item.durationInMonths} tháng
+                              </div>
+                            </DataTableRow>
+                            <DataTableRow>
+                              <div className="tb-lead-sub">
+                                {formatToVND(item.durationInMonths)}
+                              </div>
                             </DataTableRow>
 
                             <DataTableRow>
@@ -474,14 +458,6 @@ const OrganizationManagement = () => {
                               </Badge>
                             </DataTableRow>
 
-                            <DataTableRow>
-                              <span>
-                                {dayjs(item.createdAt).format(
-                                  "HH:mm DD/MM/YYYY"
-                                )}
-                              </span>
-                            </DataTableRow>
-
                             <DataTableRow className="nk-tb-col-tools">
                               <ul className="nk-tb-actions gx-1">
                                 <li>
@@ -495,6 +471,20 @@ const OrganizationManagement = () => {
                                     <DropdownMenu end>
                                       <ul className="link-list-opt no-bdr">
                                         <li>
+                                          <DropdownItem
+                                            tag="a"
+                                            href="#approve"
+                                            onClick={(ev) => {
+                                              ev.preventDefault();
+                                              setSelectedPackage(item);
+                                              setShowDetailModal(true);
+                                            }}
+                                          >
+                                            <Icon name="eye"></Icon>
+                                            <span>Chi tiết</span>
+                                          </DropdownItem>
+                                        </li>
+                                        {/* <li>
                                           <DropdownItem
                                             tag="a"
                                             href="#change-status"
@@ -517,7 +507,7 @@ const OrganizationManagement = () => {
                                                 : "Kích hoạt"}
                                             </span>
                                           </DropdownItem>
-                                        </li>
+                                        </li> */}
                                       </ul>
                                     </DropdownMenu>
                                   </UncontrolledDropdown>
@@ -529,7 +519,7 @@ const OrganizationManagement = () => {
                       })
                     : null}
                 </DataTableBody>
-                {data.organizations.length === 0 && (
+                {data.transaction.length === 0 && (
                   <div className="card-inner">
                     <div className="text-center">
                       <span className="text-silent">Không có dữ liệu</span>
@@ -537,7 +527,7 @@ const OrganizationManagement = () => {
                   </div>
                 )}
 
-                {data.organizations.length !== 0 && (
+                {data.transaction.length !== 0 && (
                   <div className="card-inner">
                     <PaginationComponent
                       currentPage={filterParams.page}
@@ -604,7 +594,58 @@ const OrganizationManagement = () => {
           </div>
         </ModalBody>
       </Modal>
+
+      <Modal
+        isOpen={showDetailModal}
+        toggle={() => setShowDetailModal(false)}
+        centered
+        size="lg"
+      >
+        <ModalBody>
+          <h5 className="mb-3">Chi tiết giao dịch</h5>
+          {selectedPackage && (
+            <div className="gy-2">
+              <p>
+                <strong>Tổ chức:</strong> {selectedPackage.organization?.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {selectedPackage.organization?.email}
+              </p>
+              <p>
+                <strong>Gói dịch vụ:</strong> {selectedPackage.packageName}
+              </p>
+              <p>
+                <strong>Số lượt KYC:</strong> {selectedPackage.requestCount}{" "}
+                lượt
+              </p>
+              <p>
+                <strong>Thời hạn:</strong> {selectedPackage.durationInMonths}{" "}
+                tháng
+              </p>
+              <p>
+                <strong>Giá:</strong> {formatToVND(selectedPackage.price)}
+              </p>
+              <p>
+                <strong>Ngày mua:</strong>{" "}
+                {dayjs(selectedPackage.purchaseDate).format("HH:mm DD/MM/YYYY")}
+              </p>
+              <p>
+                <strong>Trạng thái:</strong>{" "}
+                {selectedPackage.status === "active"
+                  ? "Kích hoạt"
+                  : "Ngừng hoạt động"}
+              </p>
+            </div>
+          )}
+
+          <div className="text-end mt-3">
+            <Button color="secondary" onClick={() => setShowDetailModal(false)}>
+              Đóng
+            </Button>
+          </div>
+        </ModalBody>
+      </Modal>
     </React.Fragment>
   );
 };
-export default OrganizationManagement;
+export default TransactionHistory;
