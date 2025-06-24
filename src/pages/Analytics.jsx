@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Content from "@/layout/content/Content";
 import Head from "@/layout/head/Head";
 import AudienceOverview from "@/components/partials/analytics/audience-overview/AudienceOverview";
@@ -8,28 +8,19 @@ import TrafficChannel from "@/components/partials/analytics/traffic-channel/Traf
 import TrafficDougnut from "@/components/partials/analytics/traffic-dougnut/TrafficDoughnut";
 import UserMap from "@/components/partials/analytics/user-map/UserMap";
 import SessionDevice from "@/components/partials/analytics/session-devices/SessionDevice";
-import {
-  DropdownToggle,
-  DropdownMenu,
-  Card,
-  UncontrolledDropdown,
-  DropdownItem,
-} from "reactstrap";
+import { Card } from "reactstrap";
 import {
   Block,
   BlockDes,
   BlockHead,
   BlockHeadContent,
   BlockTitle,
-  Icon,
-  Button,
   Row,
   Col,
   PreviewAltCard,
 } from "@/components/Component";
 
 const AnalyticsHomePage = () => {
-  const [sm, updateSm] = useState(false);
   return (
     <React.Fragment>
       <Head title="Phân tích User" />
@@ -44,7 +35,7 @@ const AnalyticsHomePage = () => {
                 <p>Chào mừng bạn đến bảng điều khiển phân tích.</p>
               </BlockDes>
             </BlockHeadContent>
-            <BlockHeadContent>
+            {/* <BlockHeadContent>
               <div className="toggle-wrap nk-block-tools-toggle">
                 <Button
                   className={`btn-icon btn-trigger toggle-expand me-n1 ${
@@ -120,7 +111,7 @@ const AnalyticsHomePage = () => {
                   </ul>
                 </div>
               </div>
-            </BlockHeadContent>
+            </BlockHeadContent> */}
           </div>
         </BlockHead>
 

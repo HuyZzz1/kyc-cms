@@ -19,9 +19,9 @@ const OrderOverview = () => {
       successful: 0,
       rejected: 0,
       submitted: 0,
-      failed: 0
+      failed: 0,
     },
-    daily_stats: []
+    daily_stats: [],
   });
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const OrderOverview = () => {
   }, [orderOverview]);
 
   const chartData = {
-    labels: overviewData.daily_stats.map(stat => stat.date),
+    labels: overviewData.daily_stats.map((stat) => stat.date),
     datasets: [
       {
         label: "Xác minh thành công",
@@ -46,7 +46,7 @@ const OrderOverview = () => {
         backgroundColor: "#8feac5",
         barPercentage: 0.8,
         categoryPercentage: 0.6,
-        data: overviewData.daily_stats.map(stat => stat.successful)
+        data: overviewData.daily_stats.map((stat) => stat.successful),
       },
       {
         label: "Xác minh thất bại",
@@ -54,9 +54,9 @@ const OrderOverview = () => {
         backgroundColor: "#9cabff",
         barPercentage: 0.8,
         categoryPercentage: 0.6,
-        data: overviewData.daily_stats.map(stat => stat.rejected)
-      }
-    ]
+        data: overviewData.daily_stats.map((stat) => stat.rejected),
+      },
+    ],
   };
 
   return (
@@ -65,7 +65,8 @@ const OrderOverview = () => {
         <CardTitle className="card-title">
           <h6 className="title">Tổng quan KYC</h6>
           <p>
-            Tổng quan các xác minh trong {orderOverview === "day" ? "30" : "15"} ngày qua
+            Tổng quan các xác minh trong {orderOverview === "day" ? "30" : "15"}{" "}
+            ngày qua
             <Link to={`/invoice-list`} className="link link-sm ps-1">
               Thống kê chi tiết
             </Link>

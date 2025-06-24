@@ -84,8 +84,6 @@ const Map = ({ statistics = [] }) => {
             },
             hover: {
               "fill-opacity": 0.9,
-              hoverColor: "#9cabff",
-              hoverOpacity: null,
               cursor: "pointer",
             },
           }}
@@ -93,8 +91,8 @@ const Map = ({ statistics = [] }) => {
             regions: [
               {
                 values: selectedData,
-                scale: ["#ccd7e2", "#798bff"],
-                normalizeFunction: "polynomial",
+                scale: ["#dee6f2", "#798bff"],
+                normalizeFunction: "linear",
               },
             ],
           }}

@@ -2,19 +2,13 @@ import React, { useState, useEffect } from "react";
 import Icon from "@/components/icon/Icon";
 import { Button } from "@/components/Component";
 import { getUrgentTasks } from "@/services/dashboard";
-import {
-  UncontrolledDropdown,
-  CardTitle,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-} from "reactstrap";
+import { CardTitle } from "reactstrap";
 
 const ActionCenter = () => {
   const [urgentTasks, setUrgentTasks] = useState({
     pending_kyc: 0,
     support_tickets: 0,
-    payment_issues: 0
+    payment_issues: 0,
   });
 
   useEffect(() => {
@@ -38,7 +32,7 @@ const ActionCenter = () => {
             <CardTitle>
               <h6 className="title">Tác Vụ Khẩn</h6>
             </CardTitle>
-            <div className="card-tools me-n1">
+            {/* <div className="card-tools me-n1">
               <UncontrolledDropdown>
                 <DropdownToggle
                   tag="a"
@@ -75,7 +69,7 @@ const ActionCenter = () => {
                   </ul>
                 </DropdownMenu>
               </UncontrolledDropdown>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="card-inner">
@@ -107,7 +101,10 @@ const ActionCenter = () => {
             <div className="nk-wg-action-content">
               <Icon name="alert"></Icon>
               <div className="title">Vấn đề thanh toán</div>
-              <p>Có {urgentTasks.payment_issues} giao dịch chưa xác minh cần kiểm tra</p>
+              <p>
+                Có {urgentTasks.payment_issues} giao dịch chưa xác minh cần kiểm
+                tra
+              </p>
             </div>
             <Button className="btn-icon btn-trigger me-n2">
               <Icon name="forward-ios"></Icon>

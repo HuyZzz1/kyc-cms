@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Head from "@/layout/head/Head";
 import Content from "@/layout/content/Content";
 import OrderOverview from "@/components/partials/crypto/order-overview/OrderOverview";
@@ -6,13 +6,7 @@ import ActionCenter from "@/components/partials/crypto/action-center/ActionCente
 import CoinOrder from "@/components/partials/crypto/coin-order/CoinOrder";
 import UserActivity from "@/components/partials/crypto/user-activity/UserActivity";
 import OrderActivity from "@/components/partials/order-activity/OrderActivity";
-import {
-  Card,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  UncontrolledDropdown,
-} from "reactstrap";
+import { Card } from "reactstrap";
 import {
   Block,
   BlockHead,
@@ -20,14 +14,11 @@ import {
   BlockBetween,
   BlockTitle,
   PreviewAltCard,
-  Icon,
-  Button,
   Row,
   Col,
 } from "@/components/Component";
 
 const CryptoHomePage = () => {
-  const [sm, updateSm] = useState(false);
   return (
     <React.Fragment>
       <Head title="Tổng quan" />
@@ -37,7 +28,7 @@ const CryptoHomePage = () => {
             <BlockHeadContent>
               <BlockTitle page>Dashboard</BlockTitle>
             </BlockHeadContent>
-            <BlockHeadContent>
+            {/* <BlockHeadContent>
               <div className="toggle-wrap nk-block-tools-toggle">
                 <Button
                   className={`btn-icon btn-trigger toggle-expand me-n1 ${
@@ -125,7 +116,7 @@ const CryptoHomePage = () => {
                   </ul>
                 </div>
               </div>
-            </BlockHeadContent>
+            </BlockHeadContent> */}
           </BlockBetween>
         </BlockHead>
         <Block>
