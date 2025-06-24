@@ -176,6 +176,64 @@ class AdminService {
       return error;
     }
   }
+
+  /**
+   * Get list of organizations with media
+   * @param {Object} params - { page, limit, search }
+   * @returns {Promise}
+   */
+  async getOrganizationsWithMedia(params = {}) {
+    try {
+      const response = await apiClient.get('/media/organizations', { params });
+      return response.data;
+    } catch (error) {
+      throw this.handleApiError(error);
+    }
+  }
+
+  /**
+   * Get media stats for an organization
+   * @param {string} organizationId
+   * @returns {Promise}
+   */
+  async getOrganizationMediaStats(organizationId) {
+    try {
+      const response = await apiClient.get(`/media/organizations/${organizationId}/stats`);
+      return response.data;
+    } catch (error) {
+      throw this.handleApiError(error);
+    }
+  }
+
+  /**
+   * Get images for an organization
+   * @param {string} organizationId
+   * @param {Object} params - { page, limit }
+   * @returns {Promise}
+   */
+  async getOrganizationImages(organizationId, params = {}) {
+    try {
+      const response = await apiClient.get(`/media/organizations/${organizationId}/images`, { params });
+      return response.data;
+    } catch (error) {
+      throw this.handleApiError(error);
+    }
+  }
+
+  /**
+   * Get videos for an organization
+   * @param {string} organizationId
+   * @param {Object} params - { page, limit }
+   * @returns {Promise}
+   */
+  async getOrganizationVideos(organizationId, params = {}) {
+    try {
+      const response = await apiClient.get(`/media/organizations/${organizationId}/videos`, { params });
+      return response.data;
+    } catch (error) {
+      throw this.handleApiError(error);
+    }
+  }
 }
 
 const adminService = new AdminService();

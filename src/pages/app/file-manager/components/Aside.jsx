@@ -58,6 +58,7 @@ const FileManagerAside = () => {
               </ul>
             </SimpleBar>
             <div className="nk-fmg-aside-bottom">
+              {/*
               <div className="nk-fmg-status">
                 <h6 className="nk-fmg-status-title">
                   <Icon name="hard-drive"></Icon>
@@ -94,63 +95,18 @@ const FileManagerAside = () => {
                   </Link>
                 </div>
               </div>
+              */}
+              {/*
               <div className="nk-fmg-switch">
-                {/* <UncontrolledDropdown direction="up">
-                  <DropdownToggle
-                    tag="a"
-                    href="#toggle"
-                    onClick={(ev) => ev.preventDefault()}
-                    className="dropdown-toggle dropdown-indicator-unfold"
-                  >
-                    <div className="lead-text">
-                      {
-                        fileManager.data.plans.find(
-                          (item) => item.id === fileManager.currentPlan
-                        ).title
-                      }
-                    </div>
-                    <div className="sub-text">Only you</div>
-                  </DropdownToggle>
-                  <DropdownMenu end>
-                    <ul className="link-list-opt no-bdr">
-                      {fileManager.data.plans.map((item) => (
-                        <li
-                          className={
-                            item.id === fileManager.currentPlan ? "active" : ""
-                          }
-                          key={item.id}
-                        >
-                          <DropdownItem
-                            tag="a"
-                            href="#item"
-                            disabled={item.id !== fileManager.currentPlan}
-                            onClick={(ev) => {
-                              ev.preventDefault();
-                            }}
-                          >
-                            <span>{item.title}</span>
-                          </DropdownItem>
-                        </li>
-                      ))}
-                      <li className="divider"></li>
-                      <li>
-                        <Link
-                          to={`/app-file-manager/settings?tab=billing`}
-                          className="link"
-                        >
-                          <span>Upgrade Plan</span>
-                        </Link>
-                      </li>
-                    </ul>
-                  </DropdownMenu>
-                </UncontrolledDropdown> */}
+                ...
               </div>
+              */}
             </div>
           </div>
-          <div className="h-100 d-flex flex-column justify-content-end px-2 pb-2 pt-5">
+          {/* <div className="h-100 d-flex flex-column justify-content-end px-2 pb-2 pt-5">
             <p className="fw-semibold m-0">Tài khoản:</p>
             <span className="m-0">Quản trị viên</span>
-          </div>
+          </div> */}
         </div>
       </SimpleBar>
       {fileManager.asideVisibility && (

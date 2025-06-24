@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 import classNames from 'classnames';
 import { useFileManager, useFileManagerUpdate } from "../components/Context";
 import icons from './Icons';
 import { Modal, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from "reactstrap";
 import { Icon } from "@/components/Component";
+import { urlImage, urlVideo } from "@/utils/mediaUtils";
 
 import CreateFolder from "../modals/CreateFolder";
 import Details from "../modals/Details";
@@ -11,7 +12,7 @@ import Share from "../modals/Share";
 import Copy from "../modals/Copy";
 import Move from "../modals/Move";
 
-const File = ({item, fileView, page}) => {
+const File = ({item, fileView, page, selectedId, onSelect, onDoubleClick}) => {
     const {fileManagerUpdate} = useFileManagerUpdate();
     
     const [detailModal, setDetailModal] = useState(false);  
@@ -43,13 +44,41 @@ const File = ({item, fileView, page}) => {
         downloadLink.click();
     };
 
+    const isSelected = selectedId === item.id;
+    // Hiển thị preview ảnh/video nếu là file
+    let preview = null;
+    if (item.fileType === 'image') {
+        preview = (
+            <img
+                src={urlImage(item.path)}
+                alt={item.name}
+                style={{width: 72, height: 48, objectFit: 'cover', borderRadius: 8, border: '1px solid #eee', background: '#fff'}}
+            />
+        );
+    } else if (item.fileType === 'video') {
+        preview = (
+            <video
+                src={urlVideo(item.path)}
+                style={{width: 96, height: 48, borderRadius: 8, border: '1px solid #eee', background: '#fff'}}
+                controls={false}
+            />
+        );
+    } else {
+        preview = <span className="nk-file-icon-type">{icons[item.icon]}</span>;
+    }
+
     return (
         <>
-            <div className="nk-file-item nk-file">
+            <div
+                className={classNames("nk-file-item nk-file", {selected: isSelected})}
+                onClick={() => onSelect && onSelect(item.id)}
+                onDoubleClick={() => onDoubleClick && onDoubleClick(item)}
+                style={isSelected ? {background: '#e6f0ff'} : {}}
+            >
                 <div className="nk-file-info">
                     <div className="nk-file-title">
                         <div className="nk-file-icon">
-                            <span className="nk-file-icon-type">{icons[item.icon]}</span>
+                            {preview}
                         </div>
                         <div className="nk-file-name">
                             <div className="nk-file-name-text">
@@ -71,8 +100,8 @@ const File = ({item, fileView, page}) => {
                         </div>
                     </div>
                     {(fileView === 'group' || fileView === 'grid') && <ul className="nk-file-desc">
-                        <li className="date">{item.date}</li>
-                        <li className="size">{item.size} MB</li>
+                        <li className="date">{item.totalFiles} files</li>
+                        <li className="size">{item.totalSizeFormatted}</li>
                         {(item.access && fileView === 'group') && <li className="members">{item.access.length} Members</li>}
                     </ul>}
                 </div>
@@ -164,46 +193,70 @@ const File = ({item, fileView, page}) => {
 }
 
 
-const Files = ({files, fixedView, page}) => {
-
+const Files = ({files, fixedView, page, onFolderOpen, selectedId: controlledSelectedId, onSelect: controlledOnSelect}) => {
     const {fileManager} = useFileManager();
-    
     const fileView = fixedView ? fixedView : fileManager.filesView;
-
     const mainClass = classNames({
         "nk-files": true,
         [`nk-files-view-${fileView}`]: fileView
     });
-
     const filesList = files;
+    const [uncontrolledSelectedId, setUncontrolledSelectedId] = useState(null);
+    const selectedId = controlledSelectedId !== undefined ? controlledSelectedId : uncontrolledSelectedId;
+    const onSelect = controlledOnSelect !== undefined ? controlledOnSelect : setUncontrolledSelectedId;
+    const handleDoubleClick = (item) => {
+        if (onFolderOpen && item.type === 'folder') {
+            onFolderOpen(item);
+        }
+    };
 
+    // Detect if this is a list of only images or only videos (layer 3)
+    const isImageList = filesList.length > 0 && filesList.every(f => f.fileType === 'image');
+    const isVideoList = filesList.length > 0 && filesList.every(f => f.fileType === 'video');
+
+    if (isImageList || isVideoList) {
+        // Gallery layout chỉ cho ảnh/video
+        return (
+            <div className="row g-3">
+                {filesList.map((item) => (
+                    <div key={item.id} className="col-6 col-sm-4 col-md-4 col-lg-4 text-center">
+                        {isImageList && (
+                            <img
+                                src={urlImage(item.path)}
+                                alt={item.name}
+                                style={{width: '100%', height: 180, objectFit: 'cover', borderRadius: 8, border: '1px solid #eee', background: '#fff', cursor: 'pointer'}}
+                            />
+                        )}
+                        {isVideoList && (
+                            <video
+                                src={urlVideo(item.path)}
+                                controls
+                                style={{width: '100%', height: 180, borderRadius: 8, border: '1px solid #eee', background: '#fff', cursor: 'pointer'}}
+                            />
+                        )}
+                        <div style={{marginTop: 8, fontSize: 13, wordBreak: 'break-all'}}>{item.name}</div>
+                    </div>
+                ))}
+                {filesList.length === 0 && <div className="mt-2">Không có thư mục hoặc file nào</div>}
+            </div>
+        );
+    }
+
+    // Layout cũ cho folder/file (grid/list/group)
     return (
         <div className={mainClass}>
-            {filesList.length > 0 && <div className="nk-files-head">
-                <div className="nk-file-item">
-                    {fileView === 'list' && <> 
-                        <div className="nk-file-info">
-                            <div className="tb-head">Name</div>
-                            <div className="tb-head"></div>
-                        </div>
-                        {(page === undefined) &&<div className="nk-file-meta">
-                            <div className="tb-head">Last Opened</div>
-                        </div>}
-                        {(page === 'recovery') && <div className="nk-file-date">
-                            <div className="tb-head">Deleted Al</div>
-                        </div>}
-                        <div className="nk-file-members">
-                            <div className="tb-head">Members</div>
-                        </div>
-                        <div className="nk-file-actions">
-                        </div>
-                    </>}
-                </div>
-            </div>}
             {(fileView === 'list' || fileView === 'grid') && 
                 <div className="nk-files-list">
                     {filesList.map((item) => (
-                        <File fileView={fileView} item={item} key={item.id} page={page}/>
+                        <File
+                            key={item.id}
+                            item={item}
+                            fileView={fileView}
+                            page={page}
+                            selectedId={selectedId}
+                            onSelect={onSelect}
+                            onDoubleClick={handleDoubleClick}
+                        />
                     ))}
                 </div>
             }
@@ -212,7 +265,15 @@ const Files = ({files, fixedView, page}) => {
                     <h6 className="title border-top-0">Folders</h6>
                     <div className="nk-files-list">
                         {filesList.filter(item => item.type === 'folder').map((item) => (
-                            <File fileView={fileView} item={item} key={item.id} page={page}/>
+                            <File
+                                key={item.id}
+                                item={item}
+                                fileView={fileView}
+                                page={page}
+                                selectedId={selectedId}
+                                onSelect={onSelect}
+                                onDoubleClick={handleDoubleClick}
+                            />
                         ))}
                     </div>
                 </div>
@@ -220,14 +281,22 @@ const Files = ({files, fixedView, page}) => {
                     <h6 className="title">Files</h6>
                     <div className="nk-files-list">
                         {filesList.filter(item => item.type === 'file').map((item) => (
-                            <File fileView={fileView} item={item} key={item.id} page={page}/>
+                            <File
+                                key={item.id}
+                                item={item}
+                                fileView={fileView}
+                                page={page}
+                                selectedId={selectedId}
+                                onSelect={onSelect}
+                                onDoubleClick={handleDoubleClick}
+                            />
                         ))}
                     </div>
                 </div>
             </>}
-            {filesList.length === 0 && <div>No folders or files are available</div>}
+            {filesList.length === 0 && <div className="mt-2">Không có thư mục hoặc file nào</div>}
         </div>
-    )
+    );
 }
 
 export default Files

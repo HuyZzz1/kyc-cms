@@ -19,7 +19,7 @@ import { findUpper } from "@/utils/Utils";
 import { Link, useParams } from "react-router-dom";
 import adminService from "@/services/adminService";
 import { KYC_STATUS } from "@/pages/pre-built/kyc-list-regular/enum";
-import { urlVideo } from "@/utils/videoUtils";
+import { urlVideo } from "@/utils/mediaUtils";
 
 // Document type names
 const DOC_TYPE_NAME = {

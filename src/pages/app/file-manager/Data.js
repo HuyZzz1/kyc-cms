@@ -20,24 +20,24 @@ const data = {
       link: "/files",
       sub: ["New Files", "This Month", "Older Files"],
     },
-    {
-      id: 2,
-      text: "Đánh dấu ưu tiên",
-      icon: "star",
-      link: "/starred",
-    },
-    {
-      id: 3,
-      text: "Chia sẻ nội bộ",
-      icon: "share-alt",
-      link: "/shared",
-    },
-    {
-      id: 4,
-      text: "Khôi phục dữ liệu",
-      icon: "trash",
-      link: "/recovery",
-    },
+    // {
+    //   id: 2,
+    //   text: "Đánh dấu ưu tiên",
+    //   icon: "star",
+    //   link: "/starred",
+    // },
+    // {
+    //   id: 3,
+    //   text: "Chia sẻ nội bộ",
+    //   icon: "share-alt",
+    //   link: "/shared",
+    // },
+    // {
+    //   id: 4,
+    //   text: "Khôi phục dữ liệu",
+    //   icon: "trash",
+    //   link: "/recovery",
+    // },
     {
       id: 5,
       text: "Cài đặt hệ thống",

@@ -110,12 +110,14 @@ const Settings = () => {
               </div>
               <div className="user-plan">
                 <div className="user-plan-info">
+                  {/*
                   <div className="user-plan-title">
                     <Icon name="hard-drive"></Icon> <span>{fileManager.data.plans.find((item) => item.id === fileManager.currentPlan).title} plan</span>
                   </div>
                   <div className="user-plan-status">
-                  12.47 GB / {fileManager.data.plans.find((item) => item.id === fileManager.currentPlan).memory} GB
+                    12.47 GB / {fileManager.data.plans.find((item) => item.id === fileManager.currentPlan).memory} GB
                   </div>
+                  */}
                 </div>
                 <div className="user-plan-actions">
                   <ul className="btn-toolbar align-center g-4">
@@ -139,6 +141,7 @@ const Settings = () => {
                     </li>
                   </ul>
                 </div>
+                {/*
                 <div className="user-plan-progress">
                   <div className="progress progress-md bg-light">
                     <div
@@ -147,6 +150,7 @@ const Settings = () => {
                     ></div>
                   </div>
                 </div>
+                */}
               </div>
             </div>
             <div className="nk-data data-list">
@@ -272,6 +276,7 @@ const Settings = () => {
         <TabPane tabId="billing">
           <Block size="xs" className="pt-5">
             <Row className="g-gs">
+              {/*
               {fileManager.data.plans.map((item) => {
                 return (
                   <Col md={6} xxl={3} key={item.id}>
@@ -316,6 +321,7 @@ const Settings = () => {
                   </Col>
                 );
               })}
+              */}
             </Row>
           </Block>
         </TabPane>
