@@ -261,8 +261,8 @@ const RequestPackage = () => {
                 </div>
               </div>
             </div>
-            <div style={{ overflowX: "auto", width: "100%" }}>
-              <div className="min-w-[900px]">
+            <div style={{ width: "100%" }} className="relative overflow-x-auto">
+              <div className="min-w-[900px] ">
                 <DataTableBody>
                   <DataTableHead>
                     <DataTableRow
@@ -270,19 +270,19 @@ const RequestPackage = () => {
                         width: 150,
                       }}
                     >
-                      <span>Loại phổ biến</span>
+                      <span className="text-nowrap">Loại phổ biến</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Gói</span>
+                      <span className="text-nowrap">Gói</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Số lượt</span>
+                      <span className="text-nowrap">Số lượt</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Giá</span>
+                      <span className="text-nowrap">Giá</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Số tháng</span>
+                      <span className="text-nowrap">Số tháng</span>
                     </DataTableRow>
 
                     <DataTableRow
@@ -290,7 +290,7 @@ const RequestPackage = () => {
                         width: 200,
                       }}
                     >
-                      <span>Ngày tạo</span>
+                      <span className="text-nowrap">Ngày tạo</span>
                     </DataTableRow>
                     <DataTableRow
                       style={{
@@ -338,7 +338,7 @@ const RequestPackage = () => {
                               </span>
                             </DataTableRow>
 
-                            <DataTableRow className="nk-tb-col-tools">
+                            <DataTableRow className="nk-tb-col-tools position-relative">
                               <ul className="nk-tb-actions gx-1">
                                 <li>
                                   <UncontrolledDropdown>
@@ -348,7 +348,11 @@ const RequestPackage = () => {
                                     >
                                       <Icon name="more-h"></Icon>
                                     </DropdownToggle>
-                                    <DropdownMenu end>
+                                    <DropdownMenu
+                                      end
+                                      container="body"
+                                      style={{ zIndex: 1050 }}
+                                    >
                                       <ul className="link-list-opt no-bdr">
                                         <li>
                                           <DropdownItem
@@ -421,6 +425,7 @@ const RequestPackage = () => {
                       })
                     : null}
                 </DataTableBody>
+                <div className="card-inner"></div>
                 {filteredData.length === 0 && (
                   <div className="card-inner">
                     <div className="text-center">

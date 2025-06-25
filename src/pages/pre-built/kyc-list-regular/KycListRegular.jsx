@@ -616,351 +616,373 @@ const KycListRegular = () => {
                 </div>
               </div>
             </div>
-            <DataTableBody>
-              <DataTableHead>
-                <DataTableRow className="nk-tb-col-check">
-                  <div className="custom-control custom-control-sm custom-checkbox notext">
-                    <input
-                      type="checkbox"
-                      className="custom-control-input"
-                      id="uid_1"
-                      onChange={(e) => selectorCheck(e)}
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="uid_1"
-                    ></label>
-                  </div>
-                </DataTableRow>{" "}
-                <DataTableRow>
-                  <span>Tổ chức</span>
-                </DataTableRow>
-                <DataTableRow>
-                  <span>Người dùng</span>
-                </DataTableRow>
-                <DataTableRow size="mb">
-                  <span>Loại giấy tờ</span>
-                </DataTableRow>
-                <DataTableRow size="md">
-                  <span>Giấy tờ</span>
-                </DataTableRow>
-                <DataTableRow size="lg">
-                  <span>Ngày nộp</span>
-                </DataTableRow>
-                <DataTableRow size="md">
-                  <span>Trạng thái</span>
-                </DataTableRow>
-                <DataTableRow size="lg">
-                  <span>Người duyệt</span>
-                </DataTableRow>
-                <DataTableRow className="nk-tb-col-tools">&nbsp;</DataTableRow>
-              </DataTableHead>
+            <div style={{ width: "100%" }} className="relative overflow-x-auto">
+              <div className="min-w-[900px] overflow-auto">
+                <DataTableBody>
+                  <DataTableHead>
+                    <DataTableRow className="nk-tb-col-check">
+                      <div className="custom-control custom-control-sm custom-checkbox notext">
+                        <input
+                          type="checkbox"
+                          className="custom-control-input"
+                          id="uid_1"
+                          onChange={(e) => selectorCheck(e)}
+                        />
+                        <label
+                          className="custom-control-label"
+                          htmlFor="uid_1"
+                        ></label>
+                      </div>
+                    </DataTableRow>{" "}
+                    <DataTableRow>
+                      <span className="text-nowrap">Tổ chức</span>
+                    </DataTableRow>
+                    <DataTableRow>
+                      <span className="text-nowrap">Người dùng</span>
+                    </DataTableRow>
+                    <DataTableRow size="mb">
+                      <span className="text-nowrap">Loại giấy tờ</span>
+                    </DataTableRow>
+                    <DataTableRow size="md">
+                      <span className="text-nowrap">Giấy tờ</span>
+                    </DataTableRow>
+                    <DataTableRow size="lg">
+                      <span className="text-nowrap">Ngày nộp</span>
+                    </DataTableRow>
+                    <DataTableRow size="md">
+                      <span className="text-nowrap">Trạng thái</span>
+                    </DataTableRow>
+                    <DataTableRow size="lg">
+                      <span className="text-nowrap">Người duyệt</span>
+                    </DataTableRow>
+                    <DataTableRow className="nk-tb-col-tools">
+                      &nbsp;
+                    </DataTableRow>
+                  </DataTableHead>
 
-              {currentItems.length > 0
-                ? currentItems.map((item) => {
-                    return (
-                      <DataTableItem key={item.id}>
-                        <DataTableRow className="nk-tb-col-check">
-                          <div className="custom-control custom-control-sm custom-checkbox notext">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              defaultChecked={item.check}
-                              id={`uid1_${item.safeId}`}
-                              key={Math.random()}
-                              onChange={(e) => onSelectChange(e, item.id)}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor={`uid1_${item.safeId}`}
-                            ></label>
-                          </div>
-                        </DataTableRow>
-                        <DataTableRow>
-                          <div className="user-card">
-                            <div className="user-info">
-                              <span className="tb-lead">
-                                {item?.organization?.name}
-                              </span>
-                              <span>{item?.organization?.email}</span>
-                            </div>
-                          </div>
-                        </DataTableRow>
-                        <DataTableRow>
-                          <Link to={`/kyc-details-regular/${item.id}`}>
-                            <div className="user-card">
-                              {/* <UserAvatar
+                  {currentItems.length > 0
+                    ? currentItems.map((item) => {
+                        return (
+                          <DataTableItem key={item.id}>
+                            <DataTableRow className="nk-tb-col-check">
+                              <div className="custom-control custom-control-sm custom-checkbox notext">
+                                <input
+                                  type="checkbox"
+                                  className="custom-control-input"
+                                  defaultChecked={item.check}
+                                  id={`uid1_${item.safeId}`}
+                                  key={Math.random()}
+                                  onChange={(e) => onSelectChange(e, item.id)}
+                                />
+                                <label
+                                  className="custom-control-label"
+                                  htmlFor={`uid1_${item.safeId}`}
+                                ></label>
+                              </div>
+                            </DataTableRow>
+                            <DataTableRow>
+                              <div className="user-card">
+                                <div className="user-info">
+                                  <span className="tb-lead">
+                                    {item?.organization?.name}
+                                  </span>
+                                  <span>{item?.organization?.email}</span>
+                                </div>
+                              </div>
+                            </DataTableRow>
+                            <DataTableRow>
+                              <Link to={`/kyc-details-regular/${item.id}`}>
+                                <div className="user-card">
+                                  {/* <UserAvatar
                                   theme={item.avatarBg}
                                   text={findUpper(item.name)}
                                   image={item.image}
                                 ></UserAvatar> */}
-                              <div className="user-info">
-                                <span className="tb-lead">
-                                  {item?.personalInfo?.name}
-                                  <span
-                                    className={`dot dot-${
-                                      item.status === KYC_STATUS.APPROVED
-                                        ? "success"
-                                        : item.status === KYC_STATUS.PENDING
-                                        ? "info"
-                                        : "danger"
-                                    } d-md-none ms-1`}
-                                  ></span>
-                                </span>
-                                <span>{item?.id}</span>
-                              </div>
-                            </div>
-                          </Link>
-                        </DataTableRow>
-                        <DataTableRow size="mb">
-                          <span className="tb-lead-sub">{item.doc}</span>
-                        </DataTableRow>
-                        <DataTableRow size="md">
-                          <DownloadDropdown
-                            item={item}
-                            downloadDocumentImage={downloadDocumentImage}
-                          />
-                        </DataTableRow>
-                        <DataTableRow size="lg">
-                          <span className="tb-date">{item.date}</span>
-                        </DataTableRow>
-                        <DataTableRow size="md">
-                          <span
-                            className={`tb-status text-${
-                              item.status === KYC_STATUS.APPROVED
-                                ? "success"
-                                : item.status === KYC_STATUS.PENDING
-                                ? "info"
-                                : "danger"
-                            }`}
-                          >
-                            {item.status === KYC_STATUS.PENDING
-                              ? "Đang chờ xử lý"
-                              : item.status === KYC_STATUS.APPROVED
-                              ? "Đã phê duyệt"
-                              : "Đã từ chối"}
-                          </span>{" "}
-                          {item.status !== KYC_STATUS.PENDING && (
-                            <TooltipComponent
-                              icon="info"
-                              direction="top"
-                              id={`tooltip_status_${item.safeId}`}
-                              text={`$${
-                                item.status === KYC_STATUS.APPROVED
-                                  ? "Đã phê duyệt"
-                                  : "Đã từ chối"
-                              } lúc ${item.adminVerifiedAt}`}
-                            ></TooltipComponent>
-                          )}
-                          {!item.status === KYC_STATUS.PENDING && (
-                            <span>
-                              <TooltipComponent
-                                icon="info"
-                                direction="top"
-                                text={`Đã nộp lúc ${item.date}`}
-                                id={`tooltip_date_${item.safeId}`}
+                                  <div className="user-info">
+                                    <span className="tb-lead">
+                                      {item?.personalInfo?.name}
+                                      <span
+                                        className={`dot dot-${
+                                          item.status === KYC_STATUS.APPROVED
+                                            ? "success"
+                                            : item.status === KYC_STATUS.PENDING
+                                            ? "info"
+                                            : "danger"
+                                        } d-md-none ms-1`}
+                                      ></span>
+                                    </span>
+                                    <span>{item?.id}</span>
+                                  </div>
+                                </div>
+                              </Link>
+                            </DataTableRow>
+                            <DataTableRow size="mb">
+                              <span className="tb-lead-sub">{item.doc}</span>
+                            </DataTableRow>
+                            <DataTableRow size="md">
+                              <DownloadDropdown
+                                item={item}
+                                downloadDocumentImage={downloadDocumentImage}
                               />
-                            </span>
-                          )}
-                        </DataTableRow>
-                        <DataTableRow size="lg">
-                          <div className="user-card">
-                            <UserAvatar
-                              theme="orange-dim"
-                              size="xs"
-                              text={findUpper(item.checked)}
-                            ></UserAvatar>
-                            <div className="user-name">
-                              <span className="tb-lead">{item.checked} </span>
-                            </div>
-                          </div>
-                        </DataTableRow>
-                        <DataTableRow className="nk-tb-col-tools">
-                          <ul className="nk-tb-actions gx-1">
-                            <li
-                              className="nk-tb-action-hidden"
-                              onClick={() => {
-                                loadDetail(item.id);
-                                setViewModal(true);
-                              }}
-                            >
-                              {" "}
-                              <TooltipComponent
-                                tag="a"
-                                containerClassName="btn btn-trigger btn-icon"
-                                id={`view_${item.safeId}`}
-                                icon="eye-fill"
-                                direction="top"
-                                text="Xem nhanh"
-                              />
-                            </li>
-                            {item.status ===
-                            KYC_STATUS.REJECTED ? null : item.status ===
-                              KYC_STATUS.APPROVED ? (
-                              <li
-                                className="nk-tb-action-hidden"
-                                onClick={() => onRejectClick(item.id)}
+                            </DataTableRow>
+                            <DataTableRow size="lg">
+                              <span className="tb-date">{item.date}</span>
+                            </DataTableRow>
+                            <DataTableRow size="md">
+                              <span
+                                className={`tb-status text-${
+                                  item.status === KYC_STATUS.APPROVED
+                                    ? "success"
+                                    : item.status === KYC_STATUS.PENDING
+                                    ? "info"
+                                    : "danger"
+                                }`}
                               >
-                                {" "}
+                                {item.status === KYC_STATUS.PENDING
+                                  ? "Đang chờ xử lý"
+                                  : item.status === KYC_STATUS.APPROVED
+                                  ? "Đã phê duyệt"
+                                  : "Đã từ chối"}
+                              </span>{" "}
+                              {item.status !== KYC_STATUS.PENDING && (
                                 <TooltipComponent
-                                  tag="a"
-                                  containerClassName="btn btn-trigger btn-icon"
-                                  id={`reject_${item.safeId}`}
-                                  icon="cross-fill-c"
+                                  icon="info"
                                   direction="top"
-                                  text="Từ chối"
-                                />
-                              </li>
-                            ) : (
-                              <React.Fragment>
-                                <li className="nk-tb-action-hidden">
-                                  <Button
-                                    disabled={isProcessing}
-                                    className="btn-trigger btn-icon"
-                                    onClick={() => onApproveClick(item.id)}
-                                  >
-                                    {" "}
-                                    <TooltipComponent
-                                      tag="a"
-                                      containerClassName="btn-trigger btn-icon"
-                                      id={`approve_${item.safeId}`}
-                                      icon={
-                                        isProcessing ? "loader" : "check-fill-c"
-                                      }
-                                      direction="top"
-                                      text="Phê duyệt"
-                                    />
-                                  </Button>
+                                  id={`tooltip_status_${item.safeId}`}
+                                  text={`$${
+                                    item.status === KYC_STATUS.APPROVED
+                                      ? "Đã phê duyệt"
+                                      : "Đã từ chối"
+                                  } lúc ${item.adminVerifiedAt}`}
+                                ></TooltipComponent>
+                              )}
+                              {!item.status === KYC_STATUS.PENDING && (
+                                <span>
+                                  <TooltipComponent
+                                    icon="info"
+                                    direction="top"
+                                    text={`Đã nộp lúc ${item.date}`}
+                                    id={`tooltip_date_${item.safeId}`}
+                                  />
+                                </span>
+                              )}
+                            </DataTableRow>
+                            <DataTableRow size="lg">
+                              <div className="user-card">
+                                <UserAvatar
+                                  theme="orange-dim"
+                                  size="xs"
+                                  text={findUpper(item.checked)}
+                                ></UserAvatar>
+                                <div className="user-name">
+                                  <span className="tb-lead">
+                                    {item.checked}{" "}
+                                  </span>
+                                </div>
+                              </div>
+                            </DataTableRow>
+                            <DataTableRow className="nk-tb-col-tools">
+                              <ul className="nk-tb-actions gx-1">
+                                <li
+                                  className="nk-tb-action-hidden"
+                                  onClick={() => {
+                                    loadDetail(item.id);
+                                    setViewModal(true);
+                                  }}
+                                >
+                                  {" "}
+                                  <TooltipComponent
+                                    tag="a"
+                                    containerClassName="btn btn-trigger btn-icon"
+                                    id={`view_${item.safeId}`}
+                                    icon="eye-fill"
+                                    direction="top"
+                                    text="Xem nhanh"
+                                  />
                                 </li>
-                                <li className="nk-tb-action-hidden">
-                                  <Button
-                                    disabled={isProcessing}
-                                    className="btn-trigger btn-icon"
+                                {item.status ===
+                                KYC_STATUS.REJECTED ? null : item.status ===
+                                  KYC_STATUS.APPROVED ? (
+                                  <li
+                                    className="nk-tb-action-hidden"
                                     onClick={() => onRejectClick(item.id)}
                                   >
                                     {" "}
                                     <TooltipComponent
                                       tag="a"
-                                      containerClassName="btn-trigger btn-icon"
+                                      containerClassName="btn btn-trigger btn-icon"
                                       id={`reject_${item.safeId}`}
-                                      icon={
-                                        isProcessing ? "loader" : "cross-fill-c"
-                                      }
+                                      icon="cross-fill-c"
                                       direction="top"
                                       text="Từ chối"
                                     />
-                                  </Button>
-                                </li>
-                              </React.Fragment>
-                            )}
-                            <li>
-                              <UncontrolledDropdown>
-                                <DropdownToggle
-                                  tag="a"
-                                  className="dropdown-toggle btn btn-icon btn-trigger"
-                                >
-                                  <Icon name="more-h"></Icon>
-                                </DropdownToggle>
-                                <DropdownMenu end>
-                                  <ul className="link-list-opt no-bdr">
-                                    <li>
-                                      <DropdownItem
-                                        tag="a"
-                                        href="#view"
-                                        onClick={(ev) => {
-                                          ev.preventDefault();
-                                          loadDetail(item.id);
-                                          setViewModal(true);
-                                        }}
+                                  </li>
+                                ) : (
+                                  <React.Fragment>
+                                    <li className="nk-tb-action-hidden">
+                                      <Button
+                                        disabled={isProcessing}
+                                        className="btn-trigger btn-icon"
+                                        onClick={() => onApproveClick(item.id)}
                                       >
-                                        <Icon name="eye"></Icon>
-                                        <span>Xem nhanh</span>
-                                      </DropdownItem>
+                                        {" "}
+                                        <TooltipComponent
+                                          tag="a"
+                                          containerClassName="btn-trigger btn-icon"
+                                          id={`approve_${item.safeId}`}
+                                          icon={
+                                            isProcessing
+                                              ? "loader"
+                                              : "check-fill-c"
+                                          }
+                                          direction="top"
+                                          text="Phê duyệt"
+                                        />
+                                      </Button>
                                     </li>
-                                    <li>
-                                      <Link
-                                        to={`/kyc-details-regular/${item.id}`}
-                                      >
-                                        <Icon name="focus"></Icon>
-                                        <span>Xem chi tiết</span>
-                                      </Link>
-                                    </li>
-                                    {item.status ===
-                                    KYC_STATUS.REJECTED ? null : item.status ===
-                                      KYC_STATUS.APPROVED ? (
-                                      <li
+                                    <li className="nk-tb-action-hidden">
+                                      <Button
+                                        disabled={isProcessing}
+                                        className="btn-trigger btn-icon"
                                         onClick={() => onRejectClick(item.id)}
                                       >
-                                        <DropdownItem
+                                        {" "}
+                                        <TooltipComponent
                                           tag="a"
-                                          href="#reject"
-                                          onClick={(ev) => {
-                                            ev.preventDefault();
-                                          }}
-                                        >
-                                          <Icon name="na"></Icon>
-                                          <span>Từ chối người dùng</span>
-                                        </DropdownItem>
-                                      </li>
-                                    ) : (
-                                      <React.Fragment>
-                                        <li
-                                          onClick={() =>
-                                            onApproveClick(item.id)
+                                          containerClassName="btn-trigger btn-icon"
+                                          id={`reject_${item.safeId}`}
+                                          icon={
+                                            isProcessing
+                                              ? "loader"
+                                              : "cross-fill-c"
                                           }
-                                        >
+                                          direction="top"
+                                          text="Từ chối"
+                                        />
+                                      </Button>
+                                    </li>
+                                  </React.Fragment>
+                                )}
+                                <li>
+                                  <UncontrolledDropdown>
+                                    <DropdownToggle
+                                      tag="a"
+                                      className="dropdown-toggle btn btn-icon btn-trigger"
+                                    >
+                                      <Icon name="more-h"></Icon>
+                                    </DropdownToggle>
+                                    <DropdownMenu
+                                      end
+                                      container="body"
+                                      style={{ zIndex: 1050 }}
+                                    >
+                                      <ul className="link-list-opt no-bdr">
+                                        <li>
                                           <DropdownItem
                                             tag="a"
-                                            href="#approve"
+                                            href="#view"
                                             onClick={(ev) => {
                                               ev.preventDefault();
+                                              loadDetail(item.id);
+                                              setViewModal(true);
                                             }}
                                           >
-                                            <Icon name="check-thick"></Icon>
-                                            <span>Phê duyệt</span>
+                                            <Icon name="eye"></Icon>
+                                            <span>Xem nhanh</span>
                                           </DropdownItem>
                                         </li>
-                                        <li
-                                          onClick={() => onRejectClick(item.id)}
-                                        >
-                                          <DropdownItem
-                                            tag="a"
-                                            href="#suspend"
-                                            onClick={(ev) => {
-                                              ev.preventDefault();
-                                            }}
+                                        <li>
+                                          <Link
+                                            to={`/kyc-details-regular/${item.id}`}
                                           >
-                                            <Icon name="na"></Icon>
-                                            <span>Tạm khóa người dùng</span>
-                                          </DropdownItem>
+                                            <Icon name="focus"></Icon>
+                                            <span>Xem chi tiết</span>
+                                          </Link>
                                         </li>
-                                      </React.Fragment>
-                                    )}
-                                  </ul>
-                                </DropdownMenu>
-                              </UncontrolledDropdown>
-                            </li>
-                          </ul>
-                        </DataTableRow>
-                      </DataTableItem>
-                    );
-                  })
-                : null}
-            </DataTableBody>
-            <div className="card-inner">
-              {currentItems.length > 0 ? (
-                <PaginationComponent
-                  noDown
-                  itemPerPage={10}
-                  totalItems={totalItems}
-                  paginate={paginate}
-                  currentPage={currentPage}
-                />
-              ) : (
-                <div className="text-center">
-                  <span className="text-silent">Không tìm thấy dữ liệu</span>
+                                        {item.status ===
+                                        KYC_STATUS.REJECTED ? null : item.status ===
+                                          KYC_STATUS.APPROVED ? (
+                                          <li
+                                            onClick={() =>
+                                              onRejectClick(item.id)
+                                            }
+                                          >
+                                            <DropdownItem
+                                              tag="a"
+                                              href="#reject"
+                                              onClick={(ev) => {
+                                                ev.preventDefault();
+                                              }}
+                                            >
+                                              <Icon name="na"></Icon>
+                                              <span>Từ chối người dùng</span>
+                                            </DropdownItem>
+                                          </li>
+                                        ) : (
+                                          <React.Fragment>
+                                            <li
+                                              onClick={() =>
+                                                onApproveClick(item.id)
+                                              }
+                                            >
+                                              <DropdownItem
+                                                tag="a"
+                                                href="#approve"
+                                                onClick={(ev) => {
+                                                  ev.preventDefault();
+                                                }}
+                                              >
+                                                <Icon name="check-thick"></Icon>
+                                                <span>Phê duyệt</span>
+                                              </DropdownItem>
+                                            </li>
+                                            <li
+                                              onClick={() =>
+                                                onRejectClick(item.id)
+                                              }
+                                            >
+                                              <DropdownItem
+                                                tag="a"
+                                                href="#suspend"
+                                                onClick={(ev) => {
+                                                  ev.preventDefault();
+                                                }}
+                                              >
+                                                <Icon name="na"></Icon>
+                                                <span>Tạm khóa người dùng</span>
+                                              </DropdownItem>
+                                            </li>
+                                          </React.Fragment>
+                                        )}
+                                      </ul>
+                                    </DropdownMenu>
+                                  </UncontrolledDropdown>
+                                </li>
+                              </ul>
+                            </DataTableRow>
+                          </DataTableItem>
+                        );
+                      })
+                    : null}
+                </DataTableBody>
+                <div className="card-inner">
+                  {currentItems.length > 0 ? (
+                    <PaginationComponent
+                      noDown
+                      itemPerPage={10}
+                      totalItems={totalItems}
+                      paginate={paginate}
+                      currentPage={currentPage}
+                    />
+                  ) : (
+                    <div className="text-center">
+                      <span className="text-silent">
+                        Không tìm thấy dữ liệu
+                      </span>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </DataTable>
         </Block>
