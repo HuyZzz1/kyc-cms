@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Content from "@/layout/content/Content";
@@ -90,57 +91,64 @@ const KycListRegular = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentAdmin] = useState("Admin"); // Thay bằng thông tin admin thực tế từ auth
 
+  const [filterDocType, setFilterDocType] = useState(null);
+  const [filterStatusType, setFilterStatusType] = useState(null);
+
   // Fetch data when page or itemPerPage changes
-  useEffect(() => {
-    const fetchEkycData = async () => {
-      try {
-        const response = await adminService.getEkycList({
-          page: currentPage,
-          limit: 10,
-        });
 
-        if (response.success) {
-          const { records, pagination } = response.data;
-          setData(
-            records.map((record) => ({
-              id: record._id,
-              safeId: `id_${record._id.replace(/[^a-zA-Z0-9]/g, "_")}`,
-              name: `${record.firstName || ""} ${record.lastName || ""}`.trim(),
-              doc: DOC_TYPE_NAME[record.documentType] || "CCCD/CMND",
-              front: true,
-              back: record.documentType !== DOC_TYPE.PASSPORT,
-              date: new Date(record.createdAt).toLocaleDateString(),
-              status: record?.status?.toUpperCase() || KYC_STATUS.PENDING,
-              checked: record.adminVerifiedBy || "-",
-              avatarBg: "primary",
-              email: record.email,
-              phone: record.phoneNumber,
-              verifiedAt: record.verifiedAt
-                ? new Date(record.verifiedAt).toLocaleString()
-                : "-",
-              adminVerifiedAt: record.adminVerifiedAt
-                ? new Date(record.adminVerifiedAt).toLocaleString()
-                : "-",
-              check: false,
-              personalInfo: record.personalInfo || {},
-              frontImagePath: record.frontImage,
-              backImagePath: record.backImage,
-              userImage: record.userImage,
-              recordVideo: record?.video?.filename || null,
-              organization: record?.organization,
-            }))
-          );
-          setTotalItems(pagination.total);
-        } else {
-          console.error("Không thể lấy dữ liệu eKYC");
-        }
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu eKYC:", error);
+  const fetchEkycData = async (page = 1) => {
+    try {
+      const response = await adminService.getEkycList({
+        page,
+        limit: 10,
+        documentType: filterDocType?.value || undefined,
+        status: filterStatusType?.value || undefined,
+      });
+
+      if (response.success) {
+        const { records, pagination } = response.data;
+        setData(
+          records.map((record) => ({
+            id: record._id,
+            safeId: `id_${record._id.replace(/[^a-zA-Z0-9]/g, "_")}`,
+            name: `${record.firstName || ""} ${record.lastName || ""}`.trim(),
+            doc: DOC_TYPE_NAME[record.documentType] || "CCCD/CMND",
+            front: true,
+            back: record.documentType !== DOC_TYPE.PASSPORT,
+            date: new Date(record.createdAt).toLocaleDateString(),
+            status: record?.status?.toUpperCase() || KYC_STATUS.PENDING,
+            checked: record.adminVerifiedBy || "-",
+            avatarBg: "primary",
+            email: record.email,
+            phone: record.phoneNumber,
+            verifiedAt: record.verifiedAt
+              ? new Date(record.verifiedAt).toLocaleString()
+              : "-",
+            adminVerifiedAt: record.adminVerifiedAt
+              ? new Date(record.adminVerifiedAt).toLocaleString()
+              : "-",
+            check: false,
+            personalInfo: record.personalInfo || {},
+            frontImagePath: record.frontImage,
+            backImagePath: record.backImage,
+            userImage: record.userImage,
+            recordVideo: record?.video?.filename || null,
+            organization: record?.organization,
+          }))
+        );
+        setTotalItems(pagination.total);
+        setCurrentPage(page);
+      } else {
+        console.error("Không thể lấy dữ liệu eKYC");
       }
-    };
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu eKYC:", error);
+    }
+  };
 
-    fetchEkycData();
-  }, [currentPage, DOC_TYPE_NAME]);
+  useEffect(() => {
+    fetchEkycData(currentPage);
+  }, []);
 
   // Sorting data
   // const sortFunc = (params) => {
@@ -291,7 +299,9 @@ const KycListRegular = () => {
   const currentItems = data;
 
   // Change Page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => {
+    fetchEkycData(pageNumber);
+  };
 
   return (
     <React.Fragment>
@@ -432,7 +442,11 @@ const KycListRegular = () => {
                                           </label>
                                           <RSelect
                                             options={translatedFilterDoc}
-                                            placeholder="Tất cả loại"
+                                            placeholder="Loại giấy tờ"
+                                            value={filterDocType}
+                                            onChange={(value) =>
+                                              setFilterDocType(value)
+                                            }
                                           />
                                         </div>
                                       </Col>
@@ -443,7 +457,11 @@ const KycListRegular = () => {
                                           </label>
                                           <RSelect
                                             options={translatedFilterStatus}
-                                            placeholder="Tất cả trạng thái"
+                                            placeholder="Trạng thái"
+                                            value={filterStatusType}
+                                            onChange={(value) =>
+                                              setFilterStatusType(value)
+                                            }
                                           />
                                         </div>
                                       </Col>
@@ -452,6 +470,9 @@ const KycListRegular = () => {
                                           <Button
                                             type="button"
                                             color="secondary"
+                                            onClick={() => {
+                                              fetchEkycData(1);
+                                            }}
                                           >
                                             Lọc
                                           </Button>
@@ -465,17 +486,12 @@ const KycListRegular = () => {
                                       href="#reset"
                                       onClick={(ev) => {
                                         ev.preventDefault();
+                                        setFilterDocType(null);
+                                        setFilterStatusType(null);
+                                        fetchEkycData(1);
                                       }}
                                     >
                                       Đặt lại bộ lọc
-                                    </a>
-                                    <a
-                                      href="#save"
-                                      onClick={(ev) => {
-                                        ev.preventDefault();
-                                      }}
-                                    >
-                                      Lưu bộ lọc
                                     </a>
                                   </div>
                                 </DropdownMenu>
