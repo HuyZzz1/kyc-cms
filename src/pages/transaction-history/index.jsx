@@ -363,8 +363,8 @@ const TransactionHistory = () => {
                 </div>
               </div>
             </div>
-            <div style={{ overflowX: "auto", width: "100%" }}>
-              <div className="min-w-[900px]">
+            <div style={{ width: "100%" }} className="relative overflow-x-auto">
+              <div className="min-w-[900px] overflow-auto">
                 <DataTableBody>
                   <DataTableHead>
                     <DataTableRow
@@ -372,29 +372,29 @@ const TransactionHistory = () => {
                         width: 150,
                       }}
                     >
-                      <span>Ngày mua</span>
+                      <span className="text-nowrap">Ngày mua</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Tổ chức</span>
+                      <span className="text-nowrap">Tổ chức</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Gói</span>
+                      <span className="text-nowrap">Gói</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Số lượt KYC</span>
+                      <span className="text-nowrap">Số lượt KYC</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Số tháng</span>
+                      <span className="text-nowrap">Số tháng</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Giá</span>
+                      <span className="text-nowrap">Giá</span>
                     </DataTableRow>
                     <DataTableRow
                       style={{
                         width: 200,
                       }}
                     >
-                      <span>Trạng thái</span>
+                      <span className="text-nowrap">Trạng thái</span>
                     </DataTableRow>
 
                     <DataTableRow
@@ -440,7 +440,7 @@ const TransactionHistory = () => {
                             </DataTableRow>
                             <DataTableRow>
                               <div className="tb-lead-sub">
-                                {formatToVND(item.durationInMonths)}
+                                {formatToVND(item.price)}
                               </div>
                             </DataTableRow>
 
@@ -468,7 +468,11 @@ const TransactionHistory = () => {
                                     >
                                       <Icon name="more-h" />
                                     </DropdownToggle>
-                                    <DropdownMenu end>
+                                    <DropdownMenu
+                                      end
+                                      container="body"
+                                      style={{ zIndex: 1050 }}
+                                    >
                                       <ul className="link-list-opt no-bdr">
                                         <li>
                                           <DropdownItem

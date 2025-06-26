@@ -384,35 +384,35 @@ const OrganizationManagement = () => {
                 </div>
               </div>
             </div>
-            <div style={{ overflowX: "auto", width: "100%" }}>
-              <div className="min-w-[900px]">
+            <div style={{ width: "100%" }} className="relative overflow-x-auto">
+              <div className="min-w-[900px] ">
                 <DataTableBody>
                   <DataTableHead>
                     <DataTableRow>
-                      <span>Tổ chức</span>
+                      <span className="text-nowrap">Tổ chức</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Quốc gia</span>
+                      <span className="text-nowrap">Quốc gia</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Ngành nghề</span>
+                      <span className="text-nowrap">Ngành nghề</span>
                     </DataTableRow>
                     <DataTableRow>
-                      <span>Thông tin gói</span>
+                      <span className="text-nowrap">Thông tin gói</span>
                     </DataTableRow>
                     <DataTableRow
                       style={{
                         width: 200,
                       }}
                     >
-                      <span>Trạng thái</span>
+                      <span className="text-nowrap">Trạng thái</span>
                     </DataTableRow>
                     <DataTableRow
                       style={{
                         width: 200,
                       }}
                     >
-                      <span>Ngày tạo</span>
+                      <span className="text-nowrap">Ngày tạo</span>
                     </DataTableRow>
                     <DataTableRow
                       style={{
@@ -492,7 +492,11 @@ const OrganizationManagement = () => {
                                     >
                                       <Icon name="more-h" />
                                     </DropdownToggle>
-                                    <DropdownMenu end>
+                                    <DropdownMenu
+                                      end
+                                      container="body"
+                                      style={{ zIndex: 1050 }}
+                                    >
                                       <ul className="link-list-opt no-bdr">
                                         <li>
                                           <DropdownItem
