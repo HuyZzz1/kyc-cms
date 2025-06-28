@@ -22,11 +22,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link
-                  to="https://dashboard.kycchain.net/api/redoc"
-                  target="_blank"
-                  className="nav-link"
-                >
+                <Link to="/pages/guide" className="nav-link">
                   Hướng dẫn
                 </Link>
               </li>

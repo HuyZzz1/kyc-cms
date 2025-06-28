@@ -91,7 +91,12 @@ const KycGuide = () => {
                     style={{
                       cursor: "pointer",
                     }}
-                    onClick={() => setActiveSection("integration")}
+                    onClick={() =>
+                      window.open(
+                        "https://dashboard.kycchain.net/api/redoc",
+                        "_blank"
+                      )
+                    }
                   >
                     {" "}
                     <i

@@ -54,8 +54,7 @@ const menu = [
       },
       {
         text: "Hướng Dẫn",
-        link: "https://dashboard.kycchain.net/api/redoc",
-        newTab: true,
+        link: "/pages/guide",
       },
     ],
   },
