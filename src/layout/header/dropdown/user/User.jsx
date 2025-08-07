@@ -1,45 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import UserAvatar from "@/components/user/UserAvatar";
 import { DropdownToggle, DropdownMenu, Dropdown } from "reactstrap";
 import { Icon } from "@/components/Component";
-import { LinkList, LinkItem } from "@/components/links/Links";
+import { LinkList } from "@/components/links/Links";
 import { useTheme, useThemeUpdate } from "@/layout/provider/Theme";
 import { useNavigate } from "react-router-dom";
-import adminService from "@/services/adminService";
-import { getAdminUserInfo } from "@/utils/authUtils";
+import { useRecoilValue } from "recoil";
+import { profileStateAtom } from "../../../../services/recoil/profile";
+import { removeToken } from "../../../../utils/authToken";
 
 const User = () => {
   const theme = useTheme();
   const themeUpdate = useThemeUpdate();
   const [open, setOpen] = useState(false);
-  const [profile, setProfile] = useState(getAdminUserInfo());
+  const profile = useRecoilValue(profileStateAtom);
   const toggle = () => setOpen((prevState) => !prevState);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const res = await adminService.getProfile();
-        // Tùy vào API trả về, lấy đúng trường dữ liệu
-        if (res && res.data) {
-          setProfile(res.data);
-        }
-      } catch {
-        // Không cần xử lý lỗi, giữ nguyên thông tin cũ
-      }
-    }
-    fetchProfile();
-  }, []);
-
-  // Hàm xử lý đăng xuất
   const handleSignOut = (e) => {
     e.preventDefault();
-    localStorage.removeItem("accessToken");
-    // Xóa cookie adminProfile nếu có
-    if (typeof document !== "undefined") {
-      document.cookie =
-        "adminProfile=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    }
+    removeToken();
     navigate("/auth-login");
   };
 
@@ -87,7 +67,7 @@ const User = () => {
         </div>
         <div className="dropdown-inner">
           <LinkList>
-            <LinkItem
+            {/* <LinkItem
               link={
                 window.location.pathname.split("/")[2] === "invest"
                   ? "/invest/profile"
@@ -119,7 +99,7 @@ const User = () => {
               onClick={toggle}
             >
               Login Activity
-            </LinkItem>
+            </LinkItem> */}
 
             <li>
               <a
@@ -151,7 +131,7 @@ const User = () => {
           <LinkList>
             <a href="/auth-login" onClick={handleSignOut}>
               <Icon name="signout"></Icon>
-              <span>Sign Out</span>
+              <span>Đăng xuất</span>
             </a>
           </LinkList>
         </div>

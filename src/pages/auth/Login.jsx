@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Head from "@/layout/head/Head";
 import AuthFooter from "./AuthFooter";
 import adminService from "@/services/adminService";
-import { setAdminAuth } from "@/utils/authUtils";
 import {
   Block,
   BlockContent,
@@ -16,54 +15,36 @@ import {
 } from "@/components/Component";
 import { Form, Spinner, Alert } from "reactstrap";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { setToken } from "../../utils/authToken";
+import { useSetRecoilState } from "recoil";
+import { profileStateAtom } from "../../services/recoil/profile";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [passState, setPassState] = useState(false);
   const [errorVal, setError] = useState("");
   const navigate = useNavigate();
-
-  // Nếu đã đăng nhập thì redirect sang /overview
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      navigate("/overview");
-    }
-  }, [navigate]);
+  const setProfile = useSetRecoilState(profileStateAtom);
 
   const onFormSubmit = async (formData) => {
     setLoading(true);
     setError("");
     try {
-      // Gọi API đăng nhập
       const loginDto = {
         username: formData.name,
-        password: formData.passcode
+        password: formData.passcode,
       };
       const response = await adminService.login(loginDto);
       const token = response?.accessToken;
       const userData = response.admin;
-      setAdminAuth(token, userData);
-      // Lưu token vào localStorage để kiểm tra đăng nhập
-      localStorage.setItem("accessToken", token);
-      // Lưu profile nếu có
-      try {
-        const profileData = await adminService.getProfile();
-        if (profileData && profileData.data) {
-          import("@/utils/cookieUtils").then(({ setCookie }) => {
-            setCookie("adminProfile", JSON.stringify(profileData.data), { days: 1 });
-          });
-        }
-      } catch (profileError) {
-        // Không quan trọng, chỉ log
-        console.error("Lỗi lấy profile:", profileError);
-      }
+      setProfile(userData);
+      setToken(token);
       setTimeout(() => {
-        navigate("/overview");
+        navigate("/");
       }, 1000);
     } catch (error) {
-      setError(error.message || "Sai tài khoản hoặc mật khẩu");
+      console.log("error", error);
+      setError("Sai tài khoản hoặc mật khẩu");
       setLoading(false);
     }
   };
@@ -129,9 +110,9 @@ const Login = () => {
                 <label className="form-label" htmlFor="password">
                   Mật Khẩu
                 </label>
-                <Link className="link link-primary link-sm" to={`/auth-reset`}>
+                {/* <Link className="link link-primary link-sm" to={`/auth-reset`}>
                   Quên mật khẩu?
-                </Link>
+                </Link> */}
               </div>
               <div className="form-control-wrap">
                 <a
@@ -177,7 +158,7 @@ const Login = () => {
               </Button>
             </div>
           </Form>
-          <div className="form-note-s2 text-center pt-4">
+          {/* <div className="form-note-s2 text-center pt-4">
             Người mới trên KYC Chain?{" "}
             <Link to={`/auth-register`}>Tạo tài khoản</Link>
           </div>
@@ -209,7 +190,7 @@ const Login = () => {
                 Google
               </a>
             </li>
-          </ul>
+          </ul> */}
         </PreviewCard>
       </Block>
       <AuthFooter />

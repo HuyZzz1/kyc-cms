@@ -1,17 +1,19 @@
 import axios from "axios";
-import { getAdminToken } from "@/utils/authUtils";
+import { getToken } from "../utils/authToken";
 
 // Get base URL from environment variable or use default
 const BASE_URL = import.meta.env.VITE_API_DOMAIN || "http://localhost:4000";
+
+const token = getToken();
 
 /**
  * Create axios instance with default configuration
  */
 const apiClient = axios.create({
-  baseURL: BASE_URL + '/api/admin',
+  baseURL: BASE_URL + "/api/admin",
   headers: {
-    'Content-Type': 'application/json'
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 /**
@@ -20,7 +22,6 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // Add token to all admin API requests
-    const token = getAdminToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
       console.log("Setting auth token for request:", config.url);
@@ -43,7 +44,7 @@ class AdminService {
    */
   async login(loginDto) {
     try {
-      const response = await apiClient.post('/login', loginDto);
+      const response = await apiClient.post("/login", loginDto);
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);
@@ -56,12 +57,11 @@ class AdminService {
    */
   async getProfile() {
     try {
-      const token = getAdminToken();
       if (!token) {
         throw new Error("No admin token found");
       }
 
-      const response = await apiClient.get('/profile');
+      const response = await apiClient.get("/profile");
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);
@@ -73,22 +73,22 @@ class AdminService {
    * @param {Object} params - Pagination parameters (page, limit)
    * @returns {Promise} - API response with list of eKYC records and pagination info
    */
-  async getEkycList (params) {
+  async getEkycList(params) {
     try {
-      const response = await apiClient.get('/ekyc/list', { params });
+      const response = await apiClient.get("/ekyc/list", { params });
       return response.data;
     } catch (error) {
       console.error("eKYC list error:", error);
       throw error;
     }
   }
-  
+
   /**
    * Get eKYC detail by ID
    * @param {string} id - eKYC record ID
    * @returns {Promise} - API response with eKYC record details
    */
-  async getEkycDetail (id) {
+  async getEkycDetail(id) {
     try {
       const response = await apiClient.get(`/ekyc/details/${id}`);
       return response.data;
@@ -97,14 +97,14 @@ class AdminService {
       throw error;
     }
   }
-  
+
   /**
    * Update eKYC verification status (for admin)
    * @param {string} id - eKYC record ID
    * @param {Object} updateData - Data to update (isAdminVerified, adminVerifiedBy)
    * @returns {Promise} - API response with updated record
    */
-  async updateEkycStatus (id, updateData) {
+  async updateEkycStatus(id, updateData) {
     try {
       const response = await apiClient.put(`/ekyc/${id}`, updateData);
       return response.data;
@@ -113,35 +113,41 @@ class AdminService {
       throw error;
     }
   }
-  
+
   /**
    * Admin verify document by ID
    * @param {string} documentId - The document ID to be approved by admin
    * @param {Object} adminData - Admin information (name, etc.)
    * @returns {Promise} - API response with verification result
    */
-  async adminVerifyDocument (documentId, adminData) {
+  async adminVerifyDocument(documentId, adminData) {
     try {
-      const response = await apiClient.put(`/ekyc/admin-verify/${documentId}`, adminData);
+      const response = await apiClient.put(
+        `/ekyc/admin-verify/${documentId}`,
+        adminData
+      );
       return response.data;
     } catch (error) {
-      console.error(`Admin verification error for document ID ${documentId}:`, error);
+      console.error(
+        `Admin verification error for document ID ${documentId}:`,
+        error
+      );
       throw error;
     }
   }
-  
+
   /**
    * Download document image
    * @param {string} imagePath - Path to the image file
    * @returns {Promise} - API response with image data
    */
-  async downloadFileMedia (imagePath) {
+  async downloadFileMedia(imagePath) {
     try {
       // Extract only the filename from the path
-      const filename = imagePath.split('/').pop();
-      const response = await apiClient.get('/ekyc/download-file', {
+      const filename = imagePath.split("/").pop();
+      const response = await apiClient.get("/ekyc/download-file", {
         params: { filename },
-        responseType: 'blob', // Important for handling binary data
+        responseType: "blob", // Important for handling binary data
       });
       return response;
     } catch (error) {
@@ -159,18 +165,20 @@ class AdminService {
     if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
-      const errorMessage = 
-        error.response.data?.message || 
-        error.response.data?.error || 
+      const errorMessage =
+        error.response.data?.message ||
+        error.response.data?.error ||
         "An error occurred with the API request";
-      
+
       const customError = new Error(errorMessage);
       customError.status = error.response.status;
       customError.data = error.response.data;
       return customError;
     } else if (error.request) {
       // The request was made but no response was received
-      return new Error("No response from server. Please check your internet connection.");
+      return new Error(
+        "No response from server. Please check your internet connection."
+      );
     } else {
       // Something happened in setting up the request that triggered an Error
       return error;
@@ -184,7 +192,7 @@ class AdminService {
    */
   async getOrganizationsWithMedia(params = {}) {
     try {
-      const response = await apiClient.get('/media/organizations', { params });
+      const response = await apiClient.get("/media/organizations", { params });
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);
@@ -198,7 +206,9 @@ class AdminService {
    */
   async getOrganizationMediaStats(organizationId) {
     try {
-      const response = await apiClient.get(`/media/organizations/${organizationId}/stats`);
+      const response = await apiClient.get(
+        `/media/organizations/${organizationId}/stats`
+      );
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);
@@ -213,7 +223,10 @@ class AdminService {
    */
   async getOrganizationImages(organizationId, params = {}) {
     try {
-      const response = await apiClient.get(`/media/organizations/${organizationId}/images`, { params });
+      const response = await apiClient.get(
+        `/media/organizations/${organizationId}/images`,
+        { params }
+      );
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);
@@ -228,7 +241,10 @@ class AdminService {
    */
   async getOrganizationVideos(organizationId, params = {}) {
     try {
-      const response = await apiClient.get(`/media/organizations/${organizationId}/videos`, { params });
+      const response = await apiClient.get(
+        `/media/organizations/${organizationId}/videos`,
+        { params }
+      );
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);

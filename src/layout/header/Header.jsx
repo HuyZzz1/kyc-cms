@@ -4,7 +4,6 @@ import Menu from "../menu/Menu";
 import MenuMobile from "../menu/MenuMobile";
 import User from "./dropdown/user/User";
 import Notification from "./dropdown/notification/Notification";
-import { Icon } from "@/components/Component";
 
 import { useTheme, useThemeUpdate } from "@/layout/provider/Theme";
 import { Link } from "react-router";
@@ -91,13 +90,6 @@ const Header = ({ fixed, className, menuData }) => {
               <li className="notification-dropdown me-n1">
                 <Notification />
               </li>
-              {window.location.pathname.split("/")[2] === "invest" && (
-                <li className="hide-mb-sm">
-                  <a href={`/auth-login`} className="nk-quick-nav-icon">
-                    <Icon name="signout" />
-                  </a>
-                </li>
-              )}
             </ul>
           </div>
         </div>

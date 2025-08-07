@@ -1,10 +1,10 @@
 import axios from "axios";
-import { getAdminToken } from "@/utils/authUtils";
+import { getToken } from "../utils/authToken";
 
 const API_URL = import.meta.env.VITE_API_DOMAIN + "/api";
 
 const getAuthHeaders = () => {
-  const token = getAdminToken();
+  const token = getToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
