@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import adminService from "@/services/adminService";
+import { getToken } from "../../../../utils/authToken";
 
 const FileManager = createContext();
 const FileManagerUpdate = createContext();
@@ -13,6 +14,8 @@ export function useFileManagerUpdate() {
 }
 
 const FileManagerProvider = ({ ...props }) => {
+  const token = getToken();
+
   const [fileManager, setFileManager] = useState({
     search: "",
     files: [],
@@ -50,9 +53,18 @@ const FileManagerProvider = ({ ...props }) => {
           videoStats: org.videoStats,
         });
       }
-      setFileManager((prev) => ({ ...prev, files, loading: false, error: null }));
+      setFileManager((prev) => ({
+        ...prev,
+        files,
+        loading: false,
+        error: null,
+      }));
     } catch (error) {
-      setFileManager((prev) => ({ ...prev, loading: false, error: error.message || "Lỗi tải dữ liệu" }));
+      setFileManager((prev) => ({
+        ...prev,
+        loading: false,
+        error: error.message || "Lỗi tải dữ liệu",
+      }));
     }
   };
 
@@ -70,7 +82,7 @@ const FileManagerProvider = ({ ...props }) => {
         parent: orgId,
         totalFiles: statsRes.imageStats?.count || 0,
         totalSize: statsRes.imageStats?.totalSize || 0,
-        totalSizeFormatted: statsRes.imageStats?.totalSizeFormatted || '',
+        totalSizeFormatted: statsRes.imageStats?.totalSizeFormatted || "",
       };
       const videoFolder = {
         id: `${orgId}-video`,
@@ -80,20 +92,20 @@ const FileManagerProvider = ({ ...props }) => {
         parent: orgId,
         totalFiles: statsRes.videoStats?.count || 0,
         totalSize: statsRes.videoStats?.totalSize || 0,
-        totalSizeFormatted: statsRes.videoStats?.totalSizeFormatted || '',
+        totalSizeFormatted: statsRes.videoStats?.totalSizeFormatted || "",
       };
       setFileManager((prev) => ({
         ...prev,
-        files: [
-          ...prev.files,
-          imageFolder,
-          videoFolder,
-        ],
+        files: [...prev.files, imageFolder, videoFolder],
         loadedOrgs: { ...prev.loadedOrgs, [orgId]: true },
         loading: false,
       }));
     } catch (error) {
-      setFileManager((prev) => ({ ...prev, loading: false, error: error.message || "Lỗi tải dữ liệu" }));
+      setFileManager((prev) => ({
+        ...prev,
+        loading: false,
+        error: error.message || "Lỗi tải dữ liệu",
+      }));
     }
   };
 
@@ -104,10 +116,12 @@ const FileManagerProvider = ({ ...props }) => {
     setFileManager((prev) => ({ ...prev, loading: true }));
     try {
       let filesToAdd = [];
-      if (type === 'image') {
-        const imagesRes = await adminService.getOrganizationImages(orgId, { limit: 100 });
+      if (type === "image") {
+        const imagesRes = await adminService.getOrganizationImages(orgId, {
+          limit: 100,
+        });
         const images = imagesRes.images || imagesRes.data || [];
-        filesToAdd = images.map(img => ({
+        filesToAdd = images.map((img) => ({
           id: img.imageId,
           name: img.userName + " - " + img.type,
           path: img.path,
@@ -119,10 +133,12 @@ const FileManagerProvider = ({ ...props }) => {
           createdAt: img.createdAt,
           imageType: img.type,
         }));
-      } else if (type === 'video') {
-        const videosRes = await adminService.getOrganizationVideos(orgId, { limit: 100 });
+      } else if (type === "video") {
+        const videosRes = await adminService.getOrganizationVideos(orgId, {
+          limit: 100,
+        });
         const videos = videosRes.videos || videosRes.data || [];
-        filesToAdd = videos.map(vid => ({
+        filesToAdd = videos.map((vid) => ({
           id: vid.videoId,
           name: vid.userName,
           path: vid.path,
@@ -137,22 +153,23 @@ const FileManagerProvider = ({ ...props }) => {
       }
       setFileManager((prev) => ({
         ...prev,
-        files: [
-          ...prev.files,
-          ...filesToAdd,
-        ],
+        files: [...prev.files, ...filesToAdd],
         loadedSubFolders: { ...prev.loadedSubFolders, [subKey]: true },
         loading: false,
       }));
     } catch (error) {
-      setFileManager((prev) => ({ ...prev, loading: false, error: error.message || "Lỗi tải dữ liệu" }));
+      setFileManager((prev) => ({
+        ...prev,
+        loading: false,
+        error: error.message || "Lỗi tải dữ liệu",
+      }));
     }
   };
 
   useEffect(() => {
+    if (!token) return;
     fetchOrganizations();
-    // eslint-disable-next-line
-  }, []);
+  }, [token]);
 
   const fileManagerUpdate = {
     filesView: function (value) {

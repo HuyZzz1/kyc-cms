@@ -4,8 +4,6 @@ import { getToken } from "../utils/authToken";
 // Get base URL from environment variable or use default
 const BASE_URL = import.meta.env.VITE_API_DOMAIN || "http://localhost:4000";
 
-const token = getToken();
-
 /**
  * Create axios instance with default configuration
  */
@@ -21,6 +19,8 @@ const apiClient = axios.create({
  */
 apiClient.interceptors.request.use(
   (config) => {
+    const token = getToken();
+
     // Add token to all admin API requests
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -56,6 +56,8 @@ class AdminService {
    * @returns {Promise} - Response with admin profile data
    */
   async getProfile() {
+    const token = getToken();
+
     try {
       if (!token) {
         throw new Error("No admin token found");
@@ -195,7 +197,7 @@ class AdminService {
       const response = await apiClient.get("/media/organizations", { params });
       return response.data;
     } catch (error) {
-      throw this.handleApiError(error);
+      console.log("error", error);
     }
   }
 
@@ -211,7 +213,7 @@ class AdminService {
       );
       return response.data;
     } catch (error) {
-      throw this.handleApiError(error);
+      console.log("error", error);
     }
   }
 
@@ -229,7 +231,7 @@ class AdminService {
       );
       return response.data;
     } catch (error) {
-      throw this.handleApiError(error);
+      console.log("error", error);
     }
   }
 
@@ -247,7 +249,7 @@ class AdminService {
       );
       return response.data;
     } catch (error) {
-      throw this.handleApiError(error);
+      console.log("error", error);
     }
   }
 }
