@@ -19,7 +19,6 @@ import { findUpper } from "@/utils/Utils";
 import { Link, useParams } from "react-router-dom";
 import adminService from "@/services/adminService";
 import { KYC_STATUS } from "@/pages/pre-built/kyc-list-regular/enum";
-import { urlVideo } from "@/utils/mediaUtils";
 
 // Document type names
 const DOC_TYPE_NAME = {
@@ -28,11 +27,39 @@ const DOC_TYPE_NAME = {
   ID_CARD: "CCCD/CMND",
 };
 
+const fieldTranslationMap = {
+  fullName: "Họ và tên",
+  idNumber: "Số CCCD/CMND",
+  dateOfBirth: "Ngày sinh",
+  gender: "Giới tính",
+  nationality: "Quốc tịch",
+  placeOfResidence: "Nơi thường trú",
+  placeOfOrigin: "Quê quán",
+  issueDate: "Ngày cấp",
+  expiryDate: "Ngày hết hạn",
+};
+
 const KycDetailsRegular = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   let { kycId } = useParams();
+
+  const forceDownload = (url, filename) => {
+    fetch(url)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = filename || "download";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(blobUrl);
+      })
+      .catch((err) => console.error("Download failed", err));
+  };
 
   useEffect(() => {
     const fetchDocumentDetails = async () => {
@@ -59,7 +86,7 @@ const KycDetailsRegular = () => {
               ? new Date(record.adminVerifiedAt).toLocaleString()
               : "Chưa được duyệt",
             personalInfo: record.personalInfo || {},
-            recordVideo: record?.video?.filename || null,
+            ocrResult: record.ocrResult || {},
             organization: record?.organization || null,
           });
         } else {
@@ -75,27 +102,6 @@ const KycDetailsRegular = () => {
 
     fetchDocumentDetails();
   }, [kycId]);
-
-  // Function to download document image
-  const downloadDocument = async (imagePath, filename) => {
-    if (!imagePath) return;
-
-    try {
-      const response = await adminService.downloadFileMedia(imagePath);
-
-      // Create a download link and trigger download
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", filename);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Lỗi khi tải ảnh:", error);
-    }
-  };
 
   // Show loading state while fetching data
   if (loading) {
@@ -202,7 +208,9 @@ const KycDetailsRegular = () => {
                     <li className="data-item">
                       <div className="data-col">
                         <div className="data-label">Người nộp</div>
-                        <div className="data-value">{user.name}</div>
+                        <div className="data-value">
+                          {user?.ocrResult?.fullName}
+                        </div>
                       </div>
                     </li>
                     <li className="data-item">
@@ -280,17 +288,17 @@ const KycDetailsRegular = () => {
                         <div className="data-value">
                           {user.frontImagePath ? (
                             <a
-                              href="#download"
+                              href="#"
                               className="text-primary"
                               onClick={(e) => {
                                 e.preventDefault();
-                                downloadDocument(
+                                forceDownload(
                                   user.frontImagePath,
-                                  `${user.name}-front.jpg`
+                                  `${user.id}-front.jpg`
                                 );
                               }}
                             >
-                              <Icon name="download"></Icon> Tải ảnh mặt trước
+                              <Icon name="download" /> Tải ảnh mặt trước
                             </a>
                           ) : (
                             "Không có"
@@ -305,17 +313,17 @@ const KycDetailsRegular = () => {
                           {user.documentType !== "PASSPORT" &&
                           user.backImagePath ? (
                             <a
-                              href="#download"
+                              href="#"
                               className="text-primary"
                               onClick={(e) => {
                                 e.preventDefault();
-                                downloadDocument(
+                                forceDownload(
                                   user.backImagePath,
-                                  `${user.name}-back.jpg`
+                                  `${user.id}-back.jpg`
                                 );
                               }}
                             >
-                              <Icon name="download"></Icon> Tải ảnh mặt sau
+                              <Icon name="download" /> Tải ảnh mặt sau
                             </a>
                           ) : (
                             "Không áp dụng"
@@ -327,43 +335,19 @@ const KycDetailsRegular = () => {
                       <div className="data-col">
                         <div className="data-label">Ảnh chân dung</div>
                         <div className="data-value">
-                          {user.faceImagePath ? (
+                          {user.userImage ? (
                             <a
-                              href="#download"
+                              href="#"
                               className="text-primary"
                               onClick={(e) => {
                                 e.preventDefault();
-                                downloadDocument(
-                                  user.faceImagePath,
-                                  `${user.name}-face.jpg`
+                                forceDownload(
+                                  user.userImage,
+                                  `${user.id}-user-image.jpg`
                                 );
                               }}
                             >
-                              <Icon name="download"></Icon> Tải ảnh chân dung
-                            </a>
-                          ) : (
-                            "Không có"
-                          )}
-                        </div>
-                      </div>
-                    </li>
-                    <li className="data-item">
-                      <div className="data-col">
-                        <div className="data-label">Video</div>
-                        <div className="data-value">
-                          {user.recordVideo ? (
-                            <a
-                              href="#download"
-                              className="text-primary"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                downloadDocument(
-                                  user.recordVideo,
-                                  `${user.name}-face-scan.webm`
-                                );
-                              }}
-                            >
-                              <Icon name="download" /> Tải video
+                              <Icon name="download" /> Tải ảnh chân dung
                             </a>
                           ) : (
                             "Không có"
@@ -373,26 +357,6 @@ const KycDetailsRegular = () => {
                     </li>
                   </ul>
                 </Card>
-                {user.recordVideo ? (
-                  <video
-                    width="100%"
-                    height="auto"
-                    controls
-                    style={{
-                      borderRadius: "8px",
-                      maxHeight: "480px",
-                      marginTop: "1.25rem",
-                    }}
-                  >
-                    <source
-                      src={urlVideo(user.recordVideo)}
-                      type="video/webm"
-                    />
-                    Trình duyệt không hỗ trợ phát video
-                  </video>
-                ) : (
-                  <div></div>
-                )}
               </Col>
 
               <Col lg="7">
@@ -404,40 +368,23 @@ const KycDetailsRegular = () => {
                 </BlockHead>
                 <Card className="card-bordered">
                   <ul className="data-list is-compact">
-                    {user.personalInfo &&
-                      Object.entries(user.personalInfo).map(([key, value]) => {
-                        // Map the key to the corresponding translation key
-                        const fieldTranslationMap = {
-                          name: "Họ và tên",
-                          id: "Số CCCD/CMND",
-                          birthDay: "Ngày sinh",
-                          gender: "Giới tính",
-                          originLocation: "Quê quán",
-                          recentLocation: "Nơi thường trú",
-                          issueDate: "Ngày cấp",
-                          issuePlace: "Nơi cấp",
-                          validDate: "Ngày hết hạn",
-                          cardType: "Loại giấy tờ",
-                          isLegal: "Giấy tờ hợp lệ",
-                        };
-                        const label =
-                          fieldTranslationMap[key] ||
-                          key.charAt(0).toUpperCase() + key.slice(1);
-                        return (
-                          <li className="data-item" key={key}>
-                            <div className="data-col">
-                              <div className="data-label">{label}</div>
-                              <div className="data-value text-break">
-                                {typeof value === "boolean"
-                                  ? value
-                                    ? "Hợp lệ"
-                                    : "Không hợp lệ"
-                                  : value}
-                              </div>
+                    {Object.entries(fieldTranslationMap).map(([key, label]) => {
+                      const value = user.ocrResult?.[key];
+                      return (
+                        <li className="data-item" key={key}>
+                          <div className="data-col">
+                            <div className="data-label">{label}</div>
+                            <div className="data-value text-break">
+                              {typeof value === "boolean"
+                                ? value
+                                  ? "Hợp lệ"
+                                  : "Không hợp lệ"
+                                : value || "—"}
                             </div>
-                          </li>
-                        );
-                      })}
+                          </div>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </Card>
               </Col>

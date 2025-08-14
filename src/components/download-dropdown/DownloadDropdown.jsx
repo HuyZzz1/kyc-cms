@@ -2,11 +2,67 @@ import { useState, useRef, useEffect } from "react";
 import { Icon } from "@/components/Component";
 import "./DownloadDropdown.css";
 
-const DownloadDropdown = ({ item, downloadDocumentImage }) => {
+const DownloadDropdown = ({ item }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Đóng dropdown khi click ngoài vùng
+  const getDownloadItems = () => {
+    const files = [];
+    const id = item.id || "unknown";
+
+    if (item.frontImagePath) {
+      files.push({
+        label: "Ảnh mặt trước",
+        filePath: item.frontImagePath,
+        filename: `${id}-front.jpg`,
+      });
+    }
+
+    if (item.backImagePath) {
+      files.push({
+        label: "Ảnh mặt sau",
+        filePath: item.backImagePath,
+        filename: `${id}-back.jpg`,
+      });
+    }
+
+    if (item.userImage) {
+      files.push({
+        label: "Ảnh chân dung",
+        filePath: item.userImage,
+        filename: `${id}-user.jpg`,
+      });
+    }
+
+    if (item.recordVideo) {
+      files.push({
+        label: "Video xác thực",
+        filePath: item.recordVideo,
+        filename: `${id}-record.webm`,
+      });
+    }
+
+    return files;
+  };
+
+  const forceDownload = (url, filename) => {
+    fetch(url)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = filename || "download";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(blobUrl);
+      })
+      .catch((err) => console.error("Download failed", err));
+  };
+
+  const downloadItems = getDownloadItems();
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -17,47 +73,6 @@ const DownloadDropdown = ({ item, downloadDocumentImage }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const getDownloadItems = () => {
-    const files = [];
-
-    if (item.frontImagePath) {
-      files.push({
-        label: "Ảnh mặt trước",
-        filePath: item.frontImagePath,
-        filename: `${item.name}-front.jpg`,
-      });
-    }
-
-    if (item.backImagePath) {
-      files.push({
-        label: "Ảnh mặt sau",
-        filePath: item.backImagePath,
-        filename: `${item.id}-back.jpg`,
-      });
-    }
-
-    if (item.userImage) {
-      files.push({
-        label: "Ảnh chân dung",
-        filePath: item.userImage,
-        filename: `${item.id}-user-face.jpg`,
-      });
-    }
-
-    if (item.recordVideo) {
-      files.push({
-        label: "Video",
-        filePath: item.recordVideo,
-        filename: `${item.id}-face-record.webm`,
-        isVideo: true,
-      });
-    }
-
-    return files;
-  };
-
-  const downloadItems = getDownloadItems();
-
   if (downloadItems.length === 0) return null;
 
   return (
@@ -66,26 +81,28 @@ const DownloadDropdown = ({ item, downloadDocumentImage }) => {
         className="dropdown-toggle"
         onClick={() => setOpen((prev) => !prev)}
         title="Tải xuống giấy tờ"
+        aria-haspopup="true"
+        aria-expanded={open}
       >
         Tải xuống
         <Icon name="download" className="me-1" />
       </button>
 
       {open && (
-        <ul className="dropdown-menu show">
+        <ul className="dropdown-menu show" role="menu">
           {downloadItems.map((file) => (
             <li key={file.label}>
               <a
-                href="#download"
+                href="#"
+                className="text-primary"
                 onClick={(e) => {
                   e.preventDefault();
-                  downloadDocumentImage(file.filePath, file.filename);
                   setOpen(false);
+                  forceDownload(file.filePath, `${file.label}.jpg`);
                 }}
-              >
-                {file.label}
-                <Icon name="download" />
-              </a>
+              ></a>
+              {file.label}
+              <Icon name="download" />
             </li>
           ))}
         </ul>

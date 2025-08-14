@@ -129,6 +129,7 @@ const KycListRegular = () => {
               : "-",
             check: false,
             personalInfo: record.personalInfo || {},
+            ocrResult: record.ocrResult || {},
             frontImagePath: record.frontImage,
             backImagePath: record.backImage,
             userImage: record.userImage,
@@ -268,23 +269,6 @@ const KycListRegular = () => {
   };
 
   // Function to download document image
-  const downloadDocumentImage = async (imagePath, filename) => {
-    try {
-      const response = await adminService.downloadFileMedia(imagePath);
-
-      // Create a download link and trigger download
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", filename);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Lỗi khi tải ảnh:", error);
-    }
-  };
 
   // function to load detail data
   const loadDetail = (id) => {
@@ -700,7 +684,7 @@ const KycListRegular = () => {
                                 ></UserAvatar> */}
                                   <div className="user-info">
                                     <span className="tb-lead">
-                                      {item?.personalInfo?.name}
+                                      {item?.ocrResult?.fullName}
                                       <span
                                         className={`dot dot-${
                                           item.status === KYC_STATUS.APPROVED
@@ -720,10 +704,7 @@ const KycListRegular = () => {
                               <span className="tb-lead-sub">{item.doc}</span>
                             </DataTableRow>
                             <DataTableRow size="md">
-                              <DownloadDropdown
-                                item={item}
-                                downloadDocumentImage={downloadDocumentImage}
-                              />
+                              <DownloadDropdown item={item} />
                             </DataTableRow>
                             <DataTableRow size="lg">
                               <span className="tb-date">{item.date}</span>
@@ -1026,7 +1007,7 @@ const KycListRegular = () => {
               <Col lg={6}>
                 <span className="sub-text">Tên người nộp </span>
                 <span className="caption-text text-break">
-                  {detail?.personalInfo?.name || detail?.id}
+                  {detail?.ocrResult?.fullName || detail?.id}
                 </span>
               </Col>
               <Col lg={6}>

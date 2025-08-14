@@ -1,288 +1,91 @@
-import axios from "axios";
-import { getToken } from "../utils/authToken";
+import { axiosInstance } from "./api";
 
-const API_URL = import.meta.env.VITE_API_DOMAIN + "/api";
+// Dashboard APIs
+export const getKycOverview = async (days = 15) =>
+  axiosInstance
+    .get(`/admin/dashboard/kyc-overview`, { params: { days } })
+    .then((res) => res.data);
 
-const getAuthHeaders = () => {
-  const token = getToken();
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
+export const getDataSources = async (days = 15) =>
+  axiosInstance
+    .get(`/admin/dashboard/data-sources`, { params: { days } })
+    .then((res) => res.data);
 
-export const getKycOverview = async (days = 15) => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/admin/dashboard/kyc-overview?days=${days}`,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching KYC overview:", error);
-    throw error;
-  }
-};
+export const getUserActivity = async (days = 15) =>
+  axiosInstance
+    .get(`/admin/dashboard/user-activity`, { params: { days } })
+    .then((res) => res.data);
 
-export const getDataSources = async (days = 15) => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/admin/dashboard/data-sources?days=${days}`,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data sources:", error);
-    throw error;
-  }
-};
+export const getUrgentTasks = async () =>
+  axiosInstance.get(`/admin/dashboard/urgent-tasks`).then((res) => res.data);
 
-export const getUserActivity = async (days = 15) => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/admin/dashboard/user-activity?days=${days}`,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching user activity:", error);
-    throw error;
-  }
-};
+export const getKycActivities = async (page = 1, limit = 10, status = "all") =>
+  axiosInstance
+    .get(`/admin/dashboard/kyc-activities`, {
+      params: { page, limit, status },
+    })
+    .then((res) => res.data);
 
-export const getUrgentTasks = async () => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/admin/dashboard/urgent-tasks`,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching urgent tasks:", error);
-    throw error;
-  }
-};
+export const getStatsOverview = async (days = 7) =>
+  axiosInstance
+    .get(`/admin/stats/overview`, { params: { days } })
+    .then((res) => res.data.data);
 
-export const getKycActivities = async (
-  page = 1,
-  limit = 10,
-  status = "all"
-) => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/admin/dashboard/kyc-activities?page=${page}&limit=${limit}&status=${status}`,
-      { headers: getAuthHeaders() }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching KYC activities:", error);
-    throw error;
-  }
-};
+export const getStatsKycMetrics = async () =>
+  axiosInstance.get(`/admin/stats/kyc-metrics`).then((res) => res.data.data);
 
-export const getStatsOverview = async (days = 7) => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/admin/stats/overview?days=${days}`,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Error fetching user activity:", error);
-    throw error;
-  }
-};
+export const getStatsCountries = async (days = 7) =>
+  axiosInstance
+    .get(`/admin/stats/countries`, { params: { days } })
+    .then((res) => res.data.data);
 
-export const getStatsKycMetrics = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/admin/stats/kyc-metrics`, {
-      headers: getAuthHeaders(),
-    });
-    return response.data.data;
-  } catch (error) {
-    console.error("Error fetching user activity:", error);
-    throw error;
-  }
-};
+export const getStatsIndustries = async (days = 7) =>
+  axiosInstance
+    .get(`/admin/stats/industries`, { params: { days } })
+    .then((res) => res.data.data);
 
-export const getStatsCountries = async (days = 7) => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/admin/stats/countries?days=${days}`,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Error fetching user activity:", error);
-    throw error;
-  }
-};
+// Request-Packages
+export const getListPackages = async (params) =>
+  axiosInstance.get(`/request-packages`, { params }).then((res) => res.data);
 
-export const getStatsIndustries = async (days = 7) => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/admin/stats/industries?days=${days}`,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Error fetching user activity:", error);
-    throw error;
-  }
-};
+export const createPackages = async (params) =>
+  axiosInstance.post(`/request-packages`, params).then((res) => res.data.data);
 
-//Request-Packages
+export const updatePackage = async (params) =>
+  axiosInstance
+    .patch(`/request-packages/${params.id}`, params)
+    .then((res) => res.data.data);
 
-export const getListPackages = async (params) => {
-  try {
-    const response = await axios.get(`${API_URL}/request-packages`, {
-      headers: getAuthHeaders(),
-      params,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching request packages:", error);
-    throw error;
-  }
-};
+export const updatePackagePopular = async (params) =>
+  axiosInstance
+    .patch(`/request-packages/${params.id}/toggle-popular`)
+    .then((res) => res.data.data);
 
-export const createPackages = async (params) => {
-  try {
-    const response = await axios.post(`${API_URL}/request-packages`, params, {
-      headers: getAuthHeaders(),
-    });
-    return response.data.data;
-  } catch (error) {
-    console.error("Error creating request package:", error);
-    throw error;
-  }
-};
+export const deletePackage = async (params) =>
+  axiosInstance
+    .delete(`/request-packages/${params.id}`)
+    .then((res) => res.data.data);
 
-export const updatePackage = async (params) => {
-  try {
-    const response = await axios.patch(
-      `${API_URL}/request-packages/${params.id}`,
-      params,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Error updating package:", error);
-    throw error;
-  }
-};
+// Metadata
+export const getListCountries = async () =>
+  axiosInstance
+    .get(`/api/organization/meta/countries`)
+    .then((res) => res.data.data);
 
-export const updatePackagePopular = async (params) => {
-  try {
-    const response = await axios.patch(
-      `${API_URL}/request-packages/${params.id}/toggle-popular`,
-      {},
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Error updating request package:", error);
-    throw error;
-  }
-};
+export const getListIndustries = async () =>
+  axiosInstance
+    .get(`/api/organization/meta/industries`)
+    .then((res) => res.data.data);
 
-export const deletePackage = async (params) => {
-  try {
-    const response = await axios.delete(
-      `${API_URL}/request-packages/${params.id}`,
+// Organization Management
+export const getListOrganizationManagement = async (params) =>
+  axiosInstance.get(`/admin/organizations`, { params }).then((res) => res.data);
 
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Error updating request package:", error);
-    throw error;
-  }
-};
+export const updateOrganization = async (params) =>
+  axiosInstance
+    .put(`/admin/organizations/${params.id}/status`, params)
+    .then((res) => res.data);
 
-//Countries
-export const getListCountries = async () => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/api/organization/meta/countries`
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Error ", error);
-    throw error;
-  }
-};
-
-//Industries
-export const getListIndustries = async () => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/api/organization/meta/industries`
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Error ", error);
-    throw error;
-  }
-};
-
-//Organization Management
-export const getListOrganizationManagement = async (params) => {
-  try {
-    const response = await axios.get(`${API_URL}/admin/organizations`, {
-      headers: getAuthHeaders(),
-      params,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error:", error);
-    throw error;
-  }
-};
-
-export const updateOrganization = async (params) => {
-  try {
-    const response = await axios.put(
-      `${API_URL}/admin/organizations/${params.id}/status`,
-      { ...params },
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error:", error);
-    throw error;
-  }
-};
-
-//Package Purchases
-export const getListPackagePurchasesManagement = async (params) => {
-  try {
-    const response = await axios.get(`${API_URL}/package-purchases`, {
-      headers: getAuthHeaders(),
-      params,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error:", error);
-    throw error;
-  }
-};
+// Package Purchases
+export const getListPackagePurchasesManagement = async (params) =>
+  axiosInstance.get(`/package-purchases`, { params }).then((res) => res.data);
