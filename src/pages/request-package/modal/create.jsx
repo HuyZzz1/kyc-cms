@@ -28,6 +28,7 @@ const CreateModal = forwardRef(({ fetchData }, ref) => {
 
   const onFormCancel = () => {
     setModal({ add: false });
+    setDisplayPrice("");
     reset();
   };
 

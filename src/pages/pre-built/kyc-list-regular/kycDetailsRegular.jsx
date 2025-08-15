@@ -45,22 +45,6 @@ const KycDetailsRegular = () => {
   const [error, setError] = useState(null);
   let { kycId } = useParams();
 
-  const forceDownload = (url, filename) => {
-    fetch(url)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = blobUrl;
-        a.download = filename || "download";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(blobUrl);
-      })
-      .catch((err) => console.error("Download failed", err));
-  };
-
   useEffect(() => {
     const fetchDocumentDetails = async () => {
       if (!kycId) return;
@@ -88,6 +72,7 @@ const KycDetailsRegular = () => {
             personalInfo: record.personalInfo || {},
             ocrResult: record.ocrResult || {},
             organization: record?.organization || null,
+            userImage: record.userImage,
           });
         } else {
           setError("Không thể lấy chi tiết giấy tờ");
@@ -288,15 +273,9 @@ const KycDetailsRegular = () => {
                         <div className="data-value">
                           {user.frontImagePath ? (
                             <a
-                              href="#"
+                              href={user.frontImagePath}
+                              target="_blank"
                               className="text-primary"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                forceDownload(
-                                  user.frontImagePath,
-                                  `${user.id}-front.jpg`
-                                );
-                              }}
                             >
                               <Icon name="download" /> Tải ảnh mặt trước
                             </a>
@@ -313,17 +292,12 @@ const KycDetailsRegular = () => {
                           {user.documentType !== "PASSPORT" &&
                           user.backImagePath ? (
                             <a
-                              href="#"
+                              href={user.backImagePath}
+                              target="_blank"
                               className="text-primary"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                forceDownload(
-                                  user.backImagePath,
-                                  `${user.id}-back.jpg`
-                                );
-                              }}
                             >
-                              <Icon name="download" /> Tải ảnh mặt sau
+                              <Icon name="download" />
+                              Tải ảnh mặt sau
                             </a>
                           ) : (
                             "Không áp dụng"
@@ -337,17 +311,12 @@ const KycDetailsRegular = () => {
                         <div className="data-value">
                           {user.userImage ? (
                             <a
-                              href="#"
+                              href={user.userImage}
+                              target="_blank"
                               className="text-primary"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                forceDownload(
-                                  user.userImage,
-                                  `${user.id}-user-image.jpg`
-                                );
-                              }}
                             >
-                              <Icon name="download" /> Tải ảnh chân dung
+                              <Icon name="download" />
+                              Tải ảnh chân dung
                             </a>
                           ) : (
                             "Không có"

@@ -45,23 +45,9 @@ const DownloadDropdown = ({ item }) => {
     return files;
   };
 
-  const forceDownload = (url, filename) => {
-    fetch(url)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = blobUrl;
-        a.download = filename || "download";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(blobUrl);
-      })
-      .catch((err) => console.error("Download failed", err));
-  };
-
   const downloadItems = getDownloadItems();
+
+  console.log("downloadItems", downloadItems);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -93,16 +79,20 @@ const DownloadDropdown = ({ item }) => {
           {downloadItems.map((file) => (
             <li key={file.label}>
               <a
-                href="#"
+                href={file.filePath}
+                target="_blank"
                 className="text-primary"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setOpen(false);
-                  forceDownload(file.filePath, `${file.label}.jpg`);
-                }}
-              ></a>
-              {file.label}
-              <Icon name="download" />
+                rel="noopener noreferrer"
+              >
+                {file.label}
+                <div
+                  style={{
+                    paddingLeft: 2,
+                  }}
+                >
+                  <Icon name="download" />
+                </div>
+              </a>
             </li>
           ))}
         </ul>
