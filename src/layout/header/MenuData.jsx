@@ -41,23 +41,23 @@ const menu = [
       },
     ],
   },
-  {
-    text: "Thông Tin",
-    subMenu: [
-      {
-        text: "Hỏi Đáp",
-        link: "/pages/faq",
-      },
-      {
-        text: "Chính Sách",
-        link: "/pages/terms-policy",
-      },
-      {
-        text: "Hướng Dẫn",
-        link: "/pages/guide",
-      },
-    ],
-  },
+  // {
+  //   text: "Thông Tin",
+  //   subMenu: [
+  //     {
+  //       text: "Hỏi Đáp",
+  //       link: "/pages/faq",
+  //     },
+  //     {
+  //       text: "Chính Sách",
+  //       link: "/pages/terms-policy",
+  //     },
+  //     {
+  //       text: "Hướng Dẫn",
+  //       link: "/pages/guide",
+  //     },
+  //   ],
+  // },
 ];
 
 const investMenu = [

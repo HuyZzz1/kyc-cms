@@ -115,12 +115,12 @@ const User = () => {
                 {theme.skin === "dark" ? (
                   <>
                     <em className="icon ni ni-sun"></em>
-                    <span>Light Mode</span>
+                    <span>Chế độ sáng</span>
                   </>
                 ) : (
                   <>
                     <em className="icon ni ni-moon"></em>
-                    <span>Dark Mode</span>
+                    <span>Chế độ tối</span>
                   </>
                 )}
               </a>
